@@ -2,17 +2,19 @@ body {
     color: #000;
     overflow-x: hidden;
     height: 100%;
-    background-color: #8C9EFF;
+    background: #222222 !important;
     background-repeat: no-repeat
 }
 
 .card {
     z-index: 0;
-    background-color: #ECEFF1;
+    background-color: #222222;
+    color: white;
     padding-bottom: 20px;
     margin-top: 90px;
     margin-bottom: 90px;
-    border-radius: 10px
+    border-radius: 10px;
+    border: 0px;
 }
 
 .top {
@@ -41,7 +43,7 @@ body {
 #progressbar .step0:before {
     font-family: FontAwesome;
     content: "\f10c";
-    color: #fff
+    // color: #fff;
 }
 
 #progressbar li:before {
@@ -50,7 +52,7 @@ body {
     line-height: 45px;
     display: block;
     font-size: 20px;
-    background: #C5CAE9;
+    background: white;
     border-radius: 50%;
     margin: auto;
     padding: 0px
@@ -60,7 +62,7 @@ body {
     content: '';
     width: 100%;
     height: 12px;
-    background: #C5CAE9;
+    background: white;
     position: absolute;
     left: 0;
     top: 16px;
@@ -98,7 +100,7 @@ body {
 
 #progressbar li.active:before,
 #progressbar li.active:after {
-    background: #651FFF
+    background: #BFB2D3;
 }
 
 #progressbar li.active:before {
@@ -117,6 +119,13 @@ body {
 }
 
 @media screen and (max-width: 992px) {
+    .top {
+        padding-right: initial;
+        padding-left: initial;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
     .icon-content {
         width: 50%
     }
