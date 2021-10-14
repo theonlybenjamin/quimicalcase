@@ -120,4 +120,36 @@ body {
     .icon-content {
         width: 50%
     }
+    #progressbar{
+        display: flex;
+        flex-direction: column;
+        li {
+            &:nth-child(2) {
+                margin: 150px 0px;
+            }
+            &::after {
+                height: 190px;
+                width: 10px;
+            }
+            &:first-child:after{
+                left: 106%;
+            }
+            &:nth-child(2):after{
+                left: 106%;
+            }
+            &:nth-child(3):after{
+                display: none;
+            }
+        }
+    }
+    .responsive {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+
+        & .responsive-imgs {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 }

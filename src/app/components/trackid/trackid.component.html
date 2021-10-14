@@ -9,29 +9,31 @@
                 <p><span class="font-weight-bold">Olva</span></p>
             </div>
         </div> <!-- Add class 'active' to progress -->
-        <div class="row d-flex justify-content-center">
-            <div class="col-12">
-                <ul id="progressbar" class="text-center">
-                    <li class="step0" [ngClass]="{'active': progressBarStatus(1)}"></li>
-                    <li class="step0" [ngClass]="{'active': progressBarStatus(2)}"></li>
-                    <li class="step0" [ngClass]="{'active': progressBarStatus(3)}"></li>
-                </ul>
-            </div>
-        </div>
-        <div class="row justify-content-between top">
-            <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
-                <div class="d-flex flex-column" style="justify-content: center;">
-                    <p class="font-weight-bold mb-0">Registrado</p>
+        <div class="responsive">
+            <div class="row d-flex justify-content-center">
+                <div class="col-12">
+                    <ul id="progressbar" class="text-center">
+                        <li class="step0" [ngClass]="{'active': progressBarStatus(1)}"></li>
+                        <li class="step0" [ngClass]="{'active': progressBarStatus(2)}"></li>
+                        <li class="step0" [ngClass]="{'active': progressBarStatus(3)}"></li>
+                    </ul>
                 </div>
             </div>
-            <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
-                <div class="d-flex flex-column" style="justify-content: center;">
-                    <p class="font-weight-bold mb-0">En ruta</p>
+            <div class="row justify-content-between top responsive-imgs">
+                <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                    <div class="d-flex flex-column" style="justify-content: center;">
+                        <p class="font-weight-bold mb-0">Registrado</p>
+                    </div>
                 </div>
-            </div>
-            <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/TkPm63y.png">
-                <div class="d-flex flex-column" style="justify-content: center; padding-bottom: 0px">
-                    <p class="font-weight-bold mb-0">Entregado</p>
+                <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                    <div class="d-flex flex-column" style="justify-content: center;">
+                        <p class="font-weight-bold mb-0">En ruta</p>
+                    </div>
+                </div>
+                <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                    <div class="d-flex flex-column" style="justify-content: center;">
+                        <p class="font-weight-bold mb-0">Entregado</p>
+                    </div>
                 </div>
             </div>
         </div>
