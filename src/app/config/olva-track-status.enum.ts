@@ -1,5 +1,5 @@
 export enum olvaStatus  {
     DELIVERED = 'ENTREGADO',
-    ONROUTE = 'EN RUTA',
+    ONROUTE = 'ASIGNADO',
     REGISTERED = 'REGISTRADO',
 }

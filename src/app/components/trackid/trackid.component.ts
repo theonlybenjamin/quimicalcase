@@ -15,24 +15,30 @@ export class TrackidComponent implements OnInit {
   public trackId: string | null;
   public sentDate = '';
   public trackStatus = '';
-
+  public cliente = '';
+  public olvaData: Olva = {} as Olva;
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient
   ) {
-    this.trackId = this.route.snapshot.queryParamMap.get('id');    
-  }
-
-  ngOnInit() {
+    this.trackId = this.route.snapshot.queryParamMap.get('id');
     this.http.get(`https://reports.olvaexpress.pe/webservice/rest/getTrackingInformation?tracking=${this.trackId}&emision=21&apikey=a82e5d192fae9bbfee43a964024498e87dfecb884b67c7e95865a3bb07b607dd&details=1`)
     .pipe(
       map((x: any) => x.data)
     )
     .subscribe((x: Olva) => {
-      console.log(x);
       this.sentDate = x.general.fecha_envio;
+      this.olvaData = x
+      this.cliente = x.general.consignado;
+      if(this.cliente.endsWith('-')){
+        this.cliente = this.cliente.substring(0, this.cliente.length - 1);
+      }
       this.trackStatus = x.general.nombre_estado_tracking;
-    })
+    })  
+  }
+
+  ngOnInit() {
+
   }
 
   public progressBarStatus(step: number) {
