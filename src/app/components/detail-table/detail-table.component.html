@@ -1,0 +1,23 @@
+<section class="wrapper">
+    <!-- Row title -->
+    <main class="row title">
+      <ul>
+        <li>Fecha</li>
+        <li>Estado</li>
+        <li>Sede</li>
+        <li>Id. Ruta</li>
+      </ul>
+    </main>
+    <!-- Row 3 -->
+    <article class="row nfl" *ngFor="let detail of details">
+      <ul>
+        <li><a href="#">{{detail.fecha_creacion}}</a></li>
+        <li>{{detail.estado_tracking}}</li>
+        <li>{{detail.nombre_sede}}</li>
+        <li>{{detail.id_rpt_envio_ruta}}</li>
+      </ul>
+      <ul class="more-content" style="box-sizing: border-box;">
+        <li>{{detail.obs}}</li>
+      </ul>
+    </article>
+  </section>

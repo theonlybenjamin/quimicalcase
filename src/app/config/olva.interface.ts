@@ -15,13 +15,12 @@ export interface Olva {
         nombre_oficina: string,
         destino: string;
     }
-    details: [
-        {
-        fecha_creacion: string
-        id_rpt_envio_ruta: string,
-        nombre_sede: string,
-        estado_tracking: string,
-        obs: string,
-        }
-    ]
+    details: OlvaDetails[]
+}
+export interface OlvaDetails {
+    fecha_creacion: string
+    id_rpt_envio_ruta: string,
+    nombre_sede: string,
+    estado_tracking: string,
+    obs: string,
 }
