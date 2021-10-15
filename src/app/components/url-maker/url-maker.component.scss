@@ -1,0 +1,102 @@
+$char-w: 1ch;
+$gap: .5*$char-w;
+$n-char: 7;
+$in-w: $n-char*($char-w + $gap);
+
+input {
+	display: block;
+	margin: 2em auto;
+	border: none;
+	padding: 0;
+	width: $in-w;
+	background: repeating-linear-gradient(90deg, 
+		dimgrey 0, dimgrey $char-w, 
+		transparent 0, transparent $char-w + $gap) 
+		0 100%/ #{$in-w - $gap} 2px no-repeat;
+	font: 5ch droid sans mono, consolas, monospace;
+	letter-spacing: $gap;
+	color: white;
+	&:focus {
+		outline: none;
+		color: dodgerblue;
+	}
+}
+$prime: #BFB2D3;
+$second: #0c1016;
+
+body,
+html {
+  align-items: center;
+  background-color: $second;
+  display: flex;
+  font-family: 'Roboto';
+  font-size: 10px;
+  height: 100%;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+* {
+  box-sizing: border-box;
+}
+svg {
+  position: absolute;
+  top: -4000px;
+  left: -4000px;
+}
+#gooey-button {
+  padding: 1rem;
+  font-size: 2rem;
+  border: none;
+  color: $second;
+  filter: url('#gooey');
+  position: relative;
+  background-color: $prime;
+
+  &:focus {
+    outline: none;
+  }
+  .bubbles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    .bubble {
+      background-color: $prime;
+      border-radius: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      z-index: -1;
+
+      @for $bubble from 1 through 10 {
+        &:nth-child(#{$bubble}) {
+          $size: 25px;
+          left: (random(90) + 10)+px;
+          width: $size;
+          height: $size;
+          animation: move-#{$bubble} #{3 + $bubble*0.02}s infinite;
+          animation-delay: #{$bubble*0.2}s;
+        }
+      }
+    }
+  }
+}
+@for $bubble from 1 through 10 {
+  @keyframes move-#{$bubble} {
+    0% {
+      transform: translate(0, 0);
+    }
+    99% {
+      transform: translate(0, -(random(80) + 50)+px);
+    }
+    100% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+  }
+}
