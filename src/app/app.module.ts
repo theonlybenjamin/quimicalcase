@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UrlMakerComponent } from './components/url-maker/url-maker.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DetailTableComponent } from './components/detail-table/detail-table.component';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,11 @@ import { DetailTableComponent } from './components/detail-table/detail-table.com
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: LocationStrategy, useClass: PathLocationStrategy
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
