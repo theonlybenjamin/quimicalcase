@@ -10,9 +10,10 @@ import { Olva } from 'src/app/config/olva.interface';
   templateUrl: './trackid.component.html',
   styleUrls: ['./trackid.component.scss']
 })
-export class TrackidComponent implements OnInit {
+export class TrackidComponent {
 
   public trackId: string | null;
+  public status = '';
   public sentDate = '';
   public trackStatus = '';
   public cliente = '';
@@ -34,11 +35,8 @@ export class TrackidComponent implements OnInit {
         this.cliente = this.cliente.substring(0, this.cliente.length - 1);
       }
       this.trackStatus = x.general.nombre_estado_tracking;
+      this.status = x.details[0].estado_tracking;
     })  
-  }
-
-  ngOnInit() {
-
   }
 
   public progressBarStatus(step: number) {
@@ -56,7 +54,7 @@ export class TrackidComponent implements OnInit {
         break;
       };
       case olvaStatus.DELIVERED: {
-        if (step){
+        if (step && this.status === this.trackStatus){
           return true;
         }
         break;
