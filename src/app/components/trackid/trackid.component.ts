@@ -54,7 +54,7 @@ export class TrackidComponent {
         break;
       };
       case olvaStatus.DELIVERED: {
-        if (step && this.status === this.trackStatus){
+        if (step && (this.status === this.trackStatus || this.status === olvaStatus.DELIVERED)){
           return true;
         }
         break;
