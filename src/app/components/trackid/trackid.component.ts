@@ -40,7 +40,7 @@ export class TrackidComponent {
   }
 
   public progressBarStatus(step: number) {
-    switch (this.trackStatus){
+    switch (this.status){
       case olvaStatus.REGISTERED: {
         if (step === 1){
           return true;
