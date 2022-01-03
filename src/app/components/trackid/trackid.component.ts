@@ -23,7 +23,7 @@ export class TrackidComponent {
     private http: HttpClient
   ) {
     this.trackId = this.route.snapshot.queryParamMap.get('id');
-    this.http.get(`https://reports.olvaexpress.pe/webservice/rest/getTrackingInformation?tracking=${this.trackId}&emision=21&apikey=a82e5d192fae9bbfee43a964024498e87dfecb884b67c7e95865a3bb07b607dd&details=1`)
+    this.http.get(`https://reports.olvaexpress.pe/webservice/rest/getTrackingInformation?tracking=${this.trackId}&emision=22&apikey=a82e5d192fae9bbfee43a964024498e87dfecb884b67c7e95865a3bb07b607dd&details=1`)
     .pipe(
       map((x: any) => x.data)
     )
