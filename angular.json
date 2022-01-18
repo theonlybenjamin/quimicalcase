@@ -31,14 +31,19 @@
               "src/assets",
               {
                 "glob": "_redirects",
-                "input": "src/", 
-                "output": "/" 
+                "input": "src/",
+                "output": "/"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/boxicons/css/boxicons.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/boxicons/dist/boxicons.js",
+              "node_modules/bootstrap/dist/js/bootstrap.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -128,6 +133,10 @@
               "devServerTarget": "quimicalcase:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }

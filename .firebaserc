@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "quimicalcase-47f4e": {
+      "hosting": {
+        "quimicalcase": [
+          "quimicalcase-47f4e"
+        ]
+      }
+    }
+  }
+}

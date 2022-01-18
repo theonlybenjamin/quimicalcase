@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
+
+<div class="container">
+            <div class="row">
+                 <div class="col-lg-10 mx-auto mb-4">
+                    <div class="section-title text-center ">
+                        <h3 class="top-c-sep">Pendientes de env&iacute;o</h3>
+                        <p>Revisar que los pedidos tengan todo antes de ser enviados</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="career-search mb-60" *ngIf="showSends">
+
+                        <app-send-pending-item [orders]="orders"></app-send-pending-item>
+                    </div>
+                </div>
+            </div>
+
+        </div>

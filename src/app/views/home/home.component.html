@@ -1,0 +1,56 @@
+<section class="body-pd" id="body-pd">
+    <header class="header" id="header">
+        <div class="header_toggle pl-2">
+            <i class='bx bx-menu' id="header-toggle" (click)="changeMenuStatus()"></i>
+            <!-- <i [ngClass]="changeMenuIcon()" id="header-toggle" (click)="changeMenuStatus()"></i> -->
+        </div>
+        <div class="header_img">
+            <img src="https://i.imgur.com/hczKIze.jpg" alt="">
+        </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div>
+                <a class="nav_logo">
+                    <i class='bx bx-message-square-add' ></i>
+                    <span class="nav_logo-name nav_icon">BBBootstrap</span>
+                </a>
+                <div class="nav_list">
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/nueva-venta">
+                        <i class='bx bx-comment-add nav_icon'></i>
+                        <span class="nav_name">Registrar venta</span>
+                    </a>
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/pendiente-envio">
+                        <i class='bx bx-send nav_icon' ></i>
+                        <span class="nav_name">Pendientes de env&iacute;o</span>
+                    </a>
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/stock">
+                        <i class='bx bx-barcode nav_icon'></i>
+                        <span class="nav_name">Stock</span>
+                    </a>
+                    <a class="nav_link">
+                        <i class='bx bx-bookmark nav_icon'></i> 
+                        <span class="nav_name">Bookmark</span>
+                    </a>
+                    <a class="nav_link">
+                        <i class='bx bx-folder nav_icon'></i>
+                        <span class="nav_name">Files</span>
+                    </a>
+                    <a class="nav_link">
+                        <i class='bx bx-bar-chart-alt-2 nav_icon'></i>
+                        <span class="nav_name">Stats</span>
+                    </a>
+                </div>
+            </div>
+            <a class="nav_link" (click)="closeSession()">
+                <i class='bx bx-log-out nav_icon'></i>
+                <span class="nav_name">Cerrar Sesi&oacute;n</span>
+            </a>
+        </nav>
+    </div>
+    <!--Container Main start-->
+    <div class="height-100 bg-light component" style="padding-left: calc(45px + 1rem);">
+        <router-outlet></router-outlet>
+    </div>
+    <!--Container Main end-->
+</section>

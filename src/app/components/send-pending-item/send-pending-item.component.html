@@ -1,0 +1,26 @@
+<div class="filter-result">
+    <p class="mb-30 ff-montserrat">Total pedidos a enviar: <b>{{ orders.length }}</b></p>
+
+    <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let order of orders; let i = index" >
+        <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+            <!-- <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
+                FD
+            </div> -->
+            <div class="job-content">
+                <h5 class="text-md-left">{{ order.cliente }}</h5>
+                <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans" style="flex-direction: column">
+                    <li class="mr-md-4">
+                        <i class="zmdi zmdi-pin mr-2"></i> {{ order.tipo_entrega }}
+                    </li>
+                    <li class="mr-md-4" style="margin-top: 20px;">
+                        <p *ngFor="let producto of order.productos; let i = index"> <b>{{ producto.model }} </b> para el <b>{{ producto.code }}</b></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="job-right my-4 flex-shrink-0">
+            <button type="button" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="completeOrder(order)">Pedido Enviado</button>
+        </div>
+    </div>
+
+</div>

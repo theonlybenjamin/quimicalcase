@@ -1,0 +1,62 @@
+<section>
+    <form class="form" [formGroup]="saleForm">
+        <div class="form-group">
+            <label for="name">Nombre de cliente</label>
+            <input type="text"
+                   class="form-control"
+                   id="name"
+                   formControlName="cliente">
+        </div>
+        <div class="form-group">
+            <label for="tipo_entrega">Tipo de entrega</label>
+            <select class="form-select" formControlName="tipo_entrega"
+                    id="tipo_entrega">
+                <option selected>Selecciona el tipo de entrega</option>
+                <option value="Olva">Olva</option>
+                <option value="Contraentrega">Contraentrega</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="cantidad">Cantidad de prodcutos a vender</label>
+            <select class="form-select" aria-label="Default select example" formControlName="cantidad"
+                    id="cantidad"
+                    (change)="addCaseSelect()">
+                <option selected>Selecciona la cantidad</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div *ngIf="showSelects">
+            <div class="select-group" *ngFor="let notUsed of cantToSell;let i = index">
+                <div class="select-child">
+                    <label for="iphone">Selecciona el tipo de iphone</label>
+                    <select class="form-select"
+                            [formControlName]="'iphone' + i"
+                            id="iphone"
+                            (change)="searchIphoneCases(i)">
+                        <option selected>Selecciona el codigo</option>
+                        <option [value]="iphone.id" *ngFor="let iphone of products">{{ iphone.name }}</option>
+                    </select>
+                </div>
+                <div class="select-child">
+                    <label for="case">Selecciona el modelo de case</label>
+                    <select class="form-select"
+                            [formControlName]="'case' + i"
+                            id="case">
+                        <option selected>Selecciona el modelo</option>
+                        <option [value]="case.producto" *ngFor="let case of cases[i]">{{ case.producto }}</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success" (click)="doSale()">Realizar Venta</button>
+        </div>
+    </form>
+</section>

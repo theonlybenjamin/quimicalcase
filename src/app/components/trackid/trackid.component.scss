@@ -114,9 +114,27 @@ body {
 }
 
 .icon-content {
-    padding-bottom: 20px
+    padding-bottom: 20px;
+    flex-shrink: unset;
+    width: unset;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    img {
+        padding: unset;
+    }
 }
-
+.font-weight-bold {
+    font-weight: 700!important;
+}
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
 @media screen and (max-width: 992px) {
     .top {
         padding-right: initial;
