@@ -107,6 +107,7 @@ export class FirebaseService {
       case StockCollections.IPhone8plus: return 'IPhone 7/8 plus';
       case StockCollections.AirpodsPro: return 'Airpods Pro / Airpods 3er gen';
       case StockCollections.Airpods1era: return 'Airpods 1era gen / 2da gen';
+      case StockCollections.Mica: return 'Mica';
       default: return '';
     }
   }
@@ -130,6 +131,7 @@ export class FirebaseService {
       case 'IPhone 7/8 plus': return StockCollections.IPhone8plus;
       case 'Airpods Pro / Airpods 3er gen': return StockCollections.AirpodsPro;
       case 'Airpods 1era gen / 2da gen': return StockCollections.Airpods1era;
+      case 'Mica': return StockCollections.Mica;
       default: return '';
     }
   }

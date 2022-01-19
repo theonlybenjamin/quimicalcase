@@ -12,12 +12,12 @@
         <nav class="nav">
             <div>
                 <a class="nav_logo">
-                    <i class='bx bx-message-square-add' ></i>
-                    <span class="nav_logo-name nav_icon">BBBootstrap</span>
+                    <i class='nav_logo-icon bx bxs-bong nav_icon'></i>
+                    <span class="nav_logo-name nav_icon">Quimical case</span>
                 </a>
                 <div class="nav_list">
                     <a class="nav_link" routerLinkActive="active" routerLink="/home/nueva-venta">
-                        <i class='bx bx-comment-add nav_icon'></i>
+                        <i class='bx bx-cart nav_icon'></i>
                         <span class="nav_name">Registrar venta</span>
                     </a>
                     <a class="nav_link" routerLinkActive="active" routerLink="/home/pendiente-envio">
@@ -28,18 +28,18 @@
                         <i class='bx bx-barcode nav_icon'></i>
                         <span class="nav_name">Stock</span>
                     </a>
-                    <a class="nav_link">
-                        <i class='bx bx-bookmark nav_icon'></i> 
-                        <span class="nav_name">Bookmark</span>
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/agregar-producto">
+                        <i class='bx bx-comment-add nav_icon'></i> 
+                        <span class="nav_name">Agregar productos</span>
                     </a>
-                    <a class="nav_link">
+                    <!-- <a class="nav_link">
                         <i class='bx bx-folder nav_icon'></i>
                         <span class="nav_name">Files</span>
                     </a>
                     <a class="nav_link">
                         <i class='bx bx-bar-chart-alt-2 nav_icon'></i>
                         <span class="nav_name">Stats</span>
-                    </a>
+                    </a> -->
                 </div>
             </div>
             <a class="nav_link" (click)="closeSession()">

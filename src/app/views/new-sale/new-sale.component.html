@@ -37,7 +37,7 @@
         <div *ngIf="showSelects">
             <div class="select-group" *ngFor="let notUsed of cantToSell;let i = index">
                 <div class="select-child">
-                    <label for="iphone">Selecciona el tipo de iphone</label>
+                    <label for="iphone">C&oacute;digo de producto</label>
                     <select class="form-select"
                             [formControlName]="'iphone' + i"
                             id="iphone"
@@ -47,7 +47,7 @@
                     </select>
                 </div>
                 <div class="select-child">
-                    <label for="case">Selecciona el modelo de case</label>
+                    <label for="case">Modelo</label>
                     <select class="form-select"
                             [formControlName]="'case' + i"
                             id="case">
