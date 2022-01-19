@@ -31,6 +31,7 @@ export class StockComponent implements OnInit {
     'IPhone 7/8 plus',
     'Airpods Pro / Airpods 3er gen',
     'Airpods 1era gen / 2da gen',
+    'Cable'
   ]
   constructor(
     public fireService: FirebaseService
