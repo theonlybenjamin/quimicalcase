@@ -21,6 +21,7 @@ import { LoginComponent } from './views/login/login.component';
 import { PERSISTENCE } from '@angular/fire/auth';
 import { AddProductComponent } from './views/add-product/add-product.component';
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ListSaleComponent } from './views/list-sale/list-sale.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     SendPendingComponent,
     SendPendingItemComponent,
     LoginComponent,
-    AddProductComponent
+    AddProductComponent,
+    ListSaleComponent
   ],
   imports: [
     BrowserModule,

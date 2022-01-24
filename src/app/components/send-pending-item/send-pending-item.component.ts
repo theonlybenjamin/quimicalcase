@@ -9,6 +9,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class SendPendingItemComponent implements OnInit {
 
+  @Input() summaryText: string = '';
   @Input() orders: SendPending[] = [];
   constructor(public fireService: FirebaseService) { }
 

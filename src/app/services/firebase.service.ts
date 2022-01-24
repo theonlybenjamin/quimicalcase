@@ -28,9 +28,6 @@ export class FirebaseService {
 
   }
 
-  // public isUserLogged() {
-  //   sessionStorage.
-  // }
   public async login(user: string, pass: string) {
     try {
       const result = await this.auth.signInWithEmailAndPassword(user, pass);
@@ -48,6 +45,18 @@ export class FirebaseService {
 
   public getSendPending(): Observable<SendPendingArray> {
     return this.afs.collection<SendPendingArray>('ventas').doc('pendientes_envio').valueChanges().pipe(
+      map(x => {
+        if (x) {
+          return x;
+        } else {
+          return this.mock2;
+        }
+      })
+    );
+  }
+
+  public getAllSales(): Observable<SendPendingArray> {
+    return this.afs.collection<SendPendingArray>('ventas').doc('total_ventas').valueChanges().pipe(
       map(x => {
         if (x) {
           return x;
@@ -675,7 +684,10 @@ export class FirebaseService {
     };
     this.getSendPending().pipe(
       take(1),
-      finalize(() => this.afs.collection('ventas').doc('pendientes_envio').set(array))
+      finalize(() => {
+        this.afs.collection('ventas').doc('pendientes_envio').set(array);
+        this.afs.collection('ventas').doc('total_ventas').set(array);
+      })
     ).subscribe(x => {
       array = x
       array.data.push(dataBack);

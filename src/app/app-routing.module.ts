@@ -6,6 +6,7 @@ import { IsLoggedGuard } from './guards/is-logged.guard';
 import { UserLoggedGuard } from './guards/user-logged.guard';
 import { AddProductComponent } from './views/add-product/add-product.component';
 import { HomeComponent } from './views/home/home.component';
+import { ListSaleComponent } from './views/list-sale/list-sale.component';
 import { LoginComponent } from './views/login/login.component';
 import { NewSaleComponent } from './views/new-sale/new-sale.component';
 import { SendPendingComponent } from './views/send-pending/send-pending.component';
@@ -29,6 +30,9 @@ const routes: Routes = [{
     path: 'pendiente-envio',
     component: SendPendingComponent
   }, {
+    path: 'ventas',
+    component: ListSaleComponent
+  },{
     path: 'stock',
     component: StockComponent
   }, {
