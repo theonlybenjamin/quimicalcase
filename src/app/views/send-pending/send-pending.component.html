@@ -13,8 +13,7 @@
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="career-search mb-60" *ngIf="showSends">
-
-                        <app-send-pending-item [orders]="reversedOrders" summaryText="Total pedidos a enviar:"></app-send-pending-item>
+                        <app-send-pending-item [orders]="reversedOrders" summaryText="Total pedidos a enviar:" [showButton]="true"></app-send-pending-item>
                     </div>
                 </div>
             </div>

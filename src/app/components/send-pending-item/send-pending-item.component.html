@@ -13,12 +13,12 @@
                         <i class="zmdi zmdi-pin mr-2"></i> {{ order.tipo_entrega }}
                     </li>
                     <li class="mr-md-4" style="margin-top: 20px;">
-                        <p *ngFor="let producto of order.productos; let i = index"> <b>{{ producto.model }} </b> para el <b>{{ producto.code }}</b></p>
+                        <p *ngFor="let producto of order.productos; let i = index"> <b>{{ producto.model }} </b> para <b>{{ producto.code }}</b></p>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="job-right my-4 flex-shrink-0">
+        <div class="job-right my-4 flex-shrink-0" *ngIf="showButton">
             <button type="button" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="completeOrder(order)">Pedido Enviado</button>
         </div>
     </div>

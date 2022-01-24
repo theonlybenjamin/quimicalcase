@@ -11,6 +11,7 @@ export class SendPendingItemComponent implements OnInit {
 
   @Input() summaryText: string = '';
   @Input() orders: SendPending[] = [];
+  @Input() showButton: boolean = true;
   constructor(public fireService: FirebaseService) { }
 
   ngOnInit(): void {
