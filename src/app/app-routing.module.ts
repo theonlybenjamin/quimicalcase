@@ -4,6 +4,7 @@ import { TrackidComponent } from './components/trackid/trackid.component';
 import { UrlMakerComponent } from './components/url-maker/url-maker.component';
 import { IsLoggedGuard } from './guards/is-logged.guard';
 import { UserLoggedGuard } from './guards/user-logged.guard';
+import { AddProductComponent } from './views/add-product/add-product.component';
 import { HomeComponent } from './views/home/home.component';
 import { LoginComponent } from './views/login/login.component';
 import { NewSaleComponent } from './views/new-sale/new-sale.component';
@@ -30,7 +31,11 @@ const routes: Routes = [{
   }, {
     path: 'stock',
     component: StockComponent
-  },{
+  }, {
+    path: 'agregar-producto',
+    component: AddProductComponent
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'nueva-venta'

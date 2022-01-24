@@ -667,7 +667,6 @@ export class FirebaseService {
     ]};
     // this.stockCollection = this.afs.collection('stock').doc(StockCollections.IPhone13ProMax).set(obj);
     this.stockCollection = this.afs.collection('stock').doc(document).set(data);
-    console.log(this.stockCollection);
   }
 
   public setSendPendingColecction(dataBack: SendPending) {

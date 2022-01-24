@@ -1,0 +1,35 @@
+<section>
+    <form class="form" [formGroup]="productForm">
+        <div>
+            <div class="select-group" *ngFor="let notUsed of cantToSell;let i = index">
+                <div class="select-child">
+                    <label for="code">C&oacute;digo de producto</label>
+                    <select class="form-select"
+                            formControlName="code"
+                            id="code"
+                            (change)="searchModelByCode(i)">
+                        <option selected>Selecciona el codigo</option>
+                        <option [value]="iphone.id" *ngFor="let iphone of codes">{{ iphone.name }}</option>
+                    </select>
+                </div>
+                <div class="select-child">
+                    <label for="case">Modelo</label>
+                    <select class="form-select"
+                            [formControlName]="'case' + i"
+                            id="case">
+                        <option selected>Selecciona el modelo</option>
+                        <option [value]="case.producto" *ngFor="let case of cases[i]">{{ case.producto }}</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success" (click)="updateProduct()">Realizar Venta</button>
+        </div>
+        <div class="form-group">
+            <label for="name">Nombre de cliente</label>
+            <input type="text"
+                   class="form-control"
+                   id="name"
+                   formControlName="cliente">
+        </div>
+    </form>
+</section>

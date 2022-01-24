@@ -1,3 +1,41 @@
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Stock Actualizado</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Por favor, toma nota o eliminar ahorita, debes eliminar del Drive los siguientes cases:
+      </p>
+      <div *ngFor="let model of modelsToEliminte;">
+            <span><b>{{model.model}}</b> del <b>{{model.code}}</b></span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="goPending()">Entendido</button>
+    </div>
+</ng-template>
+<ng-template #errorModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Error actualizando</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Hubo un error, solo se actualizaron los siguientes modelos:
+      </p>
+      <div *ngFor="let model of updatedModels;">
+            <span><b>{{model.model}}</b> del <b>{{model.code}}</b></span>
+      </div>
+      <p>Enviar captura de esto al administrador de sistemas. chula</p>
+      <p>{{ERROR}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Entendido</button>
+    </div>
+</ng-template>
 <section>
     <form class="form" [formGroup]="saleForm">
         <div class="form-group">

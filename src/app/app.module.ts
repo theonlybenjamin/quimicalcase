@@ -19,6 +19,8 @@ import { SendPendingComponent } from './views/send-pending/send-pending.componen
 import { SendPendingItemComponent } from './components/send-pending-item/send-pending-item.component';
 import { LoginComponent } from './views/login/login.component';
 import { PERSISTENCE } from '@angular/fire/auth';
+import { AddProductComponent } from './views/add-product/add-product.component';
+import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -31,21 +33,23 @@ import { PERSISTENCE } from '@angular/fire/auth';
     NewSaleComponent,
     SendPendingComponent,
     SendPendingItemComponent,
-    LoginComponent
+    LoginComponent,
+    AddProductComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig)
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    NgbModalModule
   ],
   providers: [
     AngularFirestore,
     {
       provide: LocationStrategy, useClass: PathLocationStrategy
     },
-    { provide: PERSISTENCE, useValue: 'session' },
+    { provide: PERSISTENCE, useValue: 'local' },
   ],
   bootstrap: [AppComponent]
 })
