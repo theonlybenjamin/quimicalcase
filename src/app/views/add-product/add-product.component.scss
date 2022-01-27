@@ -34,3 +34,16 @@
         }
     }
 }
+@media screen and (max-width: 763px) {
+    .form {
+        padding: 0px;
+    }
+    .select-group {
+        font-size: 10pt;
+        flex-direction: column;
+        .select-child{
+            margin: 0px 10px;
+            min-width: 135px;
+        }
+    }
+}

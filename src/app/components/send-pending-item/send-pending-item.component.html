@@ -1,3 +1,18 @@
+<ng-template #successModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Pedido enviado</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>¿Segura que el siguiente pedido fue enviado?: {{ selectedOrder | json}} </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-danger" (click)="confirmCompleteOrder()">S&iacute;</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
+    </div>
+</ng-template>
 <div class="filter-result">
     <p class="mb-30 ff-montserrat">{{summaryText}} <b>{{ orders.length }}</b></p>
 
