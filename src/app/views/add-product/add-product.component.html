@@ -1,35 +1,84 @@
+<ng-template #errorModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Error actualizando</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Hubo un error agregando el siguiente producto:
+      </p>
+      <span>{{ modalDetail | json}}</span>
+      <p>Enviar captura de esto al administrador de sistemas. Y NO SALIR DE ESTA PANTALLA</p>
+      <p>{{ERROR}}</p>
+      <p>Antigua data: {{ dataBackUp | json }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Entendido</button>
+    </div>
+</ng-template>
+<ng-template #successModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Se agreg&oacute; correctamente</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Se agrego con exito el producto: {{ modalDetail | json}} </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Entendido</button>
+    </div>
+</ng-template>
 <section>
     <form class="form" [formGroup]="productForm">
-        <div>
-            <div class="select-group" *ngFor="let notUsed of cantToSell;let i = index">
-                <div class="select-child">
-                    <label for="code">C&oacute;digo de producto</label>
-                    <select class="form-select"
-                            formControlName="code"
-                            id="code"
-                            (change)="searchModelByCode(i)">
-                        <option selected>Selecciona el codigo</option>
-                        <option [value]="iphone.id" *ngFor="let iphone of codes">{{ iphone.name }}</option>
-                    </select>
+        <div *ngFor="let product of array; let i = index">
+            <div class="select-group" [formGroup]="getArrayFormGroup(i)">
+                <div class="row mx-1">
+                    <div class="form-group col-6">
+                        <label for="code">C&oacute;digo</label>
+                        <select class="form-select"
+                                formControlName="code"
+                                id="code">
+                            <option selected>Selecciona el codigo</option>
+                            <option [value]="iphone.id" *ngFor="let iphone of codes">{{ iphone.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="name">Modelo</label>
+                        <input type="text"
+                               class="form-control"
+                               id="name"
+                               formControlName="model">
+                    </div>
                 </div>
-                <div class="select-child">
-                    <label for="case">Modelo</label>
-                    <select class="form-select"
-                            [formControlName]="'case' + i"
-                            id="case">
-                        <option selected>Selecciona el modelo</option>
-                        <option [value]="case.producto" *ngFor="let case of cases[i]">{{ case.producto }}</option>
-                    </select>
+                <div class="row mx-1">
+                    <div class="form-group col-6">
+                        <label for="name">Cantidad</label>
+                        <input type="number"
+                               class="form-control"
+                               id="name"
+                               formControlName="cant">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="name">Precio</label>
+                        <input type="number"
+                               min="0.0"
+                               step="0.1"
+                               class="form-control"
+                               id="name"
+                               formControlName="precio">
+                    </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-success" (click)="updateProduct()">Realizar Venta</button>
         </div>
-        <div class="form-group">
-            <label for="name">Nombre de cliente</label>
-            <input type="text"
-                   class="form-control"
-                   id="name"
-                   formControlName="cliente">
+        <div class="row justify-content-between px-5">
+            <button type="button" class="btn btn-dark col mx-1 my-2" (click)="addFormGroup()">Agregar m&aacute;s</button>
+            <button type="button" class="btn btn-danger col mx-1 my-2" (click)="deleteFormGroup()" [disabled]="array.length < 2">Eliminar</button>
+        </div>
+        <div class="row px-5">
+            <button type="button" class="btn btn-success col my-5" (click)="saveFormGroup()" [disabled]="!productForm.valid">Añadir productos</button>
         </div>
     </form>
 </section>

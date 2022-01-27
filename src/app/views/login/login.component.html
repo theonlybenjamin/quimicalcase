@@ -7,11 +7,11 @@
                         <h3 class="title">Hola.</h3>
                         <span class="description">Debes identificarte para entrar aquí</span>
                         <div class="form-group">
-                            <input class="form-control" type="email" placeholder="Ingresa tu usuario" formControlName="user">
+                            <input class="form-control" type="email" placeholder="Ingresa tu usuario" formControlName="user" autocomplete="on">
                         </div>
                         <p style="color: red" *ngIf="showError">Usuarios no existe.</p>
                         <div class="form-group">
-                            <input class="form-control" type="password" placeholder="Ingresa tu contraseña" formControlName="pass">
+                            <input class="form-control" type="password" placeholder="Ingresa tu contraseña" formControlName="pass" autocomplete="on">
                         </div>
                         <button class="btn signin" (click)="doLogin()">Login</button>
                         <span class="forgot mt-2"><a href="">Forgot Password?</a></span>

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SendPending } from 'src/app/interfaces/send-pending';
-import { IPhone, IProductSelled, Stock, StockProduct } from 'src/app/interfaces/stock';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { concat, from, interval, of, Subscription } from 'rxjs';
+import { catchError, concatMap, delay, finalize, take, tap, toArray } from 'rxjs/operators';
+import { IPhone, Stock, StockProduct } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -17,43 +19,103 @@ export class AddProductComponent implements OnInit {
   public productForm: FormGroup;
   public cantToSell = [0];
   public showSelects = false;
+  public ERROR: any;
+  public modalDetail: any;
+  public dataBackUp: any;
+  @ViewChild('errroModal') errorModal: ElementRef | undefined;
+  @ViewChild('successModal') successModal: ElementRef | undefined;
   constructor(
     public firebaseService: FirebaseService,
-    public router: Router
+    public router: Router,
+    private modalService: NgbModal
     ) {
     this.firebaseService.getStockAllDocumentsName().subscribe(x => this.codes = x);
     this.productForm = new FormGroup({
-      code: new FormControl({ value: 'Selecciona el codigo' }, Validators.required),
-      precio: new FormControl('', Validators.required),
-      cantidad: new FormControl('Selecciona la cantidad', Validators.required),
-      modelo: new FormControl('Selecciona la cantidad', Validators.required)
-    })
+      products: new FormArray([
+        new FormGroup({
+          code: new FormControl(null, Validators.required),
+          model: new FormControl(null, Validators.required),
+          cant: new FormControl(null, Validators.required),
+          precio: new FormControl(null, Validators.required)
+        })
+      ])
+    });
   }
 
   ngOnInit(): void {
   }
 
-  public searchModelByCode(index: number){
-    this.firebaseService.getStockSpecificDocument(this.productForm.get('code'+ index)?.value).subscribe(x => {
-      this.cases[index] = x.data
-      this.productForm.get('case'+ index)?.enable();
-    });
+  get products() {
+    return this.productForm.get('products') as FormArray;
   }
 
-  public updateProduct(): void {
-    // const codes = Object.keys(this.productForm.value).filter(x => x.includes('code'));
-    // const cases = Object.keys(this.productForm.value).filter(x => x.includes('case'));
-    // const codesAndCases = this.addProductToCart(codes, cases);
-    // const finalResult: Stock = {} as Stock;
-    // for (let i = 0; i < codesAndCases.length; i++) {
-    //   const searchObject = this.cases[codesAndCases[i].index].find(x => x.producto === codesAndCases[i].model) as StockProduct;
-    //   const indexToUpdate = this.cases[codesAndCases[i].index].indexOf(searchObject);
-    //     this.cases[codesAndCases[i].index].splice(indexToUpdate, 1);
-    //     this.cases[codesAndCases[i].index][indexToUpdate] = {...searchObject, cant: searchObject.cant -1};
-    //     finalResult.data = this.cases[codesAndCases[i].index];
-    //     this.firebaseService.setFieldsStockCollection(codesAndCases[i].code, finalResult);
-    // }
-    this.router.navigate(['/home/pendiente-envio'])
+  get array() {
+    return this.products.controls;
   }
 
+  getArrayFormGroup(i:number) {
+    return this.array[i] as FormGroup;
+  }
+
+  addFormGroup() {
+    this.products.push(new FormGroup({
+      code: new FormControl(null, Validators.required),
+      model: new FormControl(null, Validators.required),
+      cant: new FormControl(null, Validators.required),
+      precio: new FormControl(null, Validators.required)
+    }))
+  }
+
+  deleteFormGroup() {
+    this.array.pop();
+  }
+
+   saveFormGroup() {
+     from(this.array).pipe(
+       concatMap((x) => {
+        var dataBack: StockProduct;
+        const value = x.value;
+        dataBack = {
+          producto: value.model,
+          cant: Number(value.cant),
+          precio: value.precio
+        }
+        return this.getProducts(value.code, dataBack);
+       }),toArray()
+     ).subscribe(x => {
+       console.log('x', x)
+     })
+  }
+
+  public getProducts(document: string, dataBack: StockProduct) {
+    var array: Stock = {
+      data: []
+    };
+      return this.firebaseService.getStockSpecificDocumentAlone(document).pipe(
+        take(1),
+        tap(x => {
+          if (x) {
+            array = x;
+            array.data.push(dataBack);
+            this.sendNewProduct(document, dataBack, array);
+          }
+        })
+      );
+  }
+
+  public sendNewProduct(document:string, dataBack: StockProduct, array: Stock) {
+    this.firebaseService.setNewProduct(document, array).pipe(
+      take(1),
+      catchError((error) => {
+        this.ERROR = error;
+        this.modalDetail = dataBack;
+        this.dataBackUp = array;
+        this.modalService?.open(this.errorModal, {centered: true, });
+        return error;
+      })
+    ).subscribe(x => {
+      this.modalDetail = dataBack
+      this.modalService?.open(this.successModal, {centered: true});
+    })
+  }
 }

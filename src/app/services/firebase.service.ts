@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { finalize, map, take } from 'rxjs/operators';
+import { from, Observable, Subscription, throwError } from 'rxjs';
+import { catchError, finalize, map, take } from 'rxjs/operators';
 import { StockCollections } from '../enums/stock-collections.enum';
 import { SendPending, SendPendingArray } from '../interfaces/send-pending';
-import { IPhone, Stock } from '../interfaces/stock';
+import { IPhone, Stock, Stock2, StockProduct } from '../interfaces/stock';
 import { AngularFireAuth } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
@@ -76,6 +76,16 @@ export class FirebaseService {
           return this.mock;
         }
       })
+    );
+  }
+
+  public getStockSpecificDocumentAlone(collection: string): Observable<Stock> {
+    return this.afs.collection<Stock>('stock').doc(collection).valueChanges() as Observable<Stock>;
+  }
+
+  public setNewProduct(document: string, array: Stock): Observable<boolean>{
+    return from(this.afs.collection('stock').doc(document).set(array)).pipe(
+      map(x => true)
     );
   }
 
