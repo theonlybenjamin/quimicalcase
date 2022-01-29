@@ -32,7 +32,8 @@ export class StockComponent implements OnInit {
     'Airpods Pro / Airpods 3er gen',
     'Airpods 1era gen / 2da gen',
     'Cable'
-  ]
+  ];
+  public codeValue: string = '';
   constructor(
     public fireService: FirebaseService
   ) {
@@ -64,16 +65,26 @@ export class StockComponent implements OnInit {
   getCaseModel(){
     var result: string[] = [];
     for (let i = 0; i < this.productBackup.length; i++){
-      result.push(this.productBackup[i].producto);
+      if (this.codeValue) {
+        if (this.codeValue === this.productBackup[i].iphoneCode) {
+          result.push(this.productBackup[i].producto);
+        }
+      } else {
+        result.push(this.productBackup[i].producto);
+      }
     }
     return result;
   }
 
   public searchByCode(code: any) {
     var id = this.fireService.idByName(code.value);
+    this.codeValue = id;
+    this.getCaseModel();
     var filter = this.productBackup.filter(x => x.iphoneCode === id);
     if (code.value === 'reset') {
       this.products = this.productBackup;
+      this.codeValue = '';
+      this.getCaseModel();
     } else {
       this.products = filter;
     }
