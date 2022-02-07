@@ -18,11 +18,11 @@ const routes: Routes = [{
 },{
   path: 'login',
   component: LoginComponent,
-  // canActivate: [IsLoggedGuard]
+  canActivate: [IsLoggedGuard]
 }, {
   path: 'home',
   component: HomeComponent,
-  // canActivate: [UserLoggedGuard],
+  canActivate: [UserLoggedGuard],
   children: [{
     path: 'nueva-venta',
     component: NewSaleComponent
