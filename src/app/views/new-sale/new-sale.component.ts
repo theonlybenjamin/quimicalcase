@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SendPending } from 'src/app/interfaces/send-pending';
@@ -11,34 +11,72 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   templateUrl: './new-sale.component.html',
   styleUrls: ['./new-sale.component.scss']
 })
-export class NewSaleComponent implements OnInit {
+export class NewSaleComponent {
 
-  public products: IPhone[] = [];
+  public codes: IPhone[] = [];
   public cases: Array<Array<StockProduct>> = [];
   public saleForm: FormGroup;
   public cantToSell = [0];
   public showSelects = false;
-  public modelsToEliminte: IProductSelled[] = [];
+  public deleteFromDrive: IProductSelled[] = [];
   public updatedModels: IProductSelled[] = [];
   @ViewChild('content') modal: ElementRef | undefined;
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   public ERROR: any;
+  public capital: number = 0;
   constructor(
     public firebaseService: FirebaseService,
     public router: Router,
     private modalService: NgbModal
     ) {
-    this.firebaseService.getStockAllDocumentsName().subscribe(x => this.products = x);
+    this.firebaseService.getStockAllDocumentsName().subscribe(x => {
+      this.codes = x;
+    });
     this.saleForm = new FormGroup({
-      iphone0: new FormControl({ value: 'Selecciona el codigo' }, Validators.required),
-      cliente: new FormControl('', Validators.required),
-      cantidad: new FormControl('Selecciona la cantidad', Validators.required),
-      case0: new FormControl({value: 'Selecciona el modelo', disabled: true}, Validators.required),
-      tipo_entrega: new FormControl('Tipo entrega', Validators.required)
-    })
+      client: new FormControl(null, Validators.required),
+      delivery_type: new FormControl(null, Validators.required),
+      summary: new FormControl(null, Validators.required),
+      delivery_price: new FormControl(null, Validators.required),
+      products: new FormArray([
+        new FormGroup({
+          code: new FormControl(null, Validators.required),
+          model: new FormControl(null, Validators.required),
+          cant: new FormControl(null, Validators.required)
+        })
+      ])
+    });
   }
 
-  ngOnInit(): void {
+  get products() {
+    return this.saleForm.get('products') as FormArray;
+  }
+
+  get array() {
+    return this.products.controls;
+  }
+
+  getArrayFormGroup(i:number) {
+    return this.array[i] as FormGroup;
+  }
+
+  public searchIphoneCases(index: number){
+    const formGroupValue = this.getArrayFormGroup(index).value;
+    this.firebaseService.getStockSpecificDocument(formGroupValue.code).subscribe(x => {
+      this.cases[index] = x.data
+      this.cases[index].push(x.docId as unknown as StockProduct);
+    });
+  }
+
+  addFormGroup() {
+    this.products.push(new FormGroup({
+      code: new FormControl(null, Validators.required),
+      model: new FormControl(null, Validators.required),
+      cant: new FormControl(null, Validators.required)
+    }))
+  }
+
+  deleteFormGroup() {
+    this.array.pop();
   }
 
   public openModal() {
@@ -52,86 +90,66 @@ export class NewSaleComponent implements OnInit {
   public goPending() {
     this.modalService?.dismissAll();
     this.router.navigate(['/home/pendiente-envio'])
-
-  }
-// TODO
-  public searchIphoneCases(index: number){
-    console.log(this.saleForm.value);
-    this.firebaseService.getStockSpecificDocument(this.saleForm.get('iphone'+ index)?.value).subscribe(x => {
-      this.cases[index] = x.data
-      this.saleForm.get('case'+ index)?.enable();
-    });
-  }
-
-  /**
-   * Funcion para decidir cuantos select se mostrarán
-   */
-  public addCaseSelect() {
-    const valueOnNumbers = Number(this.saleForm.get('cantidad')?.value);
-    for (let i = 1; i < valueOnNumbers; i++) {
-      this.cantToSell = Array(valueOnNumbers).fill(i);
-      this.saleForm.addControl('iphone' + i, new FormControl({ value: 'Selecciona el codigo' }, Validators.required))
-      this.saleForm.addControl('case' + i, new FormControl({value: 'Selecciona el modelo', disabled: true}, Validators.required))
-    }
-    this.showSelects = true;
-  }
-
-  public addProductToCart(codeArray: Array<string>, casesArray: Array<string>): IProductSelled[] {
-    var result: IProductSelled[] = [];
-    for (let i = 0; i < codeArray.length; i++) {
-      let obj = { code: this.saleForm.get(codeArray[i])?.value,
-                  model: this.saleForm.get(casesArray[i])?.value,
-                  index: i
-                };
-      result.push(obj);
-    }
-    return result;
   }
 
   public doSale(): void {
-    const codes = Object.keys(this.saleForm.value).filter(x => x.includes('iphone'));
-    const cases = Object.keys(this.saleForm.value).filter(x => x.includes('case'));
-    const codesAndCases = this.addProductToCart(codes, cases);
-    const finalResult: Stock = {} as Stock;
-    for (let i = 0; i < codesAndCases.length; i++) {
-      const searchObject = this.cases[codesAndCases[i].index].find(x => x.producto === codesAndCases[i].model) as StockProduct;
-      const indexToUpdate = this.cases[codesAndCases[i].index].indexOf(searchObject);
-      try {
-        if (searchObject.cant === 1) {
-          this.cases[codesAndCases[i].index].splice(indexToUpdate, 1);
-          finalResult.data = this.cases[codesAndCases[i].index];
-          this.firebaseService.setFieldsStockCollection(codesAndCases[i].code, finalResult);
-          this.modelsToEliminte.push(codesAndCases[i]);
-          this.updatedModels.push(codesAndCases[i])
-        } else {
-          this.cases[codesAndCases[i].index][indexToUpdate] = {...searchObject, cant: searchObject.cant -1};
-          finalResult.data = this.cases[codesAndCases[i].index];
-          this.firebaseService.setFieldsStockCollection(codesAndCases[i].code, finalResult);
-          this.updatedModels.push(codesAndCases[i]);
+    try {
+      this.array.forEach(x => {
+        /**
+         * @this.@cases traera todo el array de modelos (estos tienen de todos los codigos que fueron llamados)
+         * es un arrays de arrays
+         * 
+         * @codeIndex es la propiedad que almacena el index del codigo en cuestion
+         */
+        const codeIndex = this.cases.findIndex(y => y[y.length - 1] === x.value.code);
+        const modelIndex = this.cases[codeIndex].findIndex(z => z.producto === x.value.model);
+        var finalResult: Stock = {} as Stock;
+        this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
+        if (this.cases[codeIndex][modelIndex].cant === 0) {
+          this.deleteFromDrive.push(x.value);
+          this.cases[codeIndex].splice(modelIndex, 1);
         }
-        this.prepareSendPendingData(codesAndCases);
-        if (this.modelsToEliminte.length === 0) {
-          this.router.navigate(['/home/pendiente-envio']);
-        } else {
-          this.openModal();
+        finalResult.data = this.cases[codeIndex];
+        if (finalResult.data[finalResult.data.length - 1] === x.value.code) {
+          finalResult.data.pop();
         }
-      } catch (error) {
+        this.firebaseService.setFieldsStockCollection(x.value.code, finalResult);
+        this.updatedModels.push(x.value);
+        // this.capital = this.capital + Number(this.cases[codeIndex][modelIndex]?.precio);
+      })
+      this.prepareSendPendingData();
+      if (this.deleteFromDrive.length === 0) {
+        this.router.navigate(['/home/pendiente-envio']);
+      } else {
+        this.openModal();
+      }
+    } catch (error) {
         console.log(error);
-        this.prepareSendPendingData(codesAndCases);
+        this.prepareSendPendingData();
         this.ERROR = error;
         this.openErrorModal();
-      }
     }
-
   }
 
-  public prepareSendPendingData(codesAndCases: Array<any>) {
+  public prepareSendPendingData() {
     var obj: SendPending = {
-      cliente: this.saleForm.get('cliente')?.value,
-      tipo_entrega: this.saleForm.get('tipo_entrega')?.value,
-      productos: codesAndCases
+      cliente: this.saleForm.get('client')?.value,
+      tipo_entrega: this.saleForm.get('delivery_type')?.value,
+      productos: this.updatedModels
     };
-    
+    console.log(this.updatedModels);
     this.firebaseService.setSendPendingColecction(obj);
+
+    var allSales: SendPending = {
+      cliente: this.saleForm.get('client')?.value,
+      tipo_entrega: this.saleForm.get('delivery_type')?.value,
+      total: this.saleForm.get('summary')?.value,
+      costo_delivery: this.saleForm.get('delivery_price')?.value,
+      productos: this.updatedModels,
+      capital: this.capital
+    };
+
+    this.firebaseService.setAllSalesCollecction(allSales);
   }
+  
 }

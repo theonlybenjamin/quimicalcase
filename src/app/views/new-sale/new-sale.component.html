@@ -8,7 +8,7 @@
     <div class="modal-body">
       <p>Por favor, toma nota o eliminar ahorita, debes eliminar del Drive los siguientes cases:
       </p>
-      <div *ngFor="let model of modelsToEliminte;">
+      <div *ngFor="let model of deleteFromDrive;">
             <span><b>{{model.model}}</b> del <b>{{model.code}}</b></span>
       </div>
     </div>
@@ -36,65 +36,86 @@
       <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Entendido</button>
     </div>
 </ng-template>
+
 <section>
-    <form class="form" [formGroup]="saleForm">
-        <div class="form-group">
-            <label for="name">Nombre de cliente</label>
-            <input type="text"
-                   class="form-control"
-                   id="name"
-                   formControlName="cliente">
-        </div>
-        <div class="form-group">
-            <label for="tipo_entrega">Tipo de entrega</label>
-            <select class="form-select" formControlName="tipo_entrega"
-                    id="tipo_entrega">
-                <option selected>Selecciona el tipo de entrega</option>
-                <option value="Olva">Olva</option>
-                <option value="Contraentrega">Contraentrega</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="cantidad">Cantidad de prodcutos a vender</label>
-            <select class="form-select" aria-label="Default select example" formControlName="cantidad"
-                    id="cantidad"
-                    (change)="addCaseSelect()">
-                <option selected>Selecciona la cantidad</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-        <div *ngIf="showSelects">
-            <div class="select-group" *ngFor="let notUsed of cantToSell;let i = index">
-                <div class="select-child">
-                    <label for="iphone">C&oacute;digo de producto</label>
-                    <select class="form-select"
-                            [formControlName]="'iphone' + i"
-                            id="iphone"
-                            (change)="searchIphoneCases(i)">
-                        <option selected>Selecciona el codigo</option>
-                        <option [value]="iphone.id" *ngFor="let iphone of products">{{ iphone.name }}</option>
-                    </select>
-                </div>
-                <div class="select-child">
+  <form class="form" [formGroup]="saleForm">
+    <div class="form-group">
+      <label for="client">Nombre de cliente</label>
+      <input type="text"
+             class="form-control"
+             id="client"
+             formControlName="client">
+    </div>
+    <div class="form-group">
+      <label for="delivery_type">Tipo de entrega</label>
+      <select class="form-select"
+              formControlName="delivery_type"
+              id="delivery_type">
+          <option selected>Selecciona el tipo de entrega</option>
+          <option value="Olva">Olva</option>
+          <option value="Contraentrega">Contraentrega</option>
+      </select>
+    </div>
+    <div *ngFor="let product of array; let i = index">
+          <div class="select-group" [formGroup]="getArrayFormGroup(i)">
+              <div class="row mx-2">
+                  <div class="form-group col-6">
+                      <label for="code">C&oacute;digo</label>
+                      <select class="form-select"
+                              formControlName="code"
+                              id="code"
+                              (change)="searchIphoneCases(i)">
+                          <option selected>Selecciona el codigo</option>
+                          <option [value]="iphone.id" *ngFor="let iphone of codes">{{ iphone.name }}</option>
+                      </select>
+                  </div>
+                  <div class="form-group col-6">
                     <label for="case">Modelo</label>
                     <select class="form-select"
-                            [formControlName]="'case' + i"
+                            formControlName="model"
                             id="case">
                         <option selected>Selecciona el modelo</option>
                         <option [value]="case.producto" *ngFor="let case of cases[i]">{{ case.producto }}</option>
                     </select>
-                </div>
-            </div>
-            <button type="button" class="btn btn-success" (click)="doSale()">Realizar Venta</button>
-        </div>
-    </form>
+                  </div>
+              </div>
+              <div class="row mx-1">
+                  <div class="form-group col">
+                      <label for="name">Cantidad</label>
+                      <input type="number"
+                             class="form-control"
+                             id="name"
+                             formControlName="cant">
+                  </div>
+              </div>
+          </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6">
+          <label for="name">Total</label>
+          <input type="number"
+                 min="0.0"
+                 step="0.1"
+                 class="form-control"
+                 id="name"
+                 formControlName="summary">
+      </div>
+      <div class="form-group col-6">
+          <label for="name">Costo de Delivery</label>
+          <input type="number"
+                 min="0.0"
+                 step="0.1"
+                 class="form-control"
+                 id="name"
+                 formControlName="delivery_price">
+      </div>
+    </div>
+      <div class="row justify-content-between px-5">
+          <button type="button" class="btn btn-dark col mx-1 my-2" (click)="addFormGroup()">Agregar m&aacute;s</button>
+          <button type="button" class="btn btn-danger col mx-1 my-2" (click)="deleteFormGroup()" [disabled]="array.length < 2">Eliminar</button>
+      </div>
+      <div class="row px-5">
+          <button type="button" class="btn btn-success col my-5" (click)="doSale()" [disabled]="!saleForm.valid">Realizar venta</button>
+      </div>
+  </form>
 </section>

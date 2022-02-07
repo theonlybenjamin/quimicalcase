@@ -10,7 +10,7 @@ export interface Stock2 {
 }
 export interface StockProduct {
     producto: string;
-    precio: string;
+    precio: number;
     cant: number;
     iphoneCode?: string
 }
@@ -28,5 +28,6 @@ export interface IPhone {
 export interface IProductSelled {
     code: string;
     model: string;
-    index: number;
+    cant?: number;
+    index?: number;
 }
