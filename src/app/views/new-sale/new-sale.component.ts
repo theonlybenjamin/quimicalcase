@@ -36,7 +36,7 @@ export class NewSaleComponent {
       client: new FormControl(null, Validators.required),
       delivery_type: new FormControl(null, Validators.required),
       summary: new FormControl(null, Validators.required),
-      delivery_price: new FormControl(null, Validators.required),
+      delivery_price: new FormControl(null),
       products: new FormArray([
         new FormGroup({
           code: new FormControl(null, Validators.required),
@@ -115,7 +115,7 @@ export class NewSaleComponent {
         }
         this.firebaseService.setFieldsStockCollection(x.value.code, finalResult);
         this.updatedModels.push(x.value);
-        // this.capital = this.capital + Number(this.cases[codeIndex][modelIndex]?.precio);
+        this.capital = this.capital + Number(this.cases[codeIndex][modelIndex]?.precio);
       })
       this.prepareSendPendingData();
       if (this.deleteFromDrive.length === 0) {
