@@ -14,8 +14,13 @@
     </div>
 </ng-template>
 <div class="filter-result">
+    <p>
+        <b style="color: green">Ingreso bruto: {{totalSummary}}</b><br>
+        <b style="color: blue">Sueldo: {{ salary }}</b><br>
+        <b style="color: red">Reinversion: {{ reinvesment }}</b><br>
+        <b style="color: red">Publicidad: {{ advertisement }}</b><br>
+    </p>
     <p class="mb-30 ff-montserrat">{{summaryText}} <b>{{ orders.length }}</b></p>
-
     <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let order of orders; let i = index" >
         <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
             <div class="job-content">
@@ -27,10 +32,17 @@
                     <li class="mr-md-4" style="margin-top: 20px;">
                         <p *ngFor="let producto of order.productos; let i = index"> {{producto.cant}} <b>{{ producto.model }} </b> de <b>{{ producto.code }}</b></p>
                     </li>
-                    <li class="mr-md-4" style="margin-top: 20px;" *ngIf="order.total">
-                        <p> Total: {{ order.total}}</p>
-                        <p> Costo Delivery: {{ order.costo_delivery }}</p>
-                        <p> Capital: {{ order.capital }}</p>
+                    <li class="mr-md-4" *ngIf="order.total">
+                        <span style="color: blue"> Total: <b>S/.</b> {{ order.total}}</span>
+                    </li>
+                    <li class="mr-md-4" *ngIf="order.total">
+                        <span> Costo Delivery: <b>S/.</b> {{ order.costo_delivery }}</span><br>
+                        <span> Inversion: <b>S/.</b> {{ order.capital }}</span><br>
+                        <span> Packaging y Publicidad: <b>S/.</b> {{ packagingPrice + advertisingPrice }}</span><br>
+                        <span style="color: red"> Gastos: <b>S/.</b> {{ getExpensesSummary(order) }}</span> <br>
+                    </li>
+                    <li class="mr-md-4" *ngIf="order.total">
+                        <span style="color: green"> Ganancia: <b>S/.</b> {{ getProfit(order) }}</span><br>
                     </li>
                 </ul>
             </div>
