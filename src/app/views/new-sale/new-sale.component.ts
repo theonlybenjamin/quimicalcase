@@ -41,7 +41,7 @@ export class NewSaleComponent {
         new FormGroup({
           code: new FormControl(null, Validators.required),
           model: new FormControl(null, Validators.required),
-          cant: new FormControl(null, Validators.required)
+          cant: new FormControl(1, Validators.required)
         })
       ])
     });
@@ -71,7 +71,7 @@ export class NewSaleComponent {
     this.products.push(new FormGroup({
       code: new FormControl(null, Validators.required),
       model: new FormControl(null, Validators.required),
-      cant: new FormControl(null, Validators.required)
+      cant: new FormControl(1, Validators.required)
     }))
   }
 
