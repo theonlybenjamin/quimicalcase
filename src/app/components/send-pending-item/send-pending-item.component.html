@@ -6,7 +6,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <p>¿Segura que el pedido de <b>{{ selectedOrder.cliente }}|</b> fue enviado? </p>
+      <p>¿Segura que el pedido de <b>{{ selectedOrder.cliente }}</b> fue enviado? </p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-danger" (click)="confirmCompleteOrder()">S&iacute;</button>
@@ -14,7 +14,7 @@
     </div>
 </ng-template>
 <div class="filter-result">
-    <p>
+    <p *ngIf="showTotal">
         <b style="color: green">Ingreso bruto: {{totalSummary}}</b><br>
         <b style="color: blue">Sueldo: {{ salary }}</b><br>
         <b style="color: red">Reinversion: {{ reinvesment }}</b><br>

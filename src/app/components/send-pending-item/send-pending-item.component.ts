@@ -15,6 +15,7 @@ export class SendPendingItemComponent implements OnInit {
   @Input() orders: SendPending[] = [];
   @Input() showButton: boolean = true;
   public selectedOrder: SendPending = {} as SendPending;
+  @Input() showTotal: boolean = false;
   @ViewChild('successModal') successModal: ElementRef | undefined;
   public packagingPrice: number = 5;
   public advertisingPrice: number = 3.5;
