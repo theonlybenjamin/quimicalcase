@@ -137,7 +137,6 @@ export class NewSaleComponent {
       tipo_entrega: this.saleForm.get('delivery_type')?.value,
       productos: this.updatedModels
     };
-    console.log(this.updatedModels);
     this.firebaseService.setSendPendingColecction(obj);
 
     var allSales: SendPending = {
