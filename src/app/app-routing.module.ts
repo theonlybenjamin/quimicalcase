@@ -45,7 +45,7 @@ const routes: Routes = [{
     redirectTo: 'nueva-venta'
   }]
 }, {
-  path: '',
+  path: '**',
   pathMatch: 'full',
   redirectTo: 'tracking'
 }];

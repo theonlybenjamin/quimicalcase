@@ -1,18 +1,3 @@
-<ng-template #successModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Pedido enviado</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p>¿Segura que el pedido de <b>{{ selectedOrder.cliente }}</b> fue enviado? </p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-danger" (click)="confirmCompleteOrder()">S&iacute;</button>
-      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
-    </div>
-</ng-template>
 <div class="filter-result">
     <p *ngIf="showTotal">
         <b style="color: green">Ingreso bruto: {{totalSummary}}</b><br>
@@ -21,7 +6,7 @@
         <b style="color: red">Publicidad: {{ advertisement }}</b><br>
     </p>
     <p class="mb-30 ff-montserrat">{{summaryText}} <b>{{ orders.length }}</b></p>
-    <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let order of orders; let i = index" >
+    <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let order of orders; let i = index">
         <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
             <div class="job-content">
                 <h5 class="text-md-left">{{ order.cliente }}</h5>
@@ -47,9 +32,9 @@
                 </ul>
             </div>
         </div>
-        <div class="job-right my-4 flex-shrink-0" *ngIf="showButton">
-            <button type="button" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="completeOrder(order)">Pedido Enviado</button>
+        <div class="job-right my-4 flex-shrink-0">
+            <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitOrder(order)">{{textButton2}}</button>
+            <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitOrder(order)">{{textButton}}</button>
         </div>
     </div>
-
 </div>

@@ -217,4 +217,31 @@ export class FirebaseService {
       array.data.splice(indexToDelete, 1);
     });
   }
+
+  public deleteItemSalesCollection(order: SendPending) {
+    var array: SendPendingArray = {
+      data: []
+    };
+    this.getAllSales().pipe(
+      take(1),
+      finalize(() => this.afs.collection('ventas').doc('total_ventas').set(array))
+    ).subscribe(x => {
+      array = x;
+      const searchObject = array.data.find(x => {
+        if (x.cliente === order.cliente && x.tipo_entrega === order.tipo_entrega) {
+          for (let i = 0; i < x.productos.length; i++) {
+            if (x.productos[i].code === order.productos[i].code && x.productos[i].model === order.productos[i].model
+              && x.productos[i].index === order.productos[i].index) {
+              return x;
+            } else {
+              return undefined;
+            }
+          }
+        }
+          return undefined;
+      }) as SendPending;
+      const indexToDelete = array.data.indexOf(searchObject);
+      array.data.splice(indexToDelete, 1);
+    });
+  }
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SendPending } from 'src/app/interfaces/send-pending';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -8,18 +8,18 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   templateUrl: './send-pending.component.html',
   styleUrls: ['./send-pending.component.scss']
 })
-export class SendPendingComponent implements OnInit {
+export class SendPendingComponent {
 
   public orders: SendPending[] = [];
   public reversedOrders: SendPending[] = [];
   public showSends = false;
+  public selectedOrder: SendPending = {} as SendPending;
+  @ViewChild('successModal') successModal: ElementRef | undefined;
   constructor(
     public fireService: FirebaseService,
+    private modalService: NgbModal
   ) {
     this.getSends();
-  }
-
-  ngOnInit(): void {
   }
 
   public getSends() {
@@ -33,7 +33,14 @@ export class SendPendingComponent implements OnInit {
       this.showSends = true;
     });
   }
+
   public completeOrder(order: SendPending) {
-    this.fireService.deleteItemPendingCollection(order);
+    this.selectedOrder = order;
+    this.modalService.open(this.successModal, {centered: true});
+  }
+
+  public confirmCompleteOrder() {
+    this.fireService.deleteItemPendingCollection(this.selectedOrder);
+    this.modalService.dismissAll();
   }
 }

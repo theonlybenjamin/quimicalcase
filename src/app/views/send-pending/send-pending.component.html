@@ -1,9 +1,23 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
+<ng-template #successModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Pedido enviado</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>¿Segura que el pedido de <b>{{ selectedOrder.cliente }}</b> fue enviado? </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-danger" (click)="confirmCompleteOrder()">S&iacute;</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
+    </div>
+</ng-template>
 
 <div class="container">
             <div class="row">
                  <div class="col-lg-10 mx-auto mb-4">
-                    <div class="section-title text-center ">
+                    <div class="section-title text-center mt-5">
                         <h3 class="top-c-sep">Pendientes de env&iacute;o</h3>
                         <p>Revisar que los pedidos tengan todo antes de ser enviados</p>
                     </div>
@@ -13,7 +27,12 @@
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="career-search mb-60" *ngIf="showSends">
-                        <app-send-pending-item [orders]="reversedOrders" summaryText="Total pedidos a enviar:" [showButton]="true"></app-send-pending-item>
+                        <app-send-pending-item [orders]="reversedOrders"
+                                               summaryText="Total pedidos a enviar:"
+                                               [showButton]="true"
+                                               (selectedOrder)="completeOrder($event)"
+                                               textButton="Pedido Enviado"
+                                               ></app-send-pending-item>
                     </div>
                 </div>
             </div>
