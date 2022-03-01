@@ -115,10 +115,10 @@ export class NewSaleComponent {
         }
         this.firebaseService.setFieldsStockCollection(x.value.code, finalResult);
         this.updatedModels.push(x.value);
-        this.capital = this.capital + Number(this.cases[codeIndex][modelIndex]?.precio);
+        this.capital += this.cases[codeIndex][modelIndex]?.precio;
       })
       this.prepareSendPendingData();
-      if (this.deleteFromDrive.length === 0) {
+      if (this.deleteFromDrive.length === 0) {-
         this.router.navigate(['/home/pendiente-envio']);
       } else {
         this.openModal();

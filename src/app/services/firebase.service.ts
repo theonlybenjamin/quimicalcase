@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { from, Observable, Subscription, throwError } from 'rxjs';
-import { catchError, finalize, map, take } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { finalize, map, take } from 'rxjs/operators';
 import { StockCollections } from '../enums/stock-collections.enum';
 import { SendPending, SendPendingArray } from '../interfaces/send-pending';
-import { IPhone, Stock, Stock2, StockProduct } from '../interfaces/stock';
+import { IPhone, Stock } from '../interfaces/stock';
 import { AngularFireAuth } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
@@ -21,11 +21,12 @@ export class FirebaseService {
   };
   public mock2: SendPendingArray = {} as SendPendingArray;
   public isLogged = false;
+  public actualMonth: number = 0;
   constructor(
     private readonly afs: AngularFirestore,
     private readonly auth: AngularFireAuth
   ) {
-
+    this.actualMonth = new Date().getMonth() + 1;
   }
 
   public async login(user: string, pass: string) {
@@ -55,8 +56,8 @@ export class FirebaseService {
     );
   }
 
-  public getAllSales(): Observable<SendPendingArray> {
-    return this.afs.collection<SendPendingArray>('ventas').doc('total_ventas').valueChanges().pipe(
+  public getAllSales(doc = 'total_ventas'): Observable<SendPendingArray> {
+    return this.afs.collection<SendPendingArray>('ventas').doc(doc).valueChanges().pipe(
       map(x => {
         if (x) {
           return x;
@@ -179,16 +180,34 @@ export class FirebaseService {
     var array: SendPendingArray = {
       data: []
     };
-    this.getAllSales().pipe(
+    this.getAllSales(this.getMonthOnSalesDOC(this.actualMonth)).pipe(
       take(1),
       finalize(() => {
-        this.afs.collection('ventas').doc('total_ventas').set(array);
+        this.afs.collection('ventas').doc(this.getMonthOnSalesDOC(this.actualMonth)).set(array);
       })
     ).subscribe(x => {
       array = x
       array.data.push(dataBack);
 
     });
+  }
+
+  public getMonthOnSalesDOC(month: number) {
+    switch (month) {
+      case 1: return 'ventas_enero';
+      case 2: return 'ventas_febrero';
+      case 3: return 'ventas_marzo';
+      case 4: return 'ventas_abril';
+      case 5: return 'ventas_mayo';
+      case 6: return 'ventas_junio'; 
+      case 7: return 'ventas_julio';
+      case 8: return 'ventas_agosto';
+      case 9: return 'ventas_setiembre';
+      case 10: return 'ventas_octubre';
+      case 11: return 'ventas_noviembre';
+      case 12: return 'ventas_diciembre';
+      default: return 'ERROR'
+      }
   }
 
   public deleteItemPendingCollection(order: SendPending) {
@@ -243,5 +262,9 @@ export class FirebaseService {
       const indexToDelete = array.data.indexOf(searchObject);
       array.data.splice(indexToDelete, 1);
     });
+  }
+
+  public justDevelopmentFunc(array: any) {
+    this.afs.collection('ventas').doc('ventas_marzo').set(array);
   }
 }
