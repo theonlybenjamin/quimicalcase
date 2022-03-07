@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -29,12 +30,14 @@ export class LoginComponent implements OnInit {
     var user = this.loginForm.get('user')?.value;
     var pass = this.loginForm.get('pass')?.value
     if( user !== null && pass !== null) {
-      var login = await this.fireService.login(user, pass);
-      if (await login === 'error') {
-        this.showError = true;
-      } else {
+      this.fireService.login(user, pass).pipe(
+        catchError( error => {
+          this.showError = true;
+          return error;
+        })
+      ).subscribe(x => {
         this.router.navigate(['/home']);
-      }
+      })
     }
   }
 }

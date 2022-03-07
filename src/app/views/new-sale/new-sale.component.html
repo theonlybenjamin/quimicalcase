@@ -56,6 +56,16 @@
           <option value="Contraentrega">Contraentrega</option>
       </select>
     </div>
+    <div class="form-group">
+      <label for="sale_channel">Canal de venta</label>
+      <select class="form-select"
+              formControlName="sale_channel"
+              id="sale_channel">
+          <option selected>Selecciona el canal de venta</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Whatsapp">Whatsapp</option>
+      </select>
+    </div>
     <div *ngFor="let product of array; let i = index">
           <div class="select-group" [formGroup]="getArrayFormGroup(i)">
               <div class="row mx-2">
@@ -81,10 +91,10 @@
               </div>
               <div class="row mx-1">
                   <div class="form-group col">
-                      <label for="name">Cantidad</label>
+                      <label for="cantidad">Cantidad</label>
                       <input type="number"
                              class="form-control"
-                             id="name"
+                             id="cantidad"
                              formControlName="cant">
                   </div>
               </div>
@@ -92,12 +102,12 @@
     </div>
     <div class="row">
       <div class="form-group col-6">
-          <label for="name">Total</label>
+          <label for="total">Total</label>
           <input type="number"
                  min="0.0"
                  step="0.1"
                  class="form-control"
-                 id="name"
+                 id="total"
                  formControlName="summary">
       </div>
       <div class="form-group col-6">

@@ -7,6 +7,7 @@ export interface SendPending {
     costo_delivery?: number;
     total?: number;
     capital?: number;
+    canal_venta?: string;
 }
 
 export interface SendPendingArray {

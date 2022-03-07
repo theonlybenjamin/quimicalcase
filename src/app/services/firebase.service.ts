@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { finalize, map, take } from 'rxjs/operators';
+import { finalize, map, take, tap } from 'rxjs/operators';
 import { StockCollections } from '../enums/stock-collections.enum';
 import { SendPending, SendPendingArray } from '../interfaces/send-pending';
 import { IPhone, Stock } from '../interfaces/stock';
@@ -28,56 +28,52 @@ export class FirebaseService {
   ) {
     this.actualMonth = new Date().getMonth() + 1;
   }
-
-  public async login(user: string, pass: string) {
-    try {
-      const result = await this.auth.signInWithEmailAndPassword(user, pass);
-      this.isLogged = true;
-      return 'ok';
-    } catch (error) {
-      return 'error';
-    }
+  /**
+   * Metodo para hacer el logeo del usuario
+   * @param user - username
+   * @param pass - password
+   * @returns 
+   */
+  public login(user: string, pass: string) {
+    return from(this.auth.signInWithEmailAndPassword(user, pass)).pipe(
+      tap(x => this.isLogged = true)
+    )
   }
 
-  public async closeSession() {
-    this.isLogged = false;
-    await this.auth.signOut();
+  /**
+   * Metodo para realizar el cierre de sesión
+   */
+  public closeSession() {
+    return from(this.auth.signOut()).pipe(
+      tap(x => this.isLogged = false)
+    )
+
   }
 
+  /**
+   * Metodo para obtener los pendientes de envío
+   * @returns mock
+   */
   public getSendPending(): Observable<SendPendingArray> {
-    return this.afs.collection<SendPendingArray>('ventas').doc('pendientes_envio').valueChanges().pipe(
-      map(x => {
-        if (x) {
-          return x;
-        } else {
-          return this.mock2;
-        }
-      })
-    );
+    return this.afs.collection<SendPendingArray>('ventas').doc('pendientes_envio').valueChanges() as Observable<SendPendingArray>;
   }
 
-  public getAllSales(doc = 'total_ventas'): Observable<SendPendingArray> {
-    return this.afs.collection<SendPendingArray>('ventas').doc(doc).valueChanges().pipe(
-      map(x => {
-        if (x) {
-          return x;
-        } else {
-          return this.mock2;
-        }
-      })
-    );
+  /**
+   * Metodo para obtener todas las ventas
+   * @param doc  - el documento a consultar
+   * @returns 
+   */
+  public getAllSales(doc: string): Observable<SendPendingArray> {
+    return this.afs.collection<SendPendingArray>('ventas').doc(doc).valueChanges() as Observable<SendPendingArray>;
   }
 
+  /**
+   * 
+   * @param collection 
+   * @returns 
+   */
   public getStockSpecificDocument(collection: string): Observable<Stock> {
-    return this.afs.collection<Stock>('stock').doc(collection).valueChanges({ idField: 'docId' }).pipe(
-      map(x => {
-        if (x) {
-          return x;
-        } else {
-          return this.mock;
-        }
-      })
-    );
+    return this.afs.collection<Stock>('stock').doc(collection).valueChanges({ idField: 'docId' }) as Observable<Stock>;
   }
 
   public getStockSpecificDocumentAlone(collection: string): Observable<Stock> {
@@ -128,7 +124,7 @@ export class FirebaseService {
       case StockCollections.AirpodsPro: return 'Airpods Pro / Airpods 3er gen';
       case StockCollections.Airpods1era: return 'Airpods 1era gen / 2da gen';
       case StockCollections.Cable: return 'Cable';
-      default: return '';
+      default: return id;
     }
   }
 
@@ -152,12 +148,12 @@ export class FirebaseService {
       case 'Airpods Pro / Airpods 3er gen': return StockCollections.AirpodsPro;
       case 'Airpods 1era gen / 2da gen': return StockCollections.Airpods1era;
       case 'Cable': return StockCollections.Cable;
-      default: return '';
+      default: return id;
     }
   }
 
-  public setFieldsStockCollection(document: string, data: Stock) {
-    this.stockCollection = this.afs.collection('stock').doc(document).set(data);
+  public setFieldsStockCollection(document: string, data: Stock): Observable<any> {
+    return from(this.afs.collection('stock').doc(document).update(data));
   }
 
   public setSendPendingColecction(dataBack: SendPending) {
@@ -206,7 +202,7 @@ export class FirebaseService {
       case 10: return 'ventas_octubre';
       case 11: return 'ventas_noviembre';
       case 12: return 'ventas_diciembre';
-      default: return 'ERROR'
+      default: return month.toString()
       }
   }
 
@@ -241,9 +237,9 @@ export class FirebaseService {
     var array: SendPendingArray = {
       data: []
     };
-    this.getAllSales().pipe(
+    this.getAllSales(this.getMonthOnSalesDOC(this.actualMonth)).pipe(
       take(1),
-      finalize(() => this.afs.collection('ventas').doc('total_ventas').set(array))
+      finalize(() => this.afs.collection('ventas').doc(this.getMonthOnSalesDOC(this.actualMonth)).set(array))
     ).subscribe(x => {
       array = x;
       const searchObject = array.data.find(x => {

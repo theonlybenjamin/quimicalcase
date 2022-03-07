@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -31,7 +32,11 @@ export class HomeComponent implements OnInit {
   }
 
   closeSession() {
-    
-    this.firebaseService.closeSession().finally(() => this.router.navigate(['/login']));
+    this.firebaseService.closeSession().pipe(
+      catchError(error =>{
+        this.router.navigate(['/login'])
+        return error;
+      })
+    ).subscribe(() => this.router.navigate(['/login']));
   }
 }

@@ -1,7 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { catchError } from 'rxjs/operators';
 import { SendPending } from 'src/app/interfaces/send-pending';
 import { IPhone, IProductSelled, Stock, StockProduct } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -35,6 +36,7 @@ export class NewSaleComponent {
     this.saleForm = new FormGroup({
       client: new FormControl(null, Validators.required),
       delivery_type: new FormControl(null, Validators.required),
+      sale_channel: new FormControl(null, Validators.required),
       summary: new FormControl(null, Validators.required),
       delivery_price: new FormControl(null),
       products: new FormArray([
@@ -94,29 +96,50 @@ export class NewSaleComponent {
 
   public doSale(): void {
     try {
-      this.array.forEach(x => {
+      this.array.map(x => {
         /**
          * @this.@cases traera todo el array de modelos (estos tienen de todos los codigos que fueron llamados)
          * es un arrays de arrays
          * 
          * @codeIndex es la propiedad que almacena el index del codigo en cuestion
+         * @modelIndex es la propiedad que almacena el modelo a editar
+         * @finalResult se almacena el nuevo resultado del arrya
          */
         const codeIndex = this.cases.findIndex(y => y[y.length - 1] === x.value.code);
         const modelIndex = this.cases[codeIndex].findIndex(z => z.producto === x.value.model);
         var finalResult: Stock = {} as Stock;
         this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
+        /**
+         * Si la cantidad actual del producto es 0, se agrega al modal que muestra los cases a eliminar
+         * y se eliminar del array
+         */
         if (this.cases[codeIndex][modelIndex].cant === 0) {
           this.deleteFromDrive.push(x.value);
           this.cases[codeIndex].splice(modelIndex, 1);
         }
         finalResult.data = this.cases[codeIndex];
+        /**
+         * Eliminar el ultimo objecto del array que es el codigo del modelo
+         */
         if (finalResult.data[finalResult.data.length - 1] === x.value.code) {
           finalResult.data.pop();
         }
-        this.firebaseService.setFieldsStockCollection(x.value.code, finalResult);
         this.updatedModels.push(x.value);
         this.capital += this.cases[codeIndex][modelIndex]?.precio;
+        return this.firebaseService.setFieldsStockCollection(x.value.code, finalResult).pipe(
+          catchError(error => {
+            console.log(error);
+            this.prepareSendPendingData();
+            this.ERROR = error;
+            this.openErrorModal();
+            return error;
+          }) 
+        ).subscribe();
       })
+      /**
+       * Una vez terminado el loop, procedemos a preparar la data a enviar y a
+       * rutear al home o mostrar el modal de cases a elminar
+       */
       this.prepareSendPendingData();
       if (this.deleteFromDrive.length === 0) {-
         this.router.navigate(['/home/pendiente-envio']);
@@ -135,7 +158,8 @@ export class NewSaleComponent {
     var obj: SendPending = {
       cliente: this.saleForm.get('client')?.value,
       tipo_entrega: this.saleForm.get('delivery_type')?.value,
-      productos: this.updatedModels
+      productos: this.updatedModels,
+      canal_venta: this.saleForm.get('sale_channel')?.value
     };
     this.firebaseService.setSendPendingColecction(obj);
 
@@ -145,7 +169,8 @@ export class NewSaleComponent {
       total: this.saleForm.get('summary')?.value,
       costo_delivery: this.saleForm.get('delivery_price')?.value,
       productos: this.updatedModels,
-      capital: this.capital
+      capital: this.capital,
+      canal_venta: this.saleForm.get('sale_channel')?.value
     };
 
     this.firebaseService.setAllSalesCollecction(allSales);

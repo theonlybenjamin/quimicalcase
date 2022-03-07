@@ -59,7 +59,7 @@ export class ListSaleComponent {
       case 10: return 'ventas_octubre';
       case 11: return 'ventas_noviembre';
       case 12: return 'ventas_diciembre';
-      default: return 'ERROR'
+      default: return month.toString();
       }
   }
 
