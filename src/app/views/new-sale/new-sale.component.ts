@@ -2,7 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { catchError } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { catchError, concatMap, finalize, toArray } from 'rxjs/operators';
 import { SendPending } from 'src/app/interfaces/send-pending';
 import { IPhone, IProductSelled, Stock, StockProduct } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -95,8 +96,8 @@ export class NewSaleComponent {
   }
 
   public doSale(): void {
-    try {
-      this.array.map(x => {
+      from(this.array).pipe(
+      concatMap(x => {
         /**
          * @this.@cases traera todo el array de modelos (estos tienen de todos los codigos que fueron llamados)
          * es un arrays de arrays
@@ -134,24 +135,23 @@ export class NewSaleComponent {
             this.openErrorModal();
             return error;
           }) 
-        ).subscribe();
-      })
-      /**
-       * Una vez terminado el loop, procedemos a preparar la data a enviar y a
-       * rutear al home o mostrar el modal de cases a elminar
-       */
-      this.prepareSendPendingData();
-      if (this.deleteFromDrive.length === 0) {-
-        this.router.navigate(['/home/pendiente-envio']);
-      } else {
-        this.openModal();
-      }
-    } catch (error) {
-        console.log(error);
+        );
+      }),
+      toArray(),
+      finalize(() => {
+       /**
+        * Una vez terminado el loop, procedemos a preparar la data a enviar y a
+        * rutear al home o mostrar el modal de cases a elminar
+        */
         this.prepareSendPendingData();
-        this.ERROR = error;
-        this.openErrorModal();
-    }
+        if (this.deleteFromDrive.length === 0) {-
+          this.router.navigate(['/home/pendiente-envio']);
+        } else {
+          this.openModal();
+        }
+      }))
+      .subscribe()
+
   }
 
   public prepareSendPendingData() {
