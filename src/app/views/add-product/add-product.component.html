@@ -33,6 +33,10 @@
 </ng-template>
 
 <section>
+  <div class="section-title text-center">
+    <h3 class="top-c-sep">Agregar producto</h3>
+    <p>Aqu&iacute; puedes agregar los nuevos productos</p>
+  </div>
     <form class="form" [formGroup]="productForm">
         <div *ngFor="let product of array; let i = index">
             <div class="select-group" [formGroup]="getArrayFormGroup(i)">
@@ -47,19 +51,19 @@
                         </select>
                     </div>
                     <div class="form-group col-6">
-                        <label for="name">Modelo</label>
+                        <label for="model">Modelo</label>
                         <input type="text"
                                class="form-control"
-                               id="name"
+                               id="model"
                                formControlName="model">
                     </div>
                 </div>
                 <div class="row mx-1">
                     <div class="form-group col-6">
-                        <label for="name">Cantidad</label>
+                        <label for="cant">Cantidad</label>
                         <input type="number"
                                class="form-control"
-                               id="name"
+                               id="cant"
                                formControlName="cant">
                     </div>
                     <div class="form-group col-6">
