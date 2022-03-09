@@ -81,8 +81,7 @@ export class AddProductComponent implements OnInit {
         dataBack = {
           producto: value.model,
           cant: Number(value.cant),
-          precio: value.precio,
-          iphoneCode: this.firebaseService.nameById(value.code)
+          precio: value.precio
         }
         return this.getProducts(value.code, dataBack);
        }),toArray(),
@@ -117,6 +116,7 @@ export class AddProductComponent implements OnInit {
   public sendNewProduct(document:string, dataBack: StockProduct, array: Stock): Observable<any> {
     return this.firebaseService.setNewProduct(document, array).pipe(
       finalize(() => {
+        dataBack.iphoneCode = this.firebaseService.nameById(document);
         this.modalDetail.push(dataBack);
       }),
       catchError((error) => {
