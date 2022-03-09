@@ -23,6 +23,7 @@ export class SendPendingComponent {
   }
 
   public getSends() {
+    this.fireService.showLoader();
     this.showSends = false;
     this.fireService.getSendPending().subscribe(x => {
       this.orders = []
@@ -31,6 +32,7 @@ export class SendPendingComponent {
         }
       this.reversedOrders = this.orders.slice().reverse();
       this.showSends = true;
+      this.fireService.hideLoader();
     });
   }
 

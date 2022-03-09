@@ -22,6 +22,8 @@ import { PERSISTENCE } from '@angular/fire/auth';
 import { AddProductComponent } from './views/add-product/add-product.component';
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListSaleComponent } from './views/list-sale/list-sale.component';
+import { FinancesComponent } from './views/finances/finances.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { ListSaleComponent } from './views/list-sale/list-sale.component';
     SendPendingItemComponent,
     LoginComponent,
     AddProductComponent,
-    ListSaleComponent
+    ListSaleComponent,
+    FinancesComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +55,7 @@ import { ListSaleComponent } from './views/list-sale/list-sale.component';
     {
       provide: LocationStrategy, useClass: PathLocationStrategy
     },
-    { provide: PERSISTENCE, useValue: 'local' },
+    // { provide: PERSISTENCE, useValue: 'local' },
   ],
   bootstrap: [AppComponent]
 })

@@ -2,8 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { concat, from, interval, of, Subscription } from 'rxjs';
-import { catchError, concatMap, delay, finalize, take, tap, toArray } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { catchError, concatMap, finalize, take, toArray } from 'rxjs/operators';
 import { IPhone, Stock, StockProduct } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -20,7 +20,8 @@ export class AddProductComponent implements OnInit {
   public cantToSell = [0];
   public showSelects = false;
   public ERROR: any;
-  public modalDetail: any;
+  public modalDetail: Array<StockProduct> = [];
+  public modalErrorDetail: Array<StockProduct> = [];
   public dataBackUp: any;
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   @ViewChild('successModal') successModal: ElementRef | undefined;
@@ -43,6 +44,7 @@ export class AddProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
   }
 
   get products() {
@@ -71,6 +73,7 @@ export class AddProductComponent implements OnInit {
   }
 
    saveFormGroup() {
+    this.firebaseService.showLoader();
      from(this.array).pipe(
        concatMap((x) => {
         var dataBack: StockProduct;
@@ -78,44 +81,50 @@ export class AddProductComponent implements OnInit {
         dataBack = {
           producto: value.model,
           cant: Number(value.cant),
-          precio: value.precio
+          precio: value.precio,
+          iphoneCode: this.firebaseService.nameById(value.code)
         }
         return this.getProducts(value.code, dataBack);
-       }),toArray()
-     ).subscribe(x => {
-       console.log('x', x)
-     })
+       }),toArray(),
+       finalize(() => {
+        this.firebaseService.hideLoader();
+        this.modalService?.open(this.successModal, {centered: true});
+       }),
+       catchError(z => {
+        this.modalService?.open(this.errorModal, {centered: true, });
+        return z;
+       })
+     ).subscribe()
   }
 
-  public getProducts(document: string, dataBack: StockProduct) {
+  public getProducts(document: string, dataBack: StockProduct): Observable<Stock> {
     var array: Stock = {
       data: []
     };
-      return this.firebaseService.getStockSpecificDocumentAlone(document).pipe(
-        take(1),
-        tap(x => {
-          if (x) {
-            array = x;
-            array.data.push(dataBack);
-            this.sendNewProduct(document, dataBack, array);
-          }
-        })
-      );
+    return this.firebaseService.getStockSpecificDocumentAlone(document).pipe(
+      take(1),
+      concatMap(x => {
+        if (x) {
+          array = x;
+          array.data.push(dataBack);
+          return this.sendNewProduct(document, dataBack, array);
+        }
+        return x;
+      })
+    );
   }
 
-  public sendNewProduct(document:string, dataBack: StockProduct, array: Stock) {
-    this.firebaseService.setNewProduct(document, array).pipe(
-      take(1),
+  public sendNewProduct(document:string, dataBack: StockProduct, array: Stock): Observable<any> {
+    return this.firebaseService.setNewProduct(document, array).pipe(
+      finalize(() => {
+        this.modalDetail.push(dataBack);
+      }),
       catchError((error) => {
         this.ERROR = error;
-        this.modalDetail = dataBack;
+        this.modalErrorDetail.push(dataBack);
         this.dataBackUp = array;
-        this.modalService?.open(this.errorModal, {centered: true, });
         return error;
       })
-    ).subscribe(x => {
-      this.modalDetail = dataBack
-      this.modalService?.open(this.successModal, {centered: true});
-    })
+    )
   }
 }

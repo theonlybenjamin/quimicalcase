@@ -31,8 +31,10 @@ export class NewSaleComponent {
     public router: Router,
     private modalService: NgbModal
     ) {
+    this.firebaseService.showLoader();
     this.firebaseService.getStockAllDocumentsName().subscribe(x => {
       this.codes = x;
+      this.firebaseService.hideLoader();
     });
     this.saleForm = new FormGroup({
       client: new FormControl(null, Validators.required),
@@ -96,6 +98,7 @@ export class NewSaleComponent {
   }
 
   public doSale(): void {
+    this.firebaseService.showLoader();
       from(this.array).pipe(
       concatMap(x => {
         /**
@@ -133,6 +136,7 @@ export class NewSaleComponent {
             this.prepareSendPendingData();
             this.ERROR = error;
             this.openErrorModal();
+            this.firebaseService.hideLoader();
             return error;
           }) 
         );
@@ -149,6 +153,7 @@ export class NewSaleComponent {
         } else {
           this.openModal();
         }
+        this.firebaseService.hideLoader();
       }))
       .subscribe()
 

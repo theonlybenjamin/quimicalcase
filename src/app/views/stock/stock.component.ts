@@ -38,6 +38,7 @@ export class StockComponent implements OnInit {
     public fireService: FirebaseService
   ) {
     var result: Array<StockProduct2> = [];
+    this.fireService.showLoader();
     this.fireService.getStockAllDocuments().pipe(
       map((x: Stock2[]) => {
         for (let i = 0; i < x.length; i++) {
@@ -53,6 +54,7 @@ export class StockComponent implements OnInit {
       this.products = x;
       this.productBackup = x;
       result = [];
+      this.fireService.hideLoader();
     })
   }
 

@@ -1,0 +1,47 @@
+#sparkles > path {
+	animation: sparklyBits 1000ms infinite;
+	position: absolute;
+}
+.main {
+	min-width: 100vw;
+    position: absolute;
+	bottom: 0;
+    z-index: 101;
+    min-height: 100vh;
+    background-color: white;
+    opacity: .7;
+	color:black;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#message {
+	margin-top: 20px;
+	text-align: center;
+}
+
+@for $i from 1 through 29 {
+	#sparkles > path:nth-child(#{$i}) {
+		animation-delay: (35ms * $i);
+	}
+}
+
+@keyframes sparklyBits {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+// Boring Bit
+body {
+	align-items: center;
+	background-color: #FAFAFA;
+	display: flex;
+	height: 100vh;
+	justify-content: center;
+	width: 100vw;
+}

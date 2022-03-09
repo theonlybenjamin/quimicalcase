@@ -23,6 +23,7 @@ export class ListSaleComponent {
     public fireService: FirebaseService,
     private modalService: NgbModal
   ) {
+    this.fireService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
     this.getSends(this.getMonthOnSalesDOC(this.actualMonth));
   }
@@ -31,13 +32,13 @@ export class ListSaleComponent {
     this.showSends = false;
     this.fireService.getAllSales(doc).subscribe(x => {
       this.orders = []
-      console.log(x);
       for (let i = 0; i < x.data.length; i++) {
           this.justDevVar = x;
           this.orders[i] = x.data[i];
         }
       this.reversedOrders = this.orders.slice().reverse();
       this.showSends = true;
+      this.fireService.hideLoader();
     });
   }
 

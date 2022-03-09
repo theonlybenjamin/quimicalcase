@@ -22,9 +22,10 @@ export class FirebaseService {
   public mock2: SendPendingArray = {} as SendPendingArray;
   public isLogged = false;
   public actualMonth: number = 0;
+  private loader = false;
   constructor(
     private readonly afs: AngularFirestore,
-    private readonly auth: AngularFireAuth
+    public readonly auth: AngularFireAuth
   ) {
     this.actualMonth = new Date().getMonth() + 1;
   }
@@ -80,7 +81,7 @@ export class FirebaseService {
     return this.afs.collection<Stock>('stock').doc(collection).valueChanges() as Observable<Stock>;
   }
 
-  public setNewProduct(document: string, array: Stock): Observable<boolean>{
+  public setNewProduct(document: string, array: Stock): Observable<any>{
     return from(this.afs.collection('stock').doc(document).set(array)).pipe(
       map(x => true)
     );
@@ -262,5 +263,17 @@ export class FirebaseService {
 
   public justDevelopmentFunc(array: any) {
     this.afs.collection('ventas').doc('ventas_marzo').set(array);
+  }
+
+  public showLoader(){
+    this.loader = true
+  };
+
+  public hideLoader(){
+    this.loader = false;
+  };
+
+  public getLoaderStatus() {
+    return this.loader;
   }
 }

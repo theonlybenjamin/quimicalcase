@@ -8,7 +8,7 @@
     <div class="modal-body">
       <p>Hubo un error agregando el siguiente producto:
       </p>
-      <span>{{ modalDetail | json}}</span>
+      <p *ngFor="let model of modalErrorDetail; let i = index"><b>{{ model.producto }}</b> del <b>{{ model.iphoneCode }}</b></p>
       <p>Enviar captura de esto al administrador de sistemas. Y NO SALIR DE ESTA PANTALLA</p>
       <p>{{ERROR}}</p>
       <p>Antigua data: {{ dataBackUp | json }}</p>
@@ -19,13 +19,13 @@
 </ng-template>
 <ng-template #successModal let-c="close" let-d="dismiss">
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Se agreg&oacute; correctamente</h4>
+      <h4 class="modal-title" id="modal-basic-title">Se agregaron correctamente los siguientes productos:</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
-      <p>Se agrego con exito el producto: {{ modalDetail | json}} </p>
+        <p *ngFor="let model of modalDetail; let i = index"><b>{{ model.producto }}</b> del <b>{{ model.iphoneCode }}</b></p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Entendido</button>

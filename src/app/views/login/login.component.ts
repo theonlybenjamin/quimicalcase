@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   async doLogin(){
+    this.fireService.showLoader();
     var user = this.loginForm.get('user')?.value;
     var pass = this.loginForm.get('pass')?.value
     if( user !== null && pass !== null) {
@@ -36,7 +37,9 @@ export class LoginComponent implements OnInit {
           return error;
         })
       ).subscribe(x => {
+        console.log(x);
         this.router.navigate(['/home']);
+        this.fireService.hideLoader();
       })
     }
   }
