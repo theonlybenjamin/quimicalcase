@@ -42,10 +42,6 @@ export class ListSaleComponent {
     });
   }
 
-  // public setDataJeje() {
-  //   this.fireService.justDevelopmentFunc(this.justDevVar);
-  // }
-
   public getMonthOnSalesDOC(month: number) {
     switch (month) {
       case 1: return 'ventas_enero';
@@ -65,7 +61,6 @@ export class ListSaleComponent {
   }
 
   public changeMonth($event: string) {
-    console.log(this.getMonthOnSalesDOC(Number($event)), $event);
     this.getSends(this.getMonthOnSalesDOC(Number($event)));
   }
 
@@ -75,7 +70,7 @@ export class ListSaleComponent {
   }
 
   public confirmDelete() {
-    this.fireService.deleteItemSalesCollection(this.selectedOrder);
     this.modalService.dismissAll();
+    this.fireService.deleteItemSalesCollection(this.selectedOrder).subscribe();
   }
 }

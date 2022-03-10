@@ -1,2 +1,45 @@
-<p>Ingreso Bruto</p>
-<p>Sueldo Andrea</p>
+<section>
+    <div class="section-title text-center">
+      <h3 class="top-c-sep">Finanzas</h3>
+      <p>Aqu&iacute; puedes agregar gastos y ver el estado de las finanzas de la empresa pe</p>
+    </div>
+    <form class="form row px-5" [formGroup]="expenseForm">
+            <div class="form-group col-sm-5 col-lg-4 col-md-4">
+              <label for="detail">Detalle del gasto</label>
+              <input type="text"
+                     class="form-control"
+                     id="detail"
+                     formControlName="expense_detail">
+                  </div>
+            <div class="form-group col-sm-5 col-lg-4 col-md-4">          
+              <label for="mont">Monto del gasto</label>
+              <input type="number"
+                     class="form-control"
+                     id="mont"
+                     formControlName="expense_amount">
+            </div>
+            <div class="form-group col-sm-2 col-lg-1 col-md-1 pt-3">
+                <button type="button" class="btn btn-dark btn-send" (click)="addExpense()" [disabled]="!expenseForm.valid">Enviar</button>
+            </div>
+    </form>
+    <div class="form row px-5 pt-2" style="border-top: 4px solid black">
+      <label for="month">Selecciona el mes que deseas ver el reporte (no se puede agregar gastos a un mes que ya pas&oacute;)</label>
+      <select aria-label="Mes" id="month" name="month" class="form-select" #monthSelect (change)="changeMonth(monthSelect.value)">
+        <option *ngFor="let month of months; let i = index" [value]="i+1" [hidden]="actualMonth<i+1" [selected]="actualMonth === i+1">{{month}}</option> 
+      </select>
+    </div>
+    <div class="row">
+      <div class="col" >
+        <p style="color: blue">Cantidad de ventas: {{ profit.cantidad_ventas }}</p>
+        <p style="color: green">Ingreso Bruto: {{ profit.monto }}</p>
+        <p style="color: red"><b>Total gastos: {{ totalExpenses + 1200 }}</b></p>
+        <p style="color: blue">Total a reinvertir: {{ profit.monto - (totalExpenses + 1200) }}</p>
+  
+      </div>
+      <div class="col">
+        <p> Hoja de gastos:</p>
+        <p style="color: red"><b>Sueldo:</b> S/.1200</p>
+        <p *ngFor="let expense of expenses; let i = index" style="color: red"><b>{{expense.fecha}}  {{expense.detalle}}:</b> {{ expense.monto}}</p>
+      </div>
+    </div>
+  </section>

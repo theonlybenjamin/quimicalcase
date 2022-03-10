@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
           return error;
         })
       ).subscribe(x => {
-        console.log(x);
         this.router.navigate(['/home']);
         this.fireService.hideLoader();
       })

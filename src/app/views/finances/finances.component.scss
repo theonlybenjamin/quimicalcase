@@ -1,0 +1,19 @@
+.form {
+    display: flex;
+    justify-content: center;
+    & .form-group {
+        margin: 20px 0px;
+    }
+}
+.form-select{
+    width: 200px
+}
+@media screen and(max-width: 575px) {
+    .form-group {
+        margin: 10px 0px !important;
+    }
+    .btn-send{
+        width:100%;
+    }
+
+}

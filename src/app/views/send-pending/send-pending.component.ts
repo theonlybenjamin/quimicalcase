@@ -42,7 +42,7 @@ export class SendPendingComponent {
   }
 
   public confirmCompleteOrder() {
-    this.fireService.deleteItemPendingCollection(this.selectedOrder);
     this.modalService.dismissAll();
+    this.fireService.deleteItemPendingCollection(this.selectedOrder).subscribe();
   }
 }

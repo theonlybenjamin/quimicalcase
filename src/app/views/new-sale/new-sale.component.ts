@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { from } from 'rxjs';
+import { forkJoin, from } from 'rxjs';
 import { catchError, concatMap, finalize, toArray } from 'rxjs/operators';
 import { SendPending } from 'src/app/interfaces/send-pending';
 import { IPhone, IProductSelled, Stock, StockProduct } from 'src/app/interfaces/stock';
@@ -132,7 +132,6 @@ export class NewSaleComponent {
         this.capital += this.cases[codeIndex][modelIndex]?.precio;
         return this.firebaseService.setFieldsStockCollection(x.value.code, finalResult).pipe(
           catchError(error => {
-            console.log(error);
             this.prepareSendPendingData();
             this.ERROR = error;
             this.openErrorModal();
@@ -147,16 +146,22 @@ export class NewSaleComponent {
         * Una vez terminado el loop, procedemos a preparar la data a enviar y a
         * rutear al home o mostrar el modal de cases a elminar
         */
-        this.prepareSendPendingData();
-        if (this.deleteFromDrive.length === 0) {-
-          this.router.navigate(['/home/pendiente-envio']);
-        } else {
-          this.openModal();
-        }
-        this.firebaseService.hideLoader();
+       forkJoin([
+        this.sendAllSalesData(),
+        this.prepareSendPendingData(),
+        this.sendTotalToFinance()
+       ]).pipe(
+        finalize(() => {
+          if (this.deleteFromDrive.length === 0) {
+            this.router.navigate(['/home/pendiente-envio']);
+          } else {
+            this.openModal();
+          }
+          this.firebaseService.hideLoader();
+        })
+      ).subscribe()
       }))
       .subscribe()
-
   }
 
   public prepareSendPendingData() {
@@ -166,8 +171,14 @@ export class NewSaleComponent {
       productos: this.updatedModels,
       canal_venta: this.saleForm.get('sale_channel')?.value
     };
-    this.firebaseService.setSendPendingColecction(obj);
+    return this.firebaseService.setSendPendingColecction(obj);
+  }
 
+  public sendTotalToFinance() {
+    return this.firebaseService.setNewTotalSales(this.saleForm.get('summary')?.value);
+  }
+
+  public sendAllSalesData() {
     var allSales: SendPending = {
       cliente: this.saleForm.get('client')?.value,
       tipo_entrega: this.saleForm.get('delivery_type')?.value,
@@ -178,7 +189,7 @@ export class NewSaleComponent {
       canal_venta: this.saleForm.get('sale_channel')?.value
     };
 
-    this.firebaseService.setAllSalesCollecction(allSales);
+    return this.firebaseService.setAllSalesCollecction(allSales);
   }
   
 }

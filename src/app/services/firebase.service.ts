@@ -6,6 +6,7 @@ import { StockCollections } from '../enums/stock-collections.enum';
 import { SendPending, SendPendingArray } from '../interfaces/send-pending';
 import { IPhone, Stock } from '../interfaces/stock';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { FinancesDoc } from '../interfaces/finances';
 @Injectable({
   providedIn: 'root'
 })
@@ -66,6 +67,51 @@ export class FirebaseService {
    */
   public getAllSales(doc: string): Observable<SendPendingArray> {
     return this.afs.collection<SendPendingArray>('ventas').doc(doc).valueChanges() as Observable<SendPendingArray>;
+  }
+
+  /**
+   * Metodo para obtener el documento de finanzas
+   * @param doc  - mes a consultar
+   * @returns 
+   */
+  public getFinances(doc: string): Observable<FinancesDoc> {
+    return this.afs.collection<FinancesDoc>('finanzas').doc(doc).valueChanges() as Observable<FinancesDoc>;
+  }
+
+  /**
+   * Metodo para agregar un nuevo gasto
+   * @param doc  - mes a consultar
+   * @param array - el arreglo a setear
+   * @returns 
+   */
+  public setNewExpense(document: string, array: FinancesDoc): Observable<any>{
+    this.showLoader();
+    return from(this.afs.collection('finanzas').doc(document).set(array)).pipe(
+      map(x => true),
+      finalize(() => this.hideLoader())
+    );
+  }
+
+  /**
+   * Metodo para sumar uno al numero de ventas
+   * @returns 
+   */
+  public setNewTotalSales(monto: number){
+    this.showLoader();
+    var array: FinancesDoc;
+    return this.getFinances(this.getMonthOnFinaceDOC(this.actualMonth)).pipe(
+      take(1),
+      map(x => {
+        array = x;
+        array.ingresos.cantidad_ventas +=1;
+        array.ingresos.monto += monto;
+        return x;
+      }),
+      finalize(() => {
+        this.afs.collection('finanzas').doc(this.getMonthOnFinaceDOC(this.actualMonth)).set(array);
+        this.hideLoader();
+      })
+    )
   }
 
   /**
@@ -152,41 +198,63 @@ export class FirebaseService {
       default: return id;
     }
   }
-
+  public getMonthOnFinaceDOC(month: number) {
+    switch (month) {
+      case 1: return 'finanzas_enero';
+      case 2: return 'finanzas_febrero';
+      case 3: return 'finanzas_marzo';
+      case 4: return 'finanzas_abril';
+      case 5: return 'finanzas_mayo';
+      case 6: return 'finanzas_junio'; 
+      case 7: return 'finanzas_julio';
+      case 8: return 'finanzas_agosto';
+      case 9: return 'finanzas_setiembre';
+      case 10: return 'finanzas_octubre';
+      case 11: return 'finanzas_noviembre';
+      case 12: return 'finanzas_diciembre';
+      default: return month.toString();
+      }
+  }
   public setFieldsStockCollection(document: string, data: Stock): Observable<any> {
     return from(this.afs.collection('stock').doc(document).update(data));
   }
 
-  public setSendPendingColecction(dataBack: SendPending) {
+  public setSendPendingColecction(dataBack: SendPending): Observable<SendPendingArray> {
+    this.showLoader();
     var array: SendPendingArray = {
       data: []
     };
-    this.getSendPending().pipe(
+    return this.getSendPending().pipe(
       take(1),
+      map(x => {
+        array = x
+        array.data.push(dataBack);
+        return x;
+      }),
       finalize(() => {
         this.afs.collection('ventas').doc('pendientes_envio').set(array);
+        this.hideLoader();
       })
-    ).subscribe(x => {
-      array = x
-      array.data.push(dataBack);
-
-    });
+    )
   }
 
-  public setAllSalesCollecction(dataBack: SendPending) {
+  public setAllSalesCollecction(dataBack: SendPending): Observable<SendPendingArray> {
+    this.showLoader();
     var array: SendPendingArray = {
       data: []
     };
-    this.getAllSales(this.getMonthOnSalesDOC(this.actualMonth)).pipe(
+    return this.getAllSales(this.getMonthOnSalesDOC(this.actualMonth)).pipe(
       take(1),
+      map(x => {
+        array = x
+        array.data.push(dataBack);
+        return x;
+      }),
       finalize(() => {
         this.afs.collection('ventas').doc(this.getMonthOnSalesDOC(this.actualMonth)).set(array);
+        this.hideLoader();
       })
-    ).subscribe(x => {
-      array = x
-      array.data.push(dataBack);
-
-    });
+    );
   }
 
   public getMonthOnSalesDOC(month: number) {
@@ -211,54 +279,56 @@ export class FirebaseService {
     var array: SendPendingArray = {
       data: []
     };
-    this.getSendPending().pipe(
+    return this.getSendPending().pipe(
       take(1),
-      finalize(() => this.afs.collection('ventas').doc('pendientes_envio').set(array))
-    ).subscribe(x => {
-      array = x;
-      const searchObject = array.data.find(x => {
-        if (x.cliente === order.cliente && x.tipo_entrega === order.tipo_entrega) {
-          for (let i = 0; i < x.productos.length; i++) {
-            if (x.productos[i].code === order.productos[i].code && x.productos[i].model === order.productos[i].model
-              && x.productos[i].index === order.productos[i].index) {
-              return x;
-            } else {
-              return undefined;
+      map((x) => {
+        array = x;
+        const searchObject = array.data.find(x => {
+          if (x.cliente === order.cliente && x.tipo_entrega === order.tipo_entrega) {
+            for (let i = 0; i < x.productos.length; i++) {
+              if (x.productos[i].code === order.productos[i].code && x.productos[i].model === order.productos[i].model
+                && x.productos[i].index === order.productos[i].index) {
+                return x;
+              } else {
+                return undefined;
+              }
             }
           }
-        }
-          return undefined;
-      }) as SendPending;
-      const indexToDelete = array.data.indexOf(searchObject);
-      array.data.splice(indexToDelete, 1);
-    });
+            return undefined;
+        }) as SendPending;
+        const indexToDelete = array.data.indexOf(searchObject);
+        array.data.splice(indexToDelete, 1);
+      }),
+      finalize(() => this.afs.collection('ventas').doc('pendientes_envio').set(array))
+    )
   }
 
   public deleteItemSalesCollection(order: SendPending) {
     var array: SendPendingArray = {
       data: []
     };
-    this.getAllSales(this.getMonthOnSalesDOC(this.actualMonth)).pipe(
+    return this.getAllSales(this.getMonthOnSalesDOC(this.actualMonth)).pipe(
       take(1),
-      finalize(() => this.afs.collection('ventas').doc(this.getMonthOnSalesDOC(this.actualMonth)).set(array))
-    ).subscribe(x => {
-      array = x;
-      const searchObject = array.data.find(x => {
-        if (x.cliente === order.cliente && x.tipo_entrega === order.tipo_entrega) {
-          for (let i = 0; i < x.productos.length; i++) {
-            if (x.productos[i].code === order.productos[i].code && x.productos[i].model === order.productos[i].model
-              && x.productos[i].index === order.productos[i].index) {
-              return x;
-            } else {
-              return undefined;
+      map(x => {
+        array = x;
+        const searchObject = array.data.find(x => {
+          if (x.cliente === order.cliente && x.tipo_entrega === order.tipo_entrega) {
+            for (let i = 0; i < x.productos.length; i++) {
+              if (x.productos[i].code === order.productos[i].code && x.productos[i].model === order.productos[i].model
+                && x.productos[i].index === order.productos[i].index) {
+                return x;
+              } else {
+                return undefined;
+              }
             }
           }
-        }
-          return undefined;
-      }) as SendPending;
-      const indexToDelete = array.data.indexOf(searchObject);
-      array.data.splice(indexToDelete, 1);
-    });
+            return undefined;
+        }) as SendPending;
+        const indexToDelete = array.data.indexOf(searchObject);
+        array.data.splice(indexToDelete, 1);
+      }),
+      finalize(() => this.afs.collection('ventas').doc(this.getMonthOnSalesDOC(this.actualMonth)).set(array))
+    )
   }
 
   public justDevelopmentFunc(array: any) {
