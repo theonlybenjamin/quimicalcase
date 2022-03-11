@@ -1,10 +1,4 @@
 <div class="filter-result">
-    <p *ngIf="showTotal">
-        <b style="color: green">Ingreso bruto: {{totalSummary}}</b><br>
-        <b style="color: blue">Sueldo: {{ salary }}</b><br>
-        <b style="color: red">Reinversion: {{ reinvesment }}</b><br>
-        <b style="color: red">Publicidad: {{ advertisement }}</b><br>
-    </p>
     <p class="mb-30 ff-montserrat">{{summaryText}} <b>{{ orders.length }}</b></p>
     <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let order of orders; let i = index">
         <div class="job-left my-4 d-md-flex align-items-center flex-wrap">

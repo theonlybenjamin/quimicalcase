@@ -18,9 +18,12 @@ export class FinancesComponent {
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
   public totalExpenses: number = 0;
+  public salary = 1200;
+  public publicity = 200;
   constructor(
     public fireService: FirebaseService
   ) {
+    this.totalExpenses  = this.salary + this.publicity;
     this.fireService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
     this.getSends(this.getMonthOnSalesDOC(this.actualMonth));
