@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FinancesDoc, FinancesGastos, FinancesIngresos } from 'src/app/interfaces/finances';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { getMonthOnFinaceDOC } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-finances',
@@ -18,15 +19,16 @@ export class FinancesComponent {
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
   public totalExpenses: number = 0;
-  public salary = 1200;
+  public salary = 1400;
   public publicity = 200;
+  public emanuel = 160;
   constructor(
     public fireService: FirebaseService
   ) {
-    this.totalExpenses  = this.salary + this.publicity;
+    this.totalExpenses  = this.salary + this.publicity + this.emanuel;
     this.fireService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
-    this.getSends(this.getMonthOnSalesDOC(this.actualMonth));
+    this.getSends(getMonthOnFinaceDOC(this.actualMonth));
     this.expenseForm = new FormGroup({
       expense_detail: new FormControl(null, Validators.required),
       expense_amount: new FormControl(null, Validators.required),
@@ -45,26 +47,8 @@ export class FinancesComponent {
     });
   }
 
-  public getMonthOnSalesDOC(month: number) {
-    switch (month) {
-      case 1: return 'finanzas_enero';
-      case 2: return 'finanzas_febrero';
-      case 3: return 'finanzas_marzo';
-      case 4: return 'finanzas_abril';
-      case 5: return 'finanzas_mayo';
-      case 6: return 'finanzas_junio'; 
-      case 7: return 'finanzas_julio';
-      case 8: return 'finanzas_agosto';
-      case 9: return 'finanzas_setiembre';
-      case 10: return 'finanzas_octubre';
-      case 11: return 'finanzas_noviembre';
-      case 12: return 'finanzas_diciembre';
-      default: return month.toString();
-      }
-  }
-
   public changeMonth($event: string) {
-    this.getSends(this.getMonthOnSalesDOC(Number($event)));
+    this.getSends(getMonthOnFinaceDOC(Number($event)));
   }
 
   /**
@@ -78,7 +62,7 @@ export class FinancesComponent {
         fecha: new Date().getDay() + '/' + this.actualMonth
       };
       this.finances.gastos.push(expense);
-      this.fireService.setNewExpense(this.getMonthOnSalesDOC(this.actualMonth), this.finances).subscribe();
+      this.fireService.setNewExpense(getMonthOnFinaceDOC(this.actualMonth), this.finances).subscribe();
       this.expenseForm.reset();
     }
   }

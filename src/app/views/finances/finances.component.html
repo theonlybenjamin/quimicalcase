@@ -22,7 +22,7 @@
                 <button type="button" class="btn btn-dark btn-send" (click)="addExpense()" [disabled]="!expenseForm.valid">Enviar</button>
             </div>
     </form>
-    <div class="form row px-5 pt-2" style="border-top: 4px solid black">
+    <div class="form row px-5 pt-2 text-center" style="border-top: 4px solid black">
       <label for="month">Selecciona el mes que deseas ver el reporte</label>
       <select aria-label="Mes" id="month" name="month" class="form-select" #monthSelect (change)="changeMonth(monthSelect.value)">
         <option *ngFor="let month of months; let i = index" [value]="i+1" [hidden]="actualMonth<i+1" [selected]="actualMonth === i+1">{{month}}</option> 
@@ -41,6 +41,7 @@
         <p>Hoja de gastos:</p>
         <p style="color: red"><b>Sueldo:</b> S/. {{salary}}</p>
         <p style="color: red"><b>Publicidad:</b> S/. {{publicity}}</p>
+        <p style="color: red"><b>Emanuel:</b> S/. {{emanuel}}</p>
         <p *ngFor="let expense of expenses; let i = index" style="color: red"><b>{{expense.fecha}} {{expense.detalle}}:</b> {{ expense.monto}}</p>
       </div>
     </div>

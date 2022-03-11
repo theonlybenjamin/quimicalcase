@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { Stock, Stock2, StockProduct, StockProduct2 } from 'src/app/interfaces/stock';
+import { Stock2, StockProduct2 } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
-
+import { idByIphoneName, iphoneNameById } from '../../utils/utils'
 @Component({
   selector: 'app-stock',
   templateUrl: './stock.component.html',
@@ -61,8 +61,8 @@ export class StockComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  rechargeData() {
-    // this.fireService.setFieldsStockCollection('asd');
+  public iphoneNameById(id: string) {
+    return iphoneNameById(id);
   }
   getCaseModel(){
     var result: string[] = [];
@@ -79,7 +79,7 @@ export class StockComponent implements OnInit {
   }
 
   public searchByCode(code: any) {
-    var id = this.fireService.idByName(code.value);
+    var id = idByIphoneName(code.value);
     this.codeValue = id;
     this.getCaseModel();
     var filter = this.productBackup.filter(x => x.iphoneCode === id);

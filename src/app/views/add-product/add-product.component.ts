@@ -6,6 +6,7 @@ import { from, Observable } from 'rxjs';
 import { catchError, concatMap, finalize, take, toArray } from 'rxjs/operators';
 import { IPhone, Stock, StockProduct } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { iphoneNameById } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-add-product',
@@ -116,7 +117,7 @@ export class AddProductComponent implements OnInit {
   public sendNewProduct(document:string, dataBack: StockProduct, array: Stock): Observable<any> {
     return this.firebaseService.setNewProduct(document, array).pipe(
       finalize(() => {
-        dataBack.iphoneCode = this.firebaseService.nameById(document);
+        dataBack.iphoneCode = iphoneNameById(document);
         this.modalDetail.push(dataBack);
       }),
       catchError((error) => {

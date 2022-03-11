@@ -15,7 +15,6 @@
                         <span style="color: blue"> Total: <b>S/.</b> {{ order.total}}</span>
                     </li>
                     <li class="mr-md-4" *ngIf="order.total">
-                        <span> Costo Delivery: <b>S/.</b> {{ order.costo_delivery }}</span><br>
                         <span> Inversion: <b>S/.</b> {{ order.capital }}</span><br>
                         <span> Packaging y Publicidad: <b>S/.</b> {{ packagingPrice + advertisingPrice }}</span><br>
                         <span style="color: red"> Gastos: <b>S/.</b> {{ getExpensesSummary(order) }}</span> <br>

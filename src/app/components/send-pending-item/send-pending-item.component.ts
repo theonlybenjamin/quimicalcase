@@ -37,7 +37,7 @@ export class SendPendingItemComponent implements OnInit {
   }
 
   public getExpensesSummary(order: SendPending): number {
-    return (order.costo_delivery? order.costo_delivery : 0) + (order.capital? order.capital : 0) + this.packagingPrice + this.advertisingPrice;
+    return (order.capital? order.capital : 0) + this.packagingPrice + this.advertisingPrice;
   }
 
   public getProfit(order: SendPending): number {

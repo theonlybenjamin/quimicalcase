@@ -41,7 +41,6 @@ export class NewSaleComponent {
       delivery_type: new FormControl(null, Validators.required),
       sale_channel: new FormControl(null, Validators.required),
       summary: new FormControl(null, Validators.required),
-      delivery_price: new FormControl(null),
       products: new FormArray([
         new FormGroup({
           code: new FormControl(null, Validators.required),
@@ -183,7 +182,6 @@ export class NewSaleComponent {
       cliente: this.saleForm.get('client')?.value,
       tipo_entrega: this.saleForm.get('delivery_type')?.value,
       total: this.saleForm.get('summary')?.value,
-      costo_delivery: this.saleForm.get('delivery_price')?.value,
       productos: this.updatedModels,
       capital: this.capital,
       canal_venta: this.saleForm.get('sale_channel')?.value

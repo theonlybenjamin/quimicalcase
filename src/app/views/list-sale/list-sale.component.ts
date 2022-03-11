@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SendPending, SendPendingArray } from 'src/app/interfaces/send-pending';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { getMonthOnSalesDOC } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-list-sale',
@@ -25,7 +26,7 @@ export class ListSaleComponent {
   ) {
     this.fireService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
-    this.getSends(this.getMonthOnSalesDOC(this.actualMonth));
+    this.getSends(getMonthOnSalesDOC(this.actualMonth));
   }
 
   public getSends(doc: string) {
@@ -42,26 +43,8 @@ export class ListSaleComponent {
     });
   }
 
-  public getMonthOnSalesDOC(month: number) {
-    switch (month) {
-      case 1: return 'ventas_enero';
-      case 2: return 'ventas_febrero';
-      case 3: return 'ventas_marzo';
-      case 4: return 'ventas_abril';
-      case 5: return 'ventas_mayo';
-      case 6: return 'ventas_junio'; 
-      case 7: return 'ventas_julio';
-      case 8: return 'ventas_agosto';
-      case 9: return 'ventas_setiembre';
-      case 10: return 'ventas_octubre';
-      case 11: return 'ventas_noviembre';
-      case 12: return 'ventas_diciembre';
-      default: return month.toString();
-      }
-  }
-
   public changeMonth($event: string) {
-    this.getSends(this.getMonthOnSalesDOC(Number($event)));
+    this.getSends(getMonthOnSalesDOC(Number($event)));
   }
 
   public completeOrder(order: SendPending) {
