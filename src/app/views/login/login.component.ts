@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
+import { Routes } from 'src/app/config/routes.enum';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit {
           return error;
         })
       ).subscribe(x => {
-        this.router.navigate(['/home']);
+        this.router.navigate([Routes.HOME]);
         this.fireService.hideLoader();
       })
     }

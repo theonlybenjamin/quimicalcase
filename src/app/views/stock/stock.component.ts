@@ -10,7 +10,6 @@ import { idByIphoneName, iphoneNameById } from '../../utils/utils'
 })
 export class StockComponent implements OnInit {
   
-  // @Input() model;
   public products: Array<StockProduct2> = [];
   public productBackup: Array<StockProduct2> = [];
   public IPhoneProducts = [

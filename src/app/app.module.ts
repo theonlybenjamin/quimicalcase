@@ -18,9 +18,8 @@ import { NewSaleComponent } from './views/new-sale/new-sale.component';
 import { SendPendingComponent } from './views/send-pending/send-pending.component';
 import { SendPendingItemComponent } from './components/send-pending-item/send-pending-item.component';
 import { LoginComponent } from './views/login/login.component';
-import { PERSISTENCE } from '@angular/fire/auth';
 import { AddProductComponent } from './views/add-product/add-product.component';
-import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListSaleComponent } from './views/list-sale/list-sale.component';
 import { FinancesComponent } from './views/finances/finances.component';
 import { LoaderComponent } from './components/loader/loader.component';
@@ -54,8 +53,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     AngularFirestore,
     {
       provide: LocationStrategy, useClass: PathLocationStrategy
-    },
-    // { provide: PERSISTENCE, useValue: 'local' },
+    }
   ],
   bootstrap: [AppComponent]
 })

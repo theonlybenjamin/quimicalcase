@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { finalize, map, take, tap } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 import { SendPending, SendPendingArray } from '../interfaces/send-pending';
 import { IPhone, Stock } from '../interfaces/stock';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FinancesDoc } from '../interfaces/finances';
 import { getMonthOnFinaceDOC, getMonthOnSalesDOC, iphoneNameById } from '../utils/utils';
+import { Documents } from '../config/documents';
+import { Collections } from '../config/collections';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,6 @@ export class FirebaseService {
     }]
   };
   public mock2: SendPendingArray = {} as SendPendingArray;
-  public isLogged = false;
   public actualMonth: number = 0;
   private loader = false;
   constructor(
@@ -37,19 +38,15 @@ export class FirebaseService {
    * @param pass - password
    * @returns 
    */
-  public login(user: string, pass: string) {
-    return from(this.auth.signInWithEmailAndPassword(user, pass)).pipe(
-      tap(x => this.isLogged = true)
-    )
+  public login(user: string, pass: string): Observable<any> {
+    return from(this.auth.signInWithEmailAndPassword(user, pass))
   }
 
   /**
    * Metodo para realizar el cierre de sesión
    */
-  public closeSession() {
-    return from(this.auth.signOut()).pipe(
-      tap(x => this.isLogged = false)
-    )
+  public closeSession(): Observable<any> {
+    return from(this.auth.signOut())
 
   }
 
@@ -58,7 +55,7 @@ export class FirebaseService {
    * @returns mock
    */
   public getSendPending(): Observable<SendPendingArray> {
-    return this.afs.collection<SendPendingArray>('ventas').doc('pendientes_envio').valueChanges() as Observable<SendPendingArray>;
+    return this.afs.collection<SendPendingArray>(Collections.VENTAS).doc(Documents.SEND_PENDING).valueChanges() as Observable<SendPendingArray>;
   }
 
   /**
@@ -67,7 +64,7 @@ export class FirebaseService {
    * @returns 
    */
   public getAllSales(doc: string): Observable<SendPendingArray> {
-    return this.afs.collection<SendPendingArray>('ventas').doc(doc).valueChanges() as Observable<SendPendingArray>;
+    return this.afs.collection<SendPendingArray>(Collections.VENTAS).doc(doc).valueChanges() as Observable<SendPendingArray>;
   }
 
   /**
@@ -76,7 +73,7 @@ export class FirebaseService {
    * @returns 
    */
   public getFinances(doc: string): Observable<FinancesDoc> {
-    return this.afs.collection<FinancesDoc>('finanzas').doc(doc).valueChanges() as Observable<FinancesDoc>;
+    return this.afs.collection<FinancesDoc>(Collections.FINANZAS).doc(doc).valueChanges() as Observable<FinancesDoc>;
   }
 
   /**
@@ -87,7 +84,7 @@ export class FirebaseService {
    */
   public setNewExpense(document: string, array: FinancesDoc): Observable<any>{
     this.showLoader();
-    return from(this.afs.collection('finanzas').doc(document).set(array)).pipe(
+    return from(this.afs.collection(Collections.FINANZAS).doc(document).set(array)).pipe(
       map(x => true),
       finalize(() => this.hideLoader())
     );
@@ -109,7 +106,7 @@ export class FirebaseService {
         return x;
       }),
       finalize(() => {
-        this.afs.collection('finanzas').doc(getMonthOnFinaceDOC(this.actualMonth)).set(array);
+        this.afs.collection(Collections.FINANZAS).doc(getMonthOnFinaceDOC(this.actualMonth)).set(array);
         this.hideLoader();
       })
     )
@@ -121,21 +118,21 @@ export class FirebaseService {
    * @returns 
    */
   public getStockSpecificDocument(collection: string): Observable<Stock> {
-    return this.afs.collection<Stock>('stock').doc(collection).valueChanges({ idField: 'docId' }) as Observable<Stock>;
+    return this.afs.collection<Stock>(Collections.STOCK).doc(collection).valueChanges({ idField: 'docId' }) as Observable<Stock>;
   }
 
   public getStockSpecificDocumentAlone(collection: string): Observable<Stock> {
-    return this.afs.collection<Stock>('stock').doc(collection).valueChanges() as Observable<Stock>;
+    return this.afs.collection<Stock>(Collections.STOCK).doc(collection).valueChanges() as Observable<Stock>;
   }
 
   public setNewProduct(document: string, array: Stock): Observable<any>{
-    return from(this.afs.collection('stock').doc(document).set(array)).pipe(
+    return from(this.afs.collection(Collections.STOCK).doc(document).set(array)).pipe(
       map(x => true)
     );
   }
 
   public getStockAllDocumentsName(): Observable<IPhone[]> {
-    return this.afs.collection('stock').get().pipe(
+    return this.afs.collection(Collections.STOCK).get().pipe(
       take(1),
       map((x) => {
         var a: IPhone[] = [];
@@ -149,11 +146,11 @@ export class FirebaseService {
   }
 
   public getStockAllDocuments(): Observable<any> {
-    return this.afs.collection('stock').valueChanges({ idField: 'docId' });
+    return this.afs.collection(Collections.STOCK).valueChanges({ idField: 'docId' });
   }
 
   public setFieldsStockCollection(document: string, data: Stock): Observable<any> {
-    return from(this.afs.collection('stock').doc(document).update(data));
+    return from(this.afs.collection(Collections.STOCK).doc(document).update(data));
   }
 
   public setSendPendingColecction(dataBack: SendPending): Observable<SendPendingArray> {
@@ -169,7 +166,7 @@ export class FirebaseService {
         return x;
       }),
       finalize(() => {
-        this.afs.collection('ventas').doc('pendientes_envio').set(array);
+        this.afs.collection(Collections.VENTAS).doc(Documents.SEND_PENDING).set(array);
         this.hideLoader();
       })
     )
@@ -188,7 +185,7 @@ export class FirebaseService {
         return x;
       }),
       finalize(() => {
-        this.afs.collection('ventas').doc(getMonthOnSalesDOC(this.actualMonth)).set(array);
+        this.afs.collection(Collections.VENTAS).doc(getMonthOnSalesDOC(this.actualMonth)).set(array);
         this.hideLoader();
       })
     );
@@ -218,7 +215,7 @@ export class FirebaseService {
         const indexToDelete = array.data.indexOf(searchObject);
         array.data.splice(indexToDelete, 1);
       }),
-      finalize(() => this.afs.collection('ventas').doc('pendientes_envio').set(array))
+      finalize(() => this.afs.collection(Collections.VENTAS).doc(Documents.SEND_PENDING).set(array))
     )
   }
 
@@ -246,7 +243,7 @@ export class FirebaseService {
         const indexToDelete = array.data.indexOf(searchObject);
         array.data.splice(indexToDelete, 1);
       }),
-      finalize(() => this.afs.collection('ventas').doc(getMonthOnSalesDOC(this.actualMonth)).set(array))
+      finalize(() => this.afs.collection(Collections.VENTAS).doc(getMonthOnSalesDOC(this.actualMonth)).set(array))
     )
   }
 

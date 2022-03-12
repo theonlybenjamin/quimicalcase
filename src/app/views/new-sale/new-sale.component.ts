@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, from } from 'rxjs';
 import { catchError, concatMap, finalize, toArray } from 'rxjs/operators';
+import { Routes } from 'src/app/config/routes.enum';
 import { SendPending } from 'src/app/interfaces/send-pending';
 import { IPhone, IProductSelled, Stock, StockProduct } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -93,7 +94,7 @@ export class NewSaleComponent {
 
   public goPending() {
     this.modalService?.dismissAll();
-    this.router.navigate(['/home/pendiente-envio'])
+    this.router.navigate([Routes.SEND_PENDING])
   }
 
   public doSale(): void {
@@ -152,7 +153,7 @@ export class NewSaleComponent {
        ]).pipe(
         finalize(() => {
           if (this.deleteFromDrive.length === 0) {
-            this.router.navigate(['/home/pendiente-envio']);
+            this.router.navigate([Routes.SEND_PENDING]);
           } else {
             this.openModal();
           }

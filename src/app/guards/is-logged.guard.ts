@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Routes } from '../config/routes.enum';
 import { FirebaseService } from '../services/firebase.service';
 
 @Injectable({
@@ -14,7 +15,7 @@ export class IsLoggedGuard implements CanActivate {
         map(x => {
           const value = x;
           if (value && value.email) {
-            this.router.navigate(['/home']);
+            this.router.navigate([Routes.HOME]);
             return false;
           } else {
             return true;
