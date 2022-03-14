@@ -45,4 +45,28 @@
         <p *ngFor="let expense of expenses; let i = index" style="color: red"><b>{{expense.fecha}} {{expense.detalle}}:</b> {{ expense.monto}}</p>
       </div>
     </div>
+    <div class="row text-center mt-5">
+      <span>
+        <b>Rappi:</b>
+        <p>&Uacute;ltimo día de pago: 10.</p>
+        <p>fecha de corte: 30. </p>
+        <p>Si compras antes o el 30 de {{months[actualMonth -1]}}, lo pagas el 10 de {{months[actualMonth]}}.</p>
+        <p>Si compras despues o el 1 de {{months[actualMonth]}}, lo pagas el 10 de {{months[actualMonth +1]}}.</p>
+      </span>
+      <span>
+        <b>Ripley:</b>
+        <p>&Uacute;ltimo día de pago: 15.</p>
+        <p>fecha de corte: 6. </p>
+        <p>Si compras antes o el 6 de {{months[actualMonth -1]}} o antes, lo pagas el 1 de {{months[actualMonth]}} .</p>
+        <p>Si compras despues o el 7 de {{months[actualMonth -1]}} o después, lo pagas el 1 de {{months[actualMonth +1]}}.</p>
+      </span>
+      <span>
+        <b>Amex:</b>
+        <p>&Uacute;ltimo día de pago: 21.</p>
+        <p>fecha de corte: 27. </p>
+        <p>TEA: 69.78%</p>
+        <p>Si compras antes o el 26 de {{months[actualMonth -1]}}, lo pagas el 21 de {{months[actualMonth]}}.</p>
+        <p>Si compras despues o el 27 de {{months[actualMonth -1]}}, lo pagas el 21 de {{months[actualMonth +1]}}.</p>
+      </span>
+    </div>
   </section>
