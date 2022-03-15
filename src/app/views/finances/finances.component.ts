@@ -19,7 +19,7 @@ export class FinancesComponent {
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
   public totalExpenses: number = 0;
-  public salary = 1300;
+  public salary = 1400;
   public publicity = 200;
   public emanuel = 106;
   constructor(
