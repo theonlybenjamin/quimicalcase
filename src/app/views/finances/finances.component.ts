@@ -41,8 +41,9 @@ export class FinancesComponent {
       this.profit = x.ingresos;
       for (let i = 0; i < x.gastos.length; i++) {
           this.expenses[i] = x.gastos[i];
-          this.totalExpenses += x.gastos[i].monto;
+          this.totalExpenses += x.gastos[i].monto ? Number(x.gastos[i].monto.toFixed(1)) : x.gastos[i].monto;
         }
+        this.totalExpenses = Number(this.totalExpenses.toFixed(1));
       this.fireService.hideLoader();
     });
   }
