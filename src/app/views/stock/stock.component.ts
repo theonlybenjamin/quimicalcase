@@ -30,7 +30,9 @@ export class StockComponent implements OnInit {
     'IPhone 7/8 plus',
     'Airpods Pro / Airpods 3er gen',
     'Airpods 1era gen / 2da gen',
-    'Cable'
+    'Cable',
+    'Mica',
+    'Camara'
   ];
   public codeValue: string = '';
   constructor(
@@ -38,13 +40,15 @@ export class StockComponent implements OnInit {
   ) {
     var result: Array<StockProduct2> = [];
     this.fireService.showLoader();
-    this.fireService.getStockAllDocuments().pipe(
+    this.fireService.getAllProductNames().pipe(
       map((x: Stock2[]) => {
         for (let i = 0; i < x.length; i++) {
           for (let j = 0; j < x[i].data?.length; j++) {
             var iphoneCode = x[i].docId;
-            x[i].data[j].iphoneCode = iphoneCode as string;
-            result.push(x[i].data[j]);
+            if (iphoneCode) {
+              x[i].data[j].iphoneCode = iphoneCode as string;
+              result.push(x[i].data[j]);
+            }
           }
         }
         return result;

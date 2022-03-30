@@ -19,9 +19,12 @@ export class FinancesComponent {
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
   public totalExpenses: number = 0;
-  public salary = 1400;
+  public salary = 1200;
   public publicity = 200;
   public emanuel = 106;
+  public gastosImprevistos = 0;
+  public reinversion = 0;
+  public ingresoBruto = 0;
   constructor(
     public fireService: FirebaseService
   ) {
@@ -39,11 +42,14 @@ export class FinancesComponent {
     this.fireService.getFinances(doc).subscribe(x => {
       this.finances = x;
       this.profit = x.ingresos;
+      this.ingresoBruto = Number(this.profit.monto.toFixed(1));
       for (let i = 0; i < x.gastos.length; i++) {
           this.expenses[i] = x.gastos[i];
           this.totalExpenses += x.gastos[i].monto ? Number(x.gastos[i].monto.toFixed(1)) : x.gastos[i].monto;
         }
         this.totalExpenses = Number(this.totalExpenses.toFixed(1));
+        this.gastosImprevistos = Number((this.totalExpenses - this.salary - this.emanuel - this.publicity).toFixed(1));
+        this.reinversion = Number((this.profit.monto - this.totalExpenses).toFixed(1))
       this.fireService.hideLoader();
     });
   }
@@ -60,7 +66,7 @@ export class FinancesComponent {
       var expense: FinancesGastos = {
         detalle: this.expenseForm.get('expense_detail')?.value,
         monto: this.expenseForm.get('expense_amount')?.value,
-        fecha: new Date().getDay() + '/' + this.actualMonth
+        fecha: new Date().getDate() + '/' + this.actualMonth
       };
       this.finances.gastos.push(expense);
       this.fireService.setNewExpense(getMonthOnFinaceDOC(this.actualMonth), this.finances).subscribe();

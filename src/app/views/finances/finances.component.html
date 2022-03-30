@@ -32,9 +32,10 @@
       <div class="col">
         <p>Resumen:</p>
         <p style="color: blue">Cantidad de ventas: {{ profit.cantidad_ventas }}</p>
-        <p style="color: green">Ingreso Bruto: {{ profit.monto }}</p>
+        <p style="color: green">Ingreso Bruto: {{ ingresoBruto }}</p>
         <p style="color: red"><b>Total gastos: {{ totalExpenses }}</b></p>
-        <p style="color: blue">Total a reinvertir: {{ profit.monto - (totalExpenses) }}</p>
+        <p style="color: red"><b>Solo gastos ingresados: {{ gastosImprevistos }}</b></p>
+        <p style="color: blue">Total a reinvertir: {{ reinversion }}</p>
   
       </div>
       <div class="col">
@@ -42,7 +43,7 @@
         <p style="color: red"><b>Sueldo:</b> S/. {{salary}}</p>
         <p style="color: red"><b>Publicidad:</b> S/. {{publicity}}</p>
         <p style="color: red"><b>Emanuel:</b> S/. {{emanuel}}</p>
-        <p *ngFor="let expense of expenses; let i = index" style="color: red"><b>{{expense.fecha}} {{expense.detalle}}:</b> {{ expense.monto}}</p>
+        <p *ngFor="let expense of expenses; let i = index" style="color: red">{{expense.fecha}} {{expense.detalle}}: {{ expense.monto}}</p>
       </div>
     </div>
     <div class="row text-center mt-5">

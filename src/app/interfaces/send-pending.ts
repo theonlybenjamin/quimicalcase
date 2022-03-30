@@ -3,7 +3,7 @@ import { IProductSelled } from "./stock";
 export interface SendPending {
     cliente: string;
     productos: Array<IProductSelled>;
-    tipo_entrega: 'contraentrega' | 'olva';
+    tipo_entrega: string;
     total?: number;
     capital?: number;
     canal_venta?: string;

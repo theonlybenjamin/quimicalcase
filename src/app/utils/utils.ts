@@ -25,6 +25,8 @@ export function iphoneNameById(id: string) {
       case StockCollections.AirpodsPro: return 'Airpods Pro / Airpods 3er gen';
       case StockCollections.Airpods1era: return 'Airpods 1era gen / 2da gen';
       case StockCollections.Cable: return 'Cable';
+      case StockCollections.Mica: return 'Mica';
+      case StockCollections.Camara: return 'Camara';
       default: return id;
     }
 }
@@ -54,6 +56,8 @@ export function idByIphoneName(name: string) {
       case 'Airpods Pro / Airpods 3er gen': return StockCollections.AirpodsPro;
       case 'Airpods 1era gen / 2da gen': return StockCollections.Airpods1era;
       case 'Cable': return StockCollections.Cable;
+      case 'Camara': return StockCollections.Camara;
+      case 'Mica': return StockCollections.Mica;
       default: return name;
     }
 }
