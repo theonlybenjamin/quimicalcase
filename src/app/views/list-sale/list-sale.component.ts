@@ -1,6 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SendPending, SendPendingArray } from 'src/app/interfaces/send-pending';
+import { from } from 'rxjs';
+import { concatMap, finalize } from 'rxjs/operators';
+import { Sale, SaleArray } from 'src/app/interfaces/sale';
+import { ProductSelled } from 'src/app/interfaces/sale';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { getMonthOnSalesDOC } from 'src/app/utils/utils';
 
@@ -11,15 +14,18 @@ import { getMonthOnSalesDOC } from 'src/app/utils/utils';
 })
 export class ListSaleComponent {
 
-  public orders: SendPending[] = [];
-  public reversedOrders: SendPending[] = [];
+  public orders: Sale[] = [];
+  public reversedOrders: Sale[] = [];
   public showSends = false;
-  public selectedOrder: SendPending = {} as SendPending;
+  public selectedOrder: Sale = {} as Sale;
   public actualMonth: number;
   @ViewChild('successModal') successModal: ElementRef | undefined;
-  public justDevVar: SendPendingArray = {
+  @ViewChild('editModal') editModal: ElementRef | undefined;
+  public justDevVar: SaleArray = {
     data: []
   };
+  public months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
   constructor(
     public fireService: FirebaseService,
     private modalService: NgbModal
@@ -47,13 +53,32 @@ export class ListSaleComponent {
     this.getSends(getMonthOnSalesDOC(Number($event)));
   }
 
-  public completeOrder(order: SendPending) {
+  public deleteOrder(order: Sale) {
     this.selectedOrder = order;
     this.modalService.open(this.successModal, {centered: true});
   }
 
+  public editOrder(order: Sale) {
+    this.selectedOrder = order;
+    this.modalService.open(this.editModal, {centered: true});
+  }
+
   public confirmDelete() {
     this.modalService.dismissAll();
-    this.fireService.deleteItemSalesCollection(this.selectedOrder).subscribe();
+    this.fireService.showLoader();
+    this.fireService.deleteSale(this.selectedOrder).subscribe();
+    from(this.selectedOrder.productos).pipe(
+      concatMap(x => {
+        var productToRestore: ProductSelled = {
+          cant: x.cant,
+          precio: x.precio,
+          producto: x.producto,
+          iphoneCode: x.iphoneCode,
+        }
+        return this.fireService.restoreProduct(productToRestore);
+      }),
+      finalize(()=> this.fireService.hideLoader())
+    ).subscribe();
+
   }
 }

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable } from 'rxjs';
 import { catchError, concatMap, finalize, take, toArray } from 'rxjs/operators';
-import { IPhone, Stock, StockProduct } from 'src/app/interfaces/stock';
+import { IPhone, Stock, Product } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { iphoneNameById } from 'src/app/utils/utils';
 
@@ -16,13 +16,13 @@ import { iphoneNameById } from 'src/app/utils/utils';
 export class AddProductComponent implements OnInit {
 
   public codes: IPhone[] = [];
-  public cases: Array<Array<StockProduct>> = [];
+  public cases: Array<Array<Product>> = [];
   public productForm: FormGroup;
   public cantToSell = [0];
   public showSelects = false;
   public ERROR: any;
-  public modalDetail: Array<StockProduct> = [];
-  public modalErrorDetail: Array<StockProduct> = [];
+  public modalDetail: Array<Product> = [];
+  public modalErrorDetail: Array<Product> = [];
   public dataBackUp: any;
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   @ViewChild('successModal') successModal: ElementRef | undefined;
@@ -77,7 +77,7 @@ export class AddProductComponent implements OnInit {
     this.firebaseService.showLoader();
      from(this.array).pipe(
        concatMap((x) => {
-        var dataBack: StockProduct;
+        var dataBack: Product;
         const value = x.value;
         dataBack = {
           producto: value.model,
@@ -97,7 +97,7 @@ export class AddProductComponent implements OnInit {
      ).subscribe()
   }
 
-  public getProducts(document: string, dataBack: StockProduct): Observable<Stock> {
+  public getProducts(document: string, dataBack: Product): Observable<Stock> {
     var array: Stock = {
       data: []
     };
@@ -114,8 +114,8 @@ export class AddProductComponent implements OnInit {
     );
   }
 
-  public sendNewProduct(document:string, dataBack: StockProduct, array: Stock): Observable<any> {
-    return this.firebaseService.setNewProduct(document, array).pipe(
+  public sendNewProduct(document:string, dataBack: Product, array: Stock): Observable<any> {
+    return this.firebaseService.addNewProduct(document, array).pipe(
       finalize(() => {
         dataBack.iphoneCode = iphoneNameById(document);
         this.modalDetail.push(dataBack);

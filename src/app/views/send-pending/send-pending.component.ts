@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SendPending } from 'src/app/interfaces/send-pending';
+import { Sale } from 'src/app/interfaces/sale';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -10,10 +10,10 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class SendPendingComponent {
 
-  public orders: SendPending[] = [];
-  public reversedOrders: SendPending[] = [];
+  public orders: Array<Sale> = [];
+  public reversedOrders: Array<Sale> = [];
   public showSends = false;
-  public selectedOrder: SendPending = {} as SendPending;
+  public selectedOrder: Sale = {} as Sale;
   @ViewChild('successModal') successModal: ElementRef | undefined;
   constructor(
     public fireService: FirebaseService,
@@ -36,13 +36,13 @@ export class SendPendingComponent {
     });
   }
 
-  public completeOrder(order: SendPending) {
+  public completeOrder(order: Sale) {
     this.selectedOrder = order;
     this.modalService.open(this.successModal, {centered: true});
   }
 
   public confirmCompleteOrder() {
     this.modalService.dismissAll();
-    this.fireService.deleteItemPendingCollection(this.selectedOrder).subscribe();
+    this.fireService.deleteOrderOfPendingList(this.selectedOrder).subscribe();
   }
 }

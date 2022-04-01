@@ -1,54 +1,59 @@
-<ng-template #successModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Cancelar pedido</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p>¿Segura que quieres cancelar el pedido de <b>{{ selectedOrder.cliente }}</b>? </p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-danger" (click)="confirmDelete()">S&iacute;</button>
-      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
-    </div>
-</ng-template>
 <div class="container">
-            <div class="row">
-                 <div class="col-lg-10 mx-auto mb-4">
-                    <div class="section-title text-center">
-                        <h3 class="top-c-sep">Ventas registradas</h3>
-                        <p>Aqu&iacute; se puede ver el total de ventas registradas</p>
-                    </div>
-                </div>
-                <div class="form-group d-flex" style="justify-content: space-evenly;">
-                  <select aria-label="Mes" id="month" name="month" class="form-select" #monthSelect (change)="changeMonth(monthSelect.value)">
-                    <option [value]="1" [hidden]="actualMonth < 1" [selected]="actualMonth === 1">Enero</option> 
-                    <option [value]="2" [hidden]="actualMonth < 2" [selected]="actualMonth === 2">Febrero</option> 
-                    <option [value]="3" [hidden]="actualMonth < 3" [selected]="actualMonth === 3">Marzo</option> 
-                    <option [value]="4" [hidden]="actualMonth < 4" [selected]="actualMonth === 4">Abril</option> 
-                    <option [value]="5" [hidden]="actualMonth < 5" [selected]="actualMonth === 5">Mayo</option> 
-                    <option [value]="6" [hidden]="actualMonth < 6" [selected]="actualMonth === 6">Junio</option> 
-                    <option [value]="7" [hidden]="actualMonth < 7" [selected]="actualMonth === 7">Julio</option> 
-                    <option [value]="8" [hidden]="actualMonth < 8" [selected]="actualMonth === 8">Agosto</option> 
-                    <option [value]="9" [hidden]="actualMonth < 9" [selected]="actualMonth === 9">Septiembre</option> 
-                    <option [value]="10" [hidden]="actualMonth < 10" [selected]="actualMonth === 10">Octubre</option> 
-                    <option [value]="11" [hidden]="actualMonth < 11" [selected]="actualMonth === 11">Noviembre</option> 
-                    <option [value]="12" [hidden]="actualMonth < 12" [selected]="actualMonth === 12">Diciembre</option> 
-                  </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-10 mx-auto">
-                    <div class="career-search mb-60" *ngIf="showSends">
-                        <app-send-pending-item [orders]="reversedOrders"
-                                               summaryText="Total de ventas:"
-                                               [showButton]="true"
-                                               textButton="Cancelar pedido"
-                                               (selectedOrder)="completeOrder($event)"
-                                               [showTotal]="true"></app-send-pending-item>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+  <div class="row">
+      <div class="col-lg-10 mx-auto mb-4">
+          <div class="section-title text-center">
+              <h3 class="top-c-sep">Ventas registradas</h3>
+              <p>Aqu&iacute; se puede ver el total de ventas registradas</p>
+          </div>
+      </div>
+      <div class="form-group d-flex" style="justify-content: space-evenly;">
+        <select aria-label="Mes" id="month" name="month" class="form-select" #monthSelect (change)="changeMonth(monthSelect.value)">
+          <option *ngFor="let month of months; let i = index" [value]="i+1" [hidden]="actualMonth<i+1" [selected]="actualMonth === i+1">{{month}}</option> 
+        </select>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-lg-10 mx-auto">
+          <div class="career-search mb-60" *ngIf="showSends">
+              <app-send-pending-item [orders]="reversedOrders"
+                                     summaryText="Total de ventas:"
+                                     [showButton]="true"
+                                     [showButton2]="true"
+                                     textButton="Cancelar pedido"
+                                     textButton2="Editar pedido"
+                                     (actionButton1)="deleteOrder($event)"
+                                     (actionButton2)="editOrder($event)"
+                                     [showTotal]="true"></app-send-pending-item>
+          </div>
+      </div>
+  </div>
+</div>
+<ng-template #successModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Cancelar pedido</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>¿Segura que quieres cancelar el pedido de <b>{{ selectedOrder.cliente }}</b>? </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="confirmDelete()">S&iacute;</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
+  </div>
+</ng-template>
+<ng-template #editModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Editar pedido</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Por el momento, para editar el pedido porfavor, cancelarlo y agregarlo de nuevo </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Salir</button>
+  </div>
+</ng-template>

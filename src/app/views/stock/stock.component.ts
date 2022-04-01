@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { Stock2, StockProduct2 } from 'src/app/interfaces/stock';
+import { ProductSelled } from 'src/app/interfaces/sale';
+import { Stock } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { idByIphoneName, iphoneNameById } from '../../utils/utils'
 @Component({
@@ -10,8 +11,8 @@ import { idByIphoneName, iphoneNameById } from '../../utils/utils'
 })
 export class StockComponent implements OnInit {
   
-  public products: Array<StockProduct2> = [];
-  public productBackup: Array<StockProduct2> = [];
+  public products: Array<ProductSelled> = [];
+  public productBackup: Array<ProductSelled> = [];
   public IPhoneProducts = [
     'IPhone 11',
     'Iphone 11 Pro',
@@ -38,16 +39,21 @@ export class StockComponent implements OnInit {
   constructor(
     public fireService: FirebaseService
   ) {
-    var result: Array<StockProduct2> = [];
+    var result: Array<ProductSelled> = [];
     this.fireService.showLoader();
     this.fireService.getAllProductNames().pipe(
-      map((x: Stock2[]) => {
+      map((x: Stock[]) => {
         for (let i = 0; i < x.length; i++) {
           for (let j = 0; j < x[i].data?.length; j++) {
             var iphoneCode = x[i].docId;
             if (iphoneCode) {
-              x[i].data[j].iphoneCode = iphoneCode as string;
-              result.push(x[i].data[j]);
+              var stockWithCode: ProductSelled = {
+                cant: x[i].data[j].cant,
+                producto: x[i].data[j].producto,
+                precio: x[i].data[j].precio,
+                iphoneCode: iphoneCode
+              }
+              result.push(stockWithCode);
             }
           }
         }
@@ -64,8 +70,8 @@ export class StockComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public iphoneNameById(id: string) {
-    return iphoneNameById(id);
+  public iphoneNameById (id: string) {
+      return iphoneNameById(id);
   }
   getCaseModel(){
     var result: string[] = [];

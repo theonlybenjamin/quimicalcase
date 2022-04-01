@@ -5,8 +5,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, from } from 'rxjs';
 import { catchError, concatMap, finalize, toArray } from 'rxjs/operators';
 import { Routes } from 'src/app/config/routes.enum';
-import { SendPending } from 'src/app/interfaces/send-pending';
-import { IPhone, IProductSelled, Stock, StockProduct } from 'src/app/interfaces/stock';
+import { Sale } from 'src/app/interfaces/sale';
+import { IPhone, Product, Stock } from 'src/app/interfaces/stock';
+import { ProductSelled } from 'src/app/interfaces/sale';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -17,16 +18,17 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class NewSaleComponent {
 
   public codes: IPhone[] = [];
-  public cases: Array<Array<StockProduct>> = [];
+  public cases: Array<Array<Product>> = [];
   public saleForm: FormGroup;
   public cantToSell = [0];
   public showSelects = false;
-  public deleteFromDrive: IProductSelled[] = [];
-  public updatedModels: IProductSelled[] = [];
+  public deleteFromDrive: Product[] = [];
+  public updatedModels: ProductSelled[] = [];
   @ViewChild('content') modal: ElementRef | undefined;
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   public ERROR: any;
   public capital: number = 0;
+  public newSale: Sale = {} as Sale;
   constructor(
     public firebaseService: FirebaseService,
     public router: Router,
@@ -39,7 +41,7 @@ export class NewSaleComponent {
     });
     this.saleForm = new FormGroup({
       client: new FormControl(null, Validators.required),
-      delivery_type: new FormControl(null, Validators.required),
+      sell_type: new FormControl('delivery', Validators.required),
       sale_channel: new FormControl(null, Validators.required),
       summary: new FormControl(null, Validators.required),
       products: new FormArray([
@@ -66,9 +68,9 @@ export class NewSaleComponent {
 
   public searchIphoneCases(index: number){
     const formGroupValue = this.getArrayFormGroup(index).value;
-    this.firebaseService.getStockSpecificDocument(formGroupValue.code).subscribe(x => {
+    this.firebaseService.getProductStock(formGroupValue.code).subscribe(x => {
       this.cases[index] = x.data
-      this.cases[index].push(x.docId as unknown as StockProduct);
+      this.cases[index].push(x.docId as unknown as Product);
     });
   }
 
@@ -128,11 +130,25 @@ export class NewSaleComponent {
         if (finalResult.data[finalResult.data.length - 1] === x.value.code) {
           finalResult.data.pop();
         }
-        this.updatedModels.push(x.value);
+        var updatedModel: ProductSelled = {
+          cant: x.value.cant,
+          producto: x.value.model,
+          iphoneCode: x.value.code,
+          precio: this.cases[codeIndex][modelIndex].precio
+        }
+        this.updatedModels.push(updatedModel);
         this.capital += this.cases[codeIndex][modelIndex]?.precio;
-        return this.firebaseService.setFieldsStockCollection(x.value.code, finalResult).pipe(
+        this.newSale = {
+          cliente: this.saleForm.get('client')?.value,
+          tipo_entrega: this.saleForm.get('sell_type')?.value,
+          total: this.saleForm.get('summary')?.value,
+          productos: this.updatedModels,
+          capital: this.capital,
+          canal_venta: this.saleForm.get('sale_channel')?.value
+        };
+        return this.firebaseService.updateSotckAfterSale(x.value.code, finalResult).pipe(
           catchError(error => {
-            this.prepareSendPendingData();
+            this.prepareSendPendingData(this.newSale);
             this.ERROR = error;
             this.openErrorModal();
             this.firebaseService.hideLoader();
@@ -147,10 +163,16 @@ export class NewSaleComponent {
         * rutear al home o mostrar el modal de cases a elminar
         */
        forkJoin([
-        this.sendAllSalesData(),
-        this.prepareSendPendingData(),
+        this.sendAllSalesData(this.newSale),
+        this.prepareSendPendingData(this.newSale),
         this.sendTotalToFinance()
        ]).pipe(
+         catchError(error =>{
+          this.ERROR = error;
+          this.openErrorModal();
+          this.firebaseService.hideLoader();
+          return error;
+         }),
         finalize(() => {
           if (this.deleteFromDrive.length === 0) {
             this.router.navigate([Routes.SEND_PENDING]);
@@ -164,31 +186,16 @@ export class NewSaleComponent {
       .subscribe()
   }
 
-  public prepareSendPendingData() {
-    var obj: SendPending = {
-      cliente: this.saleForm.get('client')?.value,
-      tipo_entrega: this.saleForm.get('delivery_type')?.value,
-      productos: this.updatedModels,
-      canal_venta: this.saleForm.get('sale_channel')?.value
-    };
-    return this.firebaseService.setSendPendingColecction(obj);
+  public prepareSendPendingData(newSale: Sale) {
+    return this.firebaseService.addOrderToPendingList(newSale);
   }
 
   public sendTotalToFinance() {
     return this.firebaseService.setNewTotalSales(this.saleForm.get('summary')?.value);
   }
 
-  public sendAllSalesData() {
-    var allSales: SendPending = {
-      cliente: this.saleForm.get('client')?.value,
-      tipo_entrega: this.saleForm.get('delivery_type')?.value,
-      total: this.saleForm.get('summary')?.value,
-      productos: this.updatedModels,
-      capital: this.capital,
-      canal_venta: this.saleForm.get('sale_channel')?.value
-    };
-
-    return this.firebaseService.setAllSalesCollecction(allSales);
+  public sendAllSalesData(newSale: Sale) {
+    return this.firebaseService.addSaleToAllSales(newSale);
   }
   
 }

@@ -9,7 +9,7 @@
       <p>Por favor, toma nota o eliminar ahorita, debes eliminar del Drive los siguientes cases:
       </p>
       <div *ngFor="let model of deleteFromDrive;">
-            <span><b>{{model.model}}</b> del <b>{{model.code}}</b></span>
+            <span><b>{{model.producto}}</b> del <b>{{model.iphoneCode}}</b></span>
       </div>
     </div>
     <div class="modal-footer">
@@ -27,7 +27,7 @@
       <p>Hubo un error, solo se actualizaron los siguientes modelos:
       </p>
       <div *ngFor="let model of updatedModels;">
-            <span><b>{{model.model}}</b> del <b>{{model.code}}</b></span>
+            <span><b>{{model.producto}}</b> del <b>{{model.iphoneCode}}</b></span>
       </div>
       <p>Enviar captura de esto al administrador de sistemas. chula</p>
       <p>{{ERROR}}</p>
@@ -51,14 +51,16 @@
              formControlName="client">
     </div>
     <div class="form-group">
-      <label for="delivery_type">Tipo de entrega</label>
-      <select class="form-select"
-              formControlName="delivery_type"
-              id="delivery_type">
-          <option selected>Selecciona el tipo de entrega</option>
-          <option value="Olva">Olva</option>
-          <option value="Contraentrega">Contraentrega</option>
-      </select>
+      <fieldset disabled>
+        <label for="sell_type">Tipo de venta</label>
+        <select class="form-select"
+                formControlName="sell_type"
+                id="sell_type">
+            <option selected>Selecciona el tipo de venta</option>
+            <option value="delivery">Delivery</option>
+            <option value="presencial">Presencial</option>
+        </select>
+      </fieldset>
     </div>
     <div class="form-group">
       <label for="sale_channel">Canal de venta</label>
@@ -89,7 +91,7 @@
                             formControlName="model"
                             id="case">
                         <option selected>Selecciona el modelo</option>
-                        <option [value]="case.producto" *ngFor="let case of cases[i]">{{ case.producto }}</option>
+                        <option [value]="case.producto" *ngFor="let case of cases[i]" [hidden]="case.producto === undefined">{{ case.producto }}</option>
                     </select>
                   </div>
               </div>

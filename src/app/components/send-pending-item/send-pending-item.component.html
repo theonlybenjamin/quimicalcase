@@ -9,17 +9,17 @@
                         <i class="zmdi zmdi-pin mr-2"></i> {{ order.tipo_entrega }}
                     </li>
                     <li class="mr-md-4" style="margin-top: 20px;">
-                        <p *ngFor="let producto of order.productos; let i = index"> {{producto.cant}} <b>{{ producto.model }} </b> de <b>{{ producto.code }}</b></p>
+                        <p *ngFor="let producto of order.productos; let i = index"> {{producto.cant}} <b>{{ producto.producto }} </b> de <b>{{ producto.iphoneCode }}</b></p>
                     </li>
-                    <li class="mr-md-4" *ngIf="order.total">
+                    <li class="mr-md-4" *ngIf="showTotal">
                         <span style="color: blue"> Total: <b>S/.</b> {{ order.total}}</span>
                     </li>
-                    <li class="mr-md-4" *ngIf="order.total">
+                    <li class="mr-md-4" *ngIf="showTotal">
                         <span> Inversion: <b>S/.</b> {{ order.capital }}</span><br>
                         <span> Packaging y Publicidad: <b>S/.</b> {{ packagingPrice + advertisingPrice }}</span><br>
                         <span style="color: red"> Gastos: <b>S/.</b> {{ getExpensesSummary(order) }}</span> <br>
                     </li>
-                    <li class="mr-md-4" *ngIf="order.total">
+                    <li class="mr-md-4" *ngIf="showTotal">
                         <span style="color: green"> Ganancia: <b>S/.</b> {{ getProfit(order) }}</span><br>
                     </li>
                 </ul>
@@ -27,8 +27,8 @@
         </div>
         <div class="job-right my-4 flex-shrink-0 text-center">
             <img height="50" *ngIf="order.canal_venta" alt="canal de venta" class="mb-3" [src]="order.canal_venta === 'Whatsapp' ? 'assets/icons/whatsapp.png': 'assets/icons/instagram.png'">
-            <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitOrder(order)">{{textButton2}}</button>
-            <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitOrder(order)">{{textButton}}</button>
+            <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitButton1(order)">{{textButton}}</button>
+            <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitButton2(order)">{{textButton2}}</button>
         </div>
     </div>
 </div>
