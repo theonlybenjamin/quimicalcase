@@ -21,7 +21,7 @@ export class FinancesComponent {
   public totalExpenses: number = 0;
   public salary = 1200;
   public publicity = 200;
-  public emanuel = 106;
+  public emanuel = 177;
   public gastosImprevistos = 0;
   public reinversion = 0;
   public ingresoBruto = 0;

@@ -46,8 +46,8 @@ export class NewSaleComponent {
       summary: new FormControl(null, Validators.required),
       products: new FormArray([
         new FormGroup({
-          code: new FormControl(null, Validators.required),
-          model: new FormControl(null, Validators.required),
+          iphoneCode: new FormControl(null, Validators.required),
+          producto: new FormControl(null, Validators.required),
           cant: new FormControl(1, Validators.required)
         })
       ])
@@ -68,7 +68,7 @@ export class NewSaleComponent {
 
   public searchIphoneCases(index: number){
     const formGroupValue = this.getArrayFormGroup(index).value;
-    this.firebaseService.getProductStock(formGroupValue.code).subscribe(x => {
+    this.firebaseService.getProductStock(formGroupValue.iphoneCode).subscribe(x => {
       this.cases[index] = x.data
       this.cases[index].push(x.docId as unknown as Product);
     });
@@ -76,8 +76,8 @@ export class NewSaleComponent {
 
   addFormGroup() {
     this.products.push(new FormGroup({
-      code: new FormControl(null, Validators.required),
-      model: new FormControl(null, Validators.required),
+      iphoneCode: new FormControl(null, Validators.required),
+      producto: new FormControl(null, Validators.required),
       cant: new FormControl(1, Validators.required)
     }))
   }
@@ -111,8 +111,9 @@ export class NewSaleComponent {
          * @modelIndex es la propiedad que almacena el modelo a editar
          * @finalResult se almacena el nuevo resultado del arrya
          */
-        const codeIndex = this.cases.findIndex(y => y[y.length - 1] === x.value.code);
-        const modelIndex = this.cases[codeIndex].findIndex(z => z.producto === x.value.model);
+        const codeIndex = this.cases.findIndex(y => y[y.length - 1] === x.value.iphoneCode);
+        const modelIndex = this.cases[codeIndex].findIndex(z => z.producto === x.value.producto);
+        const price = this.cases[codeIndex][modelIndex].precio;
         var finalResult: Stock = {} as Stock;
         this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
         /**
@@ -127,14 +128,15 @@ export class NewSaleComponent {
         /**
          * Eliminar el ultimo objecto del array que es el codigo del modelo
          */
-        if (finalResult.data[finalResult.data.length - 1] === x.value.code) {
+        if (finalResult.data[finalResult.data.length - 1] === x.value.iphoneCode) {
           finalResult.data.pop();
         }
+        console.log(this.cases[codeIndex][modelIndex]);
         var updatedModel: ProductSelled = {
           cant: x.value.cant,
-          producto: x.value.model,
-          iphoneCode: x.value.code,
-          precio: this.cases[codeIndex][modelIndex].precio
+          producto: x.value.producto,
+          iphoneCode: x.value.iphoneCode,
+          precio: price
         }
         this.updatedModels.push(updatedModel);
         this.capital += this.cases[codeIndex][modelIndex]?.precio;
@@ -146,7 +148,7 @@ export class NewSaleComponent {
           capital: this.capital,
           canal_venta: this.saleForm.get('sale_channel')?.value
         };
-        return this.firebaseService.updateSotckAfterSale(x.value.code, finalResult).pipe(
+        return this.firebaseService.updateSotckAfterSale(x.value.iphoneCode, finalResult).pipe(
           catchError(error => {
             this.prepareSendPendingData(this.newSale);
             this.ERROR = error;

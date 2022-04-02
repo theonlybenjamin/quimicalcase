@@ -8,8 +8,8 @@
     <div class="modal-body">
       <p>Por favor, toma nota o eliminar ahorita, debes eliminar del Drive los siguientes cases:
       </p>
-      <div *ngFor="let model of deleteFromDrive;">
-            <span><b>{{model.producto}}</b> del <b>{{model.iphoneCode}}</b></span>
+      <div *ngFor="let producto of deleteFromDrive;">
+            <span><b>{{producto.producto}}</b> del <b>{{producto.iphoneCode}}</b></span>
       </div>
     </div>
     <div class="modal-footer">
@@ -26,8 +26,8 @@
     <div class="modal-body">
       <p>Hubo un error, solo se actualizaron los siguientes modelos:
       </p>
-      <div *ngFor="let model of updatedModels;">
-            <span><b>{{model.producto}}</b> del <b>{{model.iphoneCode}}</b></span>
+      <div *ngFor="let producto of updatedModels;">
+            <span><b>{{producto.producto}}</b> del <b>{{producto.iphoneCode}}</b></span>
       </div>
       <p>Enviar captura de esto al administrador de sistemas. chula</p>
       <p>{{ERROR}}</p>
@@ -76,10 +76,10 @@
           <div class="select-group" [formGroup]="getArrayFormGroup(i)">
               <div class="row mx-2">
                   <div class="form-group col-6">
-                      <label for="code">C&oacute;digo</label>
+                      <label for="iphoneCode">C&oacute;digo</label>
                       <select class="form-select"
-                              formControlName="code"
-                              id="code"
+                              formControlName="iphoneCode"
+                              id="iphoneCode"
                               (change)="searchIphoneCases(i)">
                           <option selected>Selecciona el codigo</option>
                           <option [value]="iphone.id" *ngFor="let iphone of codes">{{ iphone.name }}</option>
@@ -88,7 +88,7 @@
                   <div class="form-group col-6">
                     <label for="case">Modelo</label>
                     <select class="form-select"
-                            formControlName="model"
+                            formControlName="producto"
                             id="case">
                         <option selected>Selecciona el modelo</option>
                         <option [value]="case.producto" *ngFor="let case of cases[i]" [hidden]="case.producto === undefined">{{ case.producto }}</option>
