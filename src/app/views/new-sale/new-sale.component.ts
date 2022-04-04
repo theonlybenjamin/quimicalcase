@@ -116,6 +116,7 @@ export class NewSaleComponent {
         const price = this.cases[codeIndex][modelIndex].precio;
         var finalResult: Stock = {} as Stock;
         this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
+        this.capital += this.cases[codeIndex][modelIndex]?.precio;
         /**
          * Si la cantidad actual del producto es 0, se agrega al modal que muestra los cases a eliminar
          * y se eliminar del array
@@ -131,7 +132,6 @@ export class NewSaleComponent {
         if (finalResult.data[finalResult.data.length - 1] === x.value.iphoneCode) {
           finalResult.data.pop();
         }
-        console.log(this.cases[codeIndex][modelIndex]);
         var updatedModel: ProductSelled = {
           cant: x.value.cant,
           producto: x.value.producto,
@@ -139,7 +139,6 @@ export class NewSaleComponent {
           precio: price
         }
         this.updatedModels.push(updatedModel);
-        this.capital += this.cases[codeIndex][modelIndex]?.precio;
         this.newSale = {
           cliente: this.saleForm.get('client')?.value,
           tipo_entrega: this.saleForm.get('sell_type')?.value,
