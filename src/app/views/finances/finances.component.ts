@@ -21,11 +21,14 @@ export class FinancesComponent {
   public totalExpenses: number = 0;
   public salary = 1200;
   public publicity = 200;
-  public emanuel = 177;
+  // sueldo + vino y no estabamos + malvinas + plaza norte
+  public emanuel = 177 + 10 + 15 + 16;
   public gastosImprevistos = 0;
   public reinversion = 0;
   public ingresoBruto = 0;
+  public prestamo = 300;
   public fixedTotalExpenses = 0;
+  public moneyOnCard: number = 0;
   constructor(
     public fireService: FirebaseService
   ) {
@@ -50,6 +53,7 @@ export class FinancesComponent {
         }
         this.fixedTotalExpenses = Number(this.totalExpenses.toFixed(1));
         this.gastosImprevistos = Number((this.totalExpenses - this.salary - this.emanuel - this.publicity).toFixed(1));
+        this.moneyOnCard = Number((this.ingresoBruto - this.gastosImprevistos).toFixed(1))
         this.reinversion = Number((this.profit.monto - this.totalExpenses).toFixed(1))
       this.fireService.hideLoader();
     });
@@ -57,7 +61,7 @@ export class FinancesComponent {
 
   public changeMonth($event: string) {
     this.expenses = [];
-    this.totalExpenses = this.salary + this.publicity + this.emanuel;
+    this.totalExpenses = this.salary + this.publicity + this.emanuel + this.prestamo;
     this.getSends(getMonthOnFinaceDOC(Number($event)));
   }
 
