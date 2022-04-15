@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { concatMap, map } from 'rxjs/operators';
 import { FinancesDoc, FinancesGastos, FinancesIngresos } from 'src/app/interfaces/finances';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { getMonthOnFinaceDOC } from 'src/app/utils/utils';
+import { getMonthOnFinaceDOC, getMonthOnSalesDOC } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-finances',
@@ -20,7 +21,7 @@ export class FinancesComponent {
   public finances: FinancesDoc = {} as FinancesDoc;
   public totalExpenses: number = 0;
   public salary = 1200;
-  public publicity = 200;
+  public publicity = 203.52;
   // sueldo + vino y no estabamos + malvinas + plaza norte
   public emanuel = 177 + 10 + 15 + 16;
   public gastosImprevistos = 0;
@@ -35,34 +36,51 @@ export class FinancesComponent {
     this.totalExpenses  = this.salary + this.publicity + this.emanuel;
     this.fireService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
-    this.getSends(getMonthOnFinaceDOC(this.actualMonth));
+    this.getSends(this.actualMonth).subscribe();
     this.expenseForm = new FormGroup({
       expense_detail: new FormControl(null, Validators.required),
       expense_amount: new FormControl(null, Validators.required),
     });
   }
 
-  public getSends(doc: string) {
-    this.fireService.getFinances(doc).subscribe(x => {
-      this.finances = x;
-      this.profit = x.ingresos;
-      this.ingresoBruto = Number(this.profit.monto.toFixed(1));
-      for (let i = 0; i < x.gastos.length; i++) {
-          this.expenses[i] = x.gastos[i];
-          this.totalExpenses += x.gastos[i].monto ? Number(x.gastos[i].monto.toFixed(1)) : x.gastos[i].monto;
+  public getTotalSales(month: number) {
+    var total:number = 0;
+    return this.fireService.getAllSales(getMonthOnSalesDOC(month)).pipe(
+      map(x => {
+        for (let i = 0; i < x.data.length; i++) {
+          total += x.data[i].total;
         }
+        this.profit.cantidad_ventas = x.data.length;
+        this.profit.monto = total;
+        this.ingresoBruto = Number(this.profit.monto.toFixed(1));
         this.fixedTotalExpenses = Number(this.totalExpenses.toFixed(1));
         this.gastosImprevistos = Number((this.totalExpenses - this.salary - this.emanuel - this.publicity).toFixed(1));
-        this.moneyOnCard = Number((this.ingresoBruto - this.gastosImprevistos).toFixed(1))
+        this.moneyOnCard = Number((this.ingresoBruto - this.gastosImprevistos - this.publicity).toFixed(1))
         this.reinversion = Number((this.profit.monto - this.totalExpenses).toFixed(1))
-      this.fireService.hideLoader();
-    });
+        this.fireService.hideLoader();
+      })
+    )
+  }
+
+  public getSends(month: number) {
+    return this.fireService.getFinances(getMonthOnFinaceDOC(month)).pipe(
+      concatMap(x => {
+        this.finances = x;
+        for (let i = 0; i < x.gastos.length; i++) {
+            this.expenses[i] = x.gastos[i];
+            this.totalExpenses += x.gastos[i].monto ? Number(x.gastos[i].monto.toFixed(1)) : x.gastos[i].monto;
+          }
+  
+        this.fireService.hideLoader();
+        return this.getTotalSales(month);
+      })
+    );
   }
 
   public changeMonth($event: string) {
     this.expenses = [];
     this.totalExpenses = this.salary + this.publicity + this.emanuel + this.prestamo;
-    this.getSends(getMonthOnFinaceDOC(Number($event)));
+    this.getSends(Number($event)).subscribe();
   }
 
   /**

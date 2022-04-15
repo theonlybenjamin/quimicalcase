@@ -60,7 +60,7 @@ export class AddProductComponent {
     });
   }
 
-  public sameCode(state: boolean){
+  public sameCode(state: boolean) {
     this.isSameCodeChecked = state;
       if (this.isSameCodeChecked && !this.isSameCodeSubs){
         this.codeSubscription.add(
