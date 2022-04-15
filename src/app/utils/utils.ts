@@ -27,6 +27,7 @@ export function iphoneNameById(id: string) {
       case StockCollections.Cable: return 'Cable';
       case StockCollections.Mica: return 'Mica';
       case StockCollections.Camara: return 'Camara';
+      case StockCollections.Gift: return 'Regalos';
       default: return id;
     }
 }
@@ -58,6 +59,7 @@ export function idByIphoneName(name: string) {
       case 'Cable': return StockCollections.Cable;
       case 'Camara': return StockCollections.Camara;
       case 'Mica': return StockCollections.Mica;
+      case 'Regalos': return StockCollections.Gift;
       default: return name;
     }
 }

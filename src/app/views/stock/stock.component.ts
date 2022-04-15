@@ -33,7 +33,8 @@ export class StockComponent implements OnInit {
     'Airpods 1era gen / 2da gen',
     'Cable',
     'Mica',
-    'Camara'
+    'Camara',
+    'Regalos'
   ];
   public codeValue: string = '';
   constructor(
