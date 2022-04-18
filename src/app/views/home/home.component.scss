@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 $nav-width: 68px;
-$--first-color: #4723D9;
+$--first-color: #47237C;
 $--first-color-light: #AFA5D9;
 $--white-color: #F7F6FB;
 $--body-font: 'Nunito', sans-serif;
@@ -95,7 +95,7 @@ a {
     background-color: #fff;
 }
 .body-expanded {
-    padding-left: calc(#{$nav-width} + 10rem) !important;
+    padding-left: calc(#{$nav-width} + 7rem) !important;
 }
 
 // .component {
@@ -126,7 +126,7 @@ a {
         padding-left: calc($nav-width + 2rem);
     }
     .body-expanded {
-        padding-left: calc(#{$nav-width} + 10rem) !important;
+        padding-left: calc(#{$nav-width} + 7rem) !important;
     }
     
     .header {
