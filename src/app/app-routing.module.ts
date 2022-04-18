@@ -11,15 +11,15 @@ import { LoginComponent } from './views/login/login.component';
 import { NewSaleComponent } from './views/new-sale/new-sale.component';
 import { SendPendingComponent } from './views/send-pending/send-pending.component';
 import { StockComponent } from './views/stock/stock.component';
+import { TiendaComponent } from './views/tienda/tienda.component';
 
-const routes: Routes = [{
-  path: 'tracking',
-  component: TrackidComponent
-},{
+const routes: Routes = [
+  {
   path: 'login',
   component: LoginComponent,
   canActivate: [IsLoggedGuard]
-}, {
+  },
+  {
   path: 'home',
   component: HomeComponent,
   canActivate: [UserLoggedGuard],
@@ -47,7 +47,12 @@ const routes: Routes = [{
     pathMatch: 'full',
     redirectTo: 'nueva-venta'
   }]
-}, {
+}, 
+{
+  path: 'tienda',
+  component: TiendaComponent
+},
+{
   path: '**',
   pathMatch: 'full',
   redirectTo: 'login'

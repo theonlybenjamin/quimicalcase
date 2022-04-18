@@ -23,6 +23,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListSaleComponent } from './views/list-sale/list-sale.component';
 import { FinancesComponent } from './views/finances/finances.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { TiendaComponent } from './views/tienda/tienda.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { LoaderComponent } from './components/loader/loader.component';
     AddProductComponent,
     ListSaleComponent,
     FinancesComponent,
-    LoaderComponent
+    LoaderComponent,
+    TiendaComponent
   ],
   imports: [
     BrowserModule,
