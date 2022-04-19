@@ -25,6 +25,7 @@ export class AddProductComponent {
   public modalDetail: Array<Product> = [];
   public modalErrorDetail: Array<Product> = [];
   public dataBackUp: any;
+  public uploadPercent: any = 0;
   public isSameModelChecked: boolean = false;
   public isSameModelSubs: boolean = false;
   public modelSubscription: Subscription = new Subscription();
@@ -269,5 +270,11 @@ export class AddProductComponent {
     console.log(this.getArrayFormGroup(index).value)
     const filePath = this.getArrayFormGroup(index).value.model ? this.getArrayFormGroup(index).value.model : 'error';
     const task = this.storage.upload(filePath, file);
+    task.percentageChanges().subscribe(x =>{
+      this.uploadPercent = x;
+    });
+    task.catch(x =>{
+      alert(x);
+    })
   }
 }
