@@ -11,6 +11,13 @@ export interface Product {
     iphoneCode?: string;
 }
 
+export interface ProductForm {
+    model: string;
+    precio: number;
+    cant: number;
+    code: string;
+}
+
 export interface IPhone {
     id: string;
     name: string;
