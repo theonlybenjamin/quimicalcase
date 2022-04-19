@@ -38,14 +38,14 @@
     <p>Aqu&iacute; puedes agregar los nuevos productos</p>
   </div>
     <form class="form" [formGroup]="productForm">
-      <label style="margin-right: 5px;" for="check">Mismo codigo:</label>
-      <input id="check" type="checkbox" placeholder="Marcar" formControlName="sameCode" (click)="sameCode(!isSameCodeChecked)"/>
-      <label style="margin-right: 5px;" for="check2">Mismo modelo:</label>
-      <input id="check2" type="checkbox" placeholder="Marcar" formControlName="sameModel" (click)="sameModel(!isSameModelChecked)"/>
-      <label style="margin-right: 5px;" for="check3">Misma cantidad:</label>
-      <input id="check3" type="checkbox" placeholder="Marcar" formControlName="sameCant" (click)="sameCant(!isSameCantChecked)"/>
-      <label style="margin-right: 5px;" for="check4">Mismo precio:</label>
-      <input id="check4" type="checkbox" placeholder="Marcar" formControlName="samePrice" (click)="samePrice(!isSamePriceChecked)"/>
+        <label style="margin-right: 5px;" for="check">Mismo codigo:</label>
+        <input id="check" type="checkbox" placeholder="Marcar" formControlName="sameCode" (click)="sameCode(!isSameCodeChecked)"/>
+        <label style="margin-right: 5px;" for="check2">Mismo modelo:</label>
+        <input id="check2" type="checkbox" placeholder="Marcar" formControlName="sameModel" (click)="sameModel(!isSameModelChecked)"/>
+        <label style="margin-right: 5px;" for="check3">Misma cantidad:</label>
+        <input id="check3" type="checkbox" placeholder="Marcar" formControlName="sameCant" (click)="sameCant(!isSameCantChecked)"/>
+        <label style="margin-right: 5px;" for="check4">Mismo precio:</label>
+        <input id="check4" type="checkbox" placeholder="Marcar" formControlName="samePrice" (click)="samePrice(!isSamePriceChecked)"/>
         <div *ngFor="let product of array; let i = index">
             <div class="select-group" [formGroup]="getArrayFormGroup(i)">
                 <div class="row mx-1">
@@ -83,7 +83,16 @@
                                id="name"
                                formControlName="precio">
                     </div>
-                </div>
+                  </div>
+                  <div class="row mx-1">
+                    <div class="form-group col-12">
+                      <label for="file">Choose File</label>
+                      <input type="file"
+                             id="file"
+                             accept=".jpg" 
+                             class="form-control">
+                    </div>
+                  </div>
             </div>
         </div>
         <div class="row justify-content-between px-5">
