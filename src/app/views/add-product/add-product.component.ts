@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable, Subscription } from 'rxjs';
 import { catchError, concatMap, finalize, take, toArray } from 'rxjs/operators';
-import { IPhone, Stock, Product } from 'src/app/interfaces/stock';
+import { IPhone, Stock, Product, ProductForm } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { iphoneNameById } from 'src/app/utils/utils';
 
@@ -38,10 +39,12 @@ export class AddProductComponent {
   public priceSubscription: Subscription = new Subscription();
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   @ViewChild('successModal') successModal: ElementRef | undefined;
+
   constructor(
     public firebaseService: FirebaseService,
     public router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private storage: AngularFireStorage
     ) {
     this.firebaseService.getStockAllDocumentsName().subscribe(x => this.codes = x);
     this.productForm = new FormGroup({
@@ -165,7 +168,7 @@ export class AddProductComponent {
   }
 
   get arrayValues() {
-    return this.products.getRawValue();
+    return this.products.getRawValue() as Array<ProductForm>;
   }
 
   getArrayFormGroup(i:number) {
@@ -203,7 +206,7 @@ export class AddProductComponent {
        concatMap((x) => {
         var dataBack: Product;
         dataBack = {
-          producto: x.model,
+          producto: x.model.toLowerCase(),
           cant: Number(x.cant),
           precio: x.precio
         }
@@ -245,6 +248,7 @@ export class AddProductComponent {
         console.log(currentUrl);
     });
   }
+
   public sendNewProduct(document:string, dataBack: Product, array: Stock): Observable<any> {
     return this.firebaseService.addNewProduct(document, array).pipe(
       finalize(() => {
@@ -258,5 +262,12 @@ export class AddProductComponent {
         return error;
       })
     )
+  }
+
+  public uploadFile(event: any, index: number){
+    const file = event.target.files[0];
+    console.log(this.getArrayFormGroup(index).value)
+    const filePath = this.getArrayFormGroup(index).value.model ? this.getArrayFormGroup(index).value.model : 'error';
+    const task = this.storage.upload(filePath, file);
   }
 }

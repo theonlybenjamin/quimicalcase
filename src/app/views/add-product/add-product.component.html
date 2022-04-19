@@ -90,7 +90,8 @@
                       <input type="file"
                              id="file"
                              accept=".jpg" 
-                             class="form-control">
+                             class="form-control"
+                             (change)="uploadFile($event, i)">
                     </div>
                   </div>
             </div>
