@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { from } from 'rxjs';
+import { catchError, concatMap, finalize, map } from 'rxjs/operators';
 import { codeForStorage } from 'src/app/utils/utils';
 
 @Component({
@@ -11,27 +15,35 @@ export class UploadImageComponent implements OnInit {
   uploadPercent: any;
   public array: Array<string> = [];
   public model: string = '';
+  @ViewChild('successModal') successModal: ElementRef | undefined;
+
   constructor(
-    private storage: AngularFireStorage) { }
+    private storage: AngularFireStorage,
+    private modalService: NgbModal,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  public async uploadFile(file: any){
+  public uploadFile(file: any){
     const fileEnd = file.files[0] as File;
     console.log(fileEnd);
-    for(let i = 0; i < this.array.length ;i++) {
-      const filePath = `${this.array[i]}${this.model}.jpg`;
-      const task = this.storage.upload(filePath, fileEnd);
-      task.percentageChanges().subscribe(x =>{
-        console.log(x)
-        this.uploadPercent = x;
-      });
-      task.catch(x =>{
-        alert(x);
+    from(this.array).pipe(
+      concatMap(x => {
+        const filePath = `${x}${this.model}.jpg`;
+        const task = this.storage.upload(filePath, fileEnd);
+        return task.percentageChanges().pipe(
+          map(x => this.uploadPercent = x),
+          catchError(error => {
+            alert(error);
+            return error;
+          })
+        )        
+      }),
+      finalize(() => {
+        this.modalService?.open(this.successModal, {centered: true});
       })
-      console.log('terminamos')
-    }
+    ).subscribe();
   }
 
   addCarpetStorage(carpet: string){
@@ -40,5 +52,12 @@ export class UploadImageComponent implements OnInit {
     } else {
       this.array.push(carpet);
     }
+  }
+
+  public reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
   }
 }

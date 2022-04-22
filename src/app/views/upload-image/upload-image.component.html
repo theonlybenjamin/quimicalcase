@@ -1,3 +1,18 @@
+<ng-template #successModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Se agregaron correctamente las siguientes fotos:</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <p *ngFor="let carpet of array; let i = index"><b>{{ model }}</b> en <b>{{ carpet }}</b></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="reloadCurrentRoute()">Entendido</button>
+  </div>
+</ng-template>
+
 <section>
   <section>
     <div class="section-title text-center">
@@ -98,6 +113,7 @@
         <input type="text"
                class="form-control"
                id="model"
+               appNoWhiteSpaces
                [(ngModel)]="model">
       </div>
     </div>
