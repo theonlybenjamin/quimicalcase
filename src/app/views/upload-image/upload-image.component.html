@@ -108,7 +108,7 @@
                  id="file"
                  accept=".jpg" 
                  class="form-control"
-                 [disabled]="array.length === 0"
+                 [disabled]="array.length === 0 || model === ''"
                  (change)="uploadFile($event.target)">
         </div>
       </div>
