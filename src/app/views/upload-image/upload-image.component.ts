@@ -8,7 +8,7 @@ import { codeForStorage } from 'src/app/utils/utils';
   styleUrls: ['./upload-image.component.scss']
 })
 export class UploadImageComponent implements OnInit {
-  uploadPercent: number | undefined;
+  uploadPercent: any;
   public array: Array<string> = [];
   public model: string = '';
   constructor(
@@ -17,17 +17,20 @@ export class UploadImageComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public uploadFile(file: any){
-    const fileEnd = file.target?.files[0] as File;
+  public async uploadFile(file: any){
+    const fileEnd = file.files[0] as File;
+    console.log(fileEnd);
     for(let i = 0; i < this.array.length ;i++) {
-      const filePath = `${this.array[i]}${this.model}`;
+      const filePath = `${this.array[i]}${this.model}.jpg`;
       const task = this.storage.upload(filePath, fileEnd);
       task.percentageChanges().subscribe(x =>{
+        console.log(x)
         this.uploadPercent = x;
       });
       task.catch(x =>{
         alert(x);
       })
+      console.log('terminamos')
     }
   }
 
