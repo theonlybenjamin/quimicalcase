@@ -1,0 +1,116 @@
+<section>
+  <section>
+    <div class="section-title text-center">
+      <h3 class="top-c-sep">Agregar producto</h3>
+      <p>Aqu&iacute; puedes agregar los nuevos productos</p>
+    </div>
+  </section>
+  <section>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Series X:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/iphX-XS-XR-XSm/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Cable:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/cable/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Camara:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/camara/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Sereies 11:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/iph11-11p-11pm/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Series 12:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/iph12-12pro-12promax/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Series 13:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/iph13-13m/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Series 13 Pro:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/iph13p-13pm/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Series 7:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/iph7-8p/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Watch:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/watch/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Airpods:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/airpods/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Airpods pro:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/airpodspro/')"/>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12 check-box">
+        <label for="check2">Micas:</label>
+        <input class="check" id="check2" type="checkbox"
+               placeholder="Marcar" (change)="addCarpetStorage('/micas/')"/>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="row mx-1">
+      <div class="form-group col-12">
+        <label for="model">Modelo</label>
+        <input type="text"
+               class="form-control"
+               id="model"
+               [(ngModel)]="model">
+      </div>
+    </div>
+    <div class="row mx-1">
+        <div class="form-group col-12">
+          <label for="file">Choose File %: {{uploadPercent}}</label>
+          <input type="file"
+                 id="file"
+                 accept=".jpg" 
+                 class="form-control"
+                 [disabled]="array.length === 0"
+                 (change)="uploadFile($event.target)">
+        </div>
+      </div>
+  </section>
+</section>

@@ -22,8 +22,8 @@ export class FinancesComponent {
   public totalExpenses: number = 0;
   public salary = 1200;
   public publicity = 203.52;
-  // sueldo + vino y no estabamos + malvinas + plaza norte
-  public emanuel = 177 + 10 + 15 + 16;
+  // sueldo + vino y no estabamos + malvinas + plaza norte + malvinas
+  public emanuel = 177 + 10 + 15 + 16 + 34;
   public gastosImprevistos = 0;
   public reinversion = 0;
   public ingresoBruto = 0;

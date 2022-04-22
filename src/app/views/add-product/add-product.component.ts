@@ -1,5 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -44,8 +43,7 @@ export class AddProductComponent {
   constructor(
     public firebaseService: FirebaseService,
     public router: Router,
-    private modalService: NgbModal,
-    private storage: AngularFireStorage
+    private modalService: NgbModal
     ) {
     this.firebaseService.getStockAllDocumentsName().subscribe(x => this.codes = x);
     this.productForm = new FormGroup({
@@ -201,7 +199,7 @@ export class AddProductComponent {
     this.array.pop();
   }
 
-   saveFormGroup() {
+  saveFormGroup() {
     this.firebaseService.showLoader();
      from(this.arrayValues).pipe(
        concatMap((x) => {
@@ -242,14 +240,6 @@ export class AddProductComponent {
     );
   }
 
-  reloadCurrentRoute() {
-    let currentUrl = this.router.url;
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate([currentUrl]);
-        console.log(currentUrl);
-    });
-  }
-
   public sendNewProduct(document:string, dataBack: Product, array: Stock): Observable<any> {
     return this.firebaseService.addNewProduct(document, array).pipe(
       finalize(() => {
@@ -265,16 +255,10 @@ export class AddProductComponent {
     )
   }
 
-  public uploadFile(event: any, index: number){
-    const file = event.target.files[0];
-    console.log(this.getArrayFormGroup(index).value)
-    const filePath = this.getArrayFormGroup(index).value.model ? this.getArrayFormGroup(index).value.model : 'error';
-    const task = this.storage.upload(filePath, file);
-    task.percentageChanges().subscribe(x =>{
-      this.uploadPercent = x;
+  public reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
     });
-    task.catch(x =>{
-      alert(x);
-    })
   }
 }

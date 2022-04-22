@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { ProductSelled } from 'src/app/interfaces/sale';
 import { Stock } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { idByIphoneName, iphoneNameById } from '../../utils/utils'
+import { idByIphoneName, iphoneNameById, setDashesToName } from '../../utils/utils'
 @Component({
   selector: 'app-stock',
   templateUrl: './stock.component.html',
@@ -65,10 +65,12 @@ export class StockComponent implements OnInit {
       this.productBackup = x;
       result = [];
       this.fireService.hideLoader();
+      this.searchByCode({ value: 'IPhone 11'})
     })
   }
 
   ngOnInit(): void {
+    // this.searchByCode({ value: 'IPhone 11'})
   }
 
   public iphoneNameById (id: string) {
@@ -89,6 +91,7 @@ export class StockComponent implements OnInit {
   }
 
   public searchByCode(code: any) {
+    console.log(code.value);
     var id = idByIphoneName(code.value);
     this.codeValue = id;
     this.getCaseModel();
@@ -109,5 +112,9 @@ export class StockComponent implements OnInit {
     } else {
       this.products = filter;
     }
+  }
+
+  public getImageURL(name: string, code: string) {
+    return setDashesToName(name, code);
   }
 }

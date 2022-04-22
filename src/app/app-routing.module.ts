@@ -12,6 +12,7 @@ import { NewSaleComponent } from './views/new-sale/new-sale.component';
 import { SendPendingComponent } from './views/send-pending/send-pending.component';
 import { StockComponent } from './views/stock/stock.component';
 import { TiendaComponent } from './views/tienda/tienda.component';
+import { UploadImageComponent } from './views/upload-image/upload-image.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
   }, {
     path:'finanzas',
     component: FinancesComponent
+  },
+  {
+    path: 'subir-imagen',
+    component: UploadImageComponent
   },
   {
     path: '',

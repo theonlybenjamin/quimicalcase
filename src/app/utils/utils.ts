@@ -1,4 +1,5 @@
 import { StockCollections } from "../enums/stock-collections.enum";
+import { StorageUrl } from "../enums/storage.enum";
 
 /**
  * Funcion para devolver el nombre comercial del iphone dando su ID
@@ -108,6 +109,42 @@ export function getMonthOnSalesDOC(month: number) {
       case 12: return 'ventas_diciembre';
       default: return month.toString()
       }
+}
+
+export function codeForStorage(code: string){
+  switch(code){
+    case StockCollections.IPhone11: return StorageUrl.SERIES11;
+      case StockCollections.IPhone11Pro: return StorageUrl.SERIES11;
+      case StockCollections.IPhone11ProMax: return StorageUrl.SERIES11;
+      case StockCollections.IPhone12: return StorageUrl.SERIES12;
+      case StockCollections.IPhone12Mini: return StorageUrl.SERIES12;
+      case StockCollections.IPhone12ProMax: return StorageUrl.SERIES12;
+      case StockCollections.IPhoneXS: return StorageUrl.SERIESX;
+      case StockCollections.IPhoneXSMax: return StorageUrl.SERIESX;
+      case StockCollections.IPhoneXR: return StorageUrl.SERIESX;
+      case StockCollections.IPhone13: return StorageUrl.SERIES13;
+      case StockCollections.IPhone13Pro: return StorageUrl.SERIES13P;
+      case StockCollections.IPhone13ProMax: return StorageUrl.SERIES13P;
+      case StockCollections.IPhone13Mini: return StorageUrl.SERIES13;
+      case StockCollections.IPhoneSE: return StorageUrl.SERIES7;
+      case StockCollections.IPhone8plus: return StorageUrl.SERIES7;
+      case StockCollections.AirpodsPro: return StorageUrl.AIRPODSPRO;
+      case StockCollections.Airpods1era: return StorageUrl.AIRPODS;
+      case StockCollections.Cable: return StorageUrl.CABLE;
+      case StockCollections.Mica: return StorageUrl.MICA;
+      case StockCollections.Camara: return StorageUrl.CAMARA;
+      default: return code;
+  }
+}
+export function setDashesToName(name: string, code: string) {
+
+  if (name) {
+    var lowerCase = name.toLowerCase();
+    const onlyFirst = lowerCase.replace(/\s+/g, '-');
+    return codeForStorage(code)+onlyFirst+ '.jpg';
+  } else {
+    return 'error'
+  }
 }
 
   

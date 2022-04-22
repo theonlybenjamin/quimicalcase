@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { TrackidComponent } from './components/trackid/trackid.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UrlMakerComponent } from './components/url-maker/url-maker.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DetailTableComponent } from './components/detail-table/detail-table.component';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { HomeComponent } from './views/home/home.component';
@@ -24,7 +24,8 @@ import { ListSaleComponent } from './views/list-sale/list-sale.component';
 import { FinancesComponent } from './views/finances/finances.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { TiendaComponent } from './views/tienda/tienda.component';
-
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { UploadImageComponent } from './views/upload-image/upload-image.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,15 +42,18 @@ import { TiendaComponent } from './views/tienda/tienda.component';
     ListSaleComponent,
     FinancesComponent,
     LoaderComponent,
-    TiendaComponent
+    TiendaComponent,
+    UploadImageComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    NgbModalModule
+    NgbModalModule,
+    AngularFireStorageModule
   ],
   providers: [
     AngularFirestore,
