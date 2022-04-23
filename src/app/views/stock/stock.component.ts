@@ -70,7 +70,6 @@ export class StockComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.searchByCode({ value: 'IPhone 11'})
   }
 
   public iphoneNameById (id: string) {
