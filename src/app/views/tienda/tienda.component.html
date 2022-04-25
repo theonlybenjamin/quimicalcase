@@ -1,11 +1,62 @@
 <header class="header" id="header">
-    <div class="header_toggle ml-2"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-    <figure>
-        <img src="assets/logo2.png" alt="" height="60">
-    </figure>
-    <div>
-        <div class="shop-icon">
-            <i class='bx bx-cart' style='color:#ffffff; font-size:1.2rem'></i>
-        </div>
-    </div>
+  <div class="header_toggle ml-2" (click)="sideBar.classList.toggle('hide')">
+      <i class='bx bx-menu' id="header-toggle"></i>
+  </div>
+  <figure (click)="router.navigate(['tienda/'])">
+      <img src="assets/logo2.png" alt="" height="60">
+  </figure>
+  <div>
+      <div class="shop-icon">
+          <i class='bx bx-cart' style='color:#ffffff; font-size:1.2rem'></i>
+      </div>
+  </div>
 </header>
+<section class="sidebar hide" #sideBar>
+<nav class="sidebar card py-2 mb-4">
+  <div class="header_toggle ml-2" (click)="sideBar.classList.toggle('hide')">
+    <i class='bx bx-menu' id="header-toggle"></i>
+    <i class='bx bxs-x-circle' style="color: white; font-size: 2rem"></i>
+</div>
+  <ul class="nav flex-column" id="nav_accordion">
+    <li class="nav-item has-submenu">
+      <div class="d-flex align-items-center justify-content-between">
+        <a class="nav-link" (click)="iphone.classList.toggle('show')">Cases para IPhone</a>
+        <i class='bx bx-plus' style="color: white"></i>
+      </div>
+      <ul #iphone class="submenu collapse">
+        <li><a class="nav-link" *ngFor="let iphone of IPhoneProducts" (click)="showCatalog(iphone.replace(' ', ''))" >{{iphone}}</a></li>
+      </ul>
+    </li>
+    <li class="nav-item has-submenu">
+      <div class="d-flex align-items-center justify-content-between">
+        <a class="nav-link" (click)="airpods.classList.toggle('show')">Airpods</a>
+        <i class='bx bx-plus' style="color: white"></i>
+      </div>
+      <ul #airpods class="submenu collapse">
+        <li><a class="nav-link">1/2da Generaci&oacute;n</a></li>
+        <li><a class="nav-link">Airpods Pro</a></li>
+        <li><a class="nav-link">3era Generaci&oacute;n</a></li>
+      </ul>
+    </li>
+    <li class="nav-item has-submenu">
+      <div class="d-flex align-items-center justify-content-between">
+        <a class="nav-link" (click)="watch.classList.toggle('show')">Apple Watch</a>
+        <i class='bx bx-plus' style="color: white"></i>
+      </div>
+      <ul #watch class="submenu collapse">
+        <li><a class="nav-link">40/41 mm</a></li>
+        <li><a class="nav-link">44/45 mm</a></li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link">Protectores</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link">Accesorios</a>
+    </li>
+  </ul>
+</nav>
+</section>
+<section style="margin-top: 70px;">
+  <router-outlet></router-outlet>
+</section>

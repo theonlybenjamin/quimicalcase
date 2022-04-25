@@ -42,27 +42,3 @@
         border-radius: 100px;
     }
 }
-.sidebar {
-	height: 100%;
-	width: 100%;
-	background-color: black;
-
-	li {
-		cursor: pointer;
-		margin: 0px 1.2rem .8rem 1.5rem;
-		font-size: 1.2rem;
-		a {
-			color:white;
-		}
-		.submenu{ 
-			list-style: none; 
-			margin: 0; 
-			padding: 0; 
-			padding-right: 1rem;
-		}
-
-	}
-}
-.hide {
-	display: none;
-}

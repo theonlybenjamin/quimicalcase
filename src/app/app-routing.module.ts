@@ -9,6 +9,7 @@ import { HomeComponent } from './views/home/home.component';
 import { ListSaleComponent } from './views/list-sale/list-sale.component';
 import { LoginComponent } from './views/login/login.component';
 import { NewSaleComponent } from './views/new-sale/new-sale.component';
+import { ProductoComponent } from './views/producto/producto.component';
 import { SendPendingComponent } from './views/send-pending/send-pending.component';
 import { StockComponent } from './views/stock/stock.component';
 import { TiendaComponent } from './views/tienda/tienda.component';
@@ -55,7 +56,13 @@ const routes: Routes = [
 }, 
 {
   path: 'tienda',
-  component: TiendaComponent
+  component: TiendaComponent,
+  children: [
+    {
+      path: 'producto',
+      component: ProductoComponent
+    }
+  ]
 },
 {
   path: '**',

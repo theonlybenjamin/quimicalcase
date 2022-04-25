@@ -27,6 +27,8 @@ import { TiendaComponent } from './views/tienda/tienda.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { UploadImageComponent } from './views/upload-image/upload-image.component';
 import { NoWhiteSpacesDirective } from './directives/no-white-spaces.directive';
+import { HeaderComponent } from './components/header/header.component';
+import { ProductoComponent } from './views/producto/producto.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +47,9 @@ import { NoWhiteSpacesDirective } from './directives/no-white-spaces.directive';
     LoaderComponent,
     TiendaComponent,
     UploadImageComponent,
-    NoWhiteSpacesDirective
+    NoWhiteSpacesDirective,
+    HeaderComponent,
+    ProductoComponent
   ],
   imports: [
     BrowserModule,
