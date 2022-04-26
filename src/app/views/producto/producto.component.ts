@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { finalize, map, take } from 'rxjs/operators';
+import { concatMap, finalize, map, take } from 'rxjs/operators';
 import { Product } from 'src/app/interfaces/stock';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { idByIphoneName } from 'src/app/utils/utils';
@@ -21,13 +21,17 @@ export class ProductoComponent implements OnInit, OnDestroy {
     private fireService: FirebaseService
   ) {
     this.fireService.showLoader();
-    const ga = this.route.snapshot.queryParamMap.get('id');
-    this.iphoneCode = idByIphoneName(ga ? ga.replace("-", " ") : 'error');
-    this.subscriptions.add(this.fireService.getStockSpecificDocumentAlone(this.iphoneCode).pipe(
-      take(1),
-      map(x => this.justStock = x.data),
-      finalize(() => this.fireService.hideLoader())
-    ).subscribe());
+    this.route.queryParams.pipe(
+      concatMap(x => {
+        this.fireService.showLoader();
+        this.iphoneCode = idByIphoneName(x['id'].replace("-", " "));
+        return this.fireService.getStockSpecificDocumentAlone(this.iphoneCode).pipe(
+          take(1),
+          map(x => this.justStock = x.data),
+          finalize(() => this.fireService.hideLoader())
+        )
+      })
+    ).subscribe();
   }
 
   ngOnInit(): void {
