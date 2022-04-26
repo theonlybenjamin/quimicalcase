@@ -6,21 +6,30 @@
     background-color: #fff;
     border: none;
     border-radius: 10px;
-    width: 177px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+    width: 160px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    @media only screen and (max-width: 385px) {
+        width: 140px;
+    }
+    
+    .image-container {
+        position: relative;
+        width: inherit;
+        .img-holder {
+            height: 210px;
+            width: inherit;
+            object-fit: cover;
+            @media only screen and (max-width: 385px) {
+                height: 180px;
+            }
+            
+        }
+    }
 }
 
-.image-container {
-    position: relative
-}
 
 .thumbnail-image {
     border-radius: 10px !important
-}
-.img-holder {
-    width: 177px;
-    height: 220px;
-    object-fit: cover;
 }
 
 .discount {
