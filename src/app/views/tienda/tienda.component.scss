@@ -43,7 +43,6 @@
     }
 }
 .sidebar {
-	height: 100%;
 	width: 100%;
 	background-color: black;
     z-index: 9;
@@ -52,10 +51,10 @@
     right: 0;
     bottom: 0;
     position: absolute;
+    min-height: 100%;
+    height: fit-content;
         
     & .header_toggle {
-        // color: #000000;
-        // font-size: 1.5rem;
         cursor: pointer;
         margin-top: .8rem;
         margin-left: .8rem;

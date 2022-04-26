@@ -1,18 +1,19 @@
 <ng-template #successModal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Se agregaron correctamente las siguientes fotos:</h4>
+    <h4 class="modal-title" id="modal-basic-title">Se agregaron correctamente la foto:</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-      <p *ngFor="let carpet of array; let i = index"><b>{{ model }}</b> en <b>{{ carpet }}</b></p>
+      <p>Nombre: <b>{{model}}</b></p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="reloadCurrentRoute()">Entendido</button>
   </div>
 </ng-template>
-
+<section>
+</section>
 <section>
   <section>
     <div class="section-title text-center">
@@ -21,92 +22,18 @@
     </div>
   </section>
   <section>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="seriesx">Series X:</label>
-        <input class="check" id="seriesx" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/iphX-XS-XR-XSm/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="cable">Cable:</label>
-        <input class="check" id="cable" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/cable/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="camara">Camara:</label>
-        <input class="check" id="camara" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/camara/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="series11">Sereies 11:</label>
-        <input class="check" id="series11" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/iph11-11p-11pm/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="series12">Series 12:</label>
-        <input class="check" id="series12" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/iph12-12pro-12promax/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="series13">Series 13:</label>
-        <input class="check" id="series13" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/iph13-13m/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="series13p">Series 13 Pro:</label>
-        <input class="check" id="series13p" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/iph13p-13pm/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="series7">Series 7:</label>
-        <input class="check" id="series7" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/iph7-8p/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="watch">Watch:</label>
-        <input class="check" id="watch" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/watch/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="airpods">Airpods:</label>
-        <input class="check" id="airpods" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/airpods/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="airpodspro">Airpods pro:</label>
-        <input class="check" id="airpodspro" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/airpodspro/')"/>
-      </div>
-    </div>
-    <div class="row mx-1">
-      <div class="col-12 check-box">
-        <label for="mica">Micas:</label>
-        <input class="check" id="mica" type="checkbox"
-               placeholder="Marcar" (change)="addCarpetStorage('/micas/')"/>
-      </div>
-    </div>
-  </section>
-  <section>
+    <label for="sell_type">Tipo de producto</label>
+    <select class="form-select"
+                  [(ngModel)]="productType"
+                  id="sell_type">
+              <option selected>Selecciona el tipo de producto:</option>
+              <option value="IPH11">IPhone</option>
+              <option value="AIRP">Airpods</option>
+              <option value="AIRP">Airpods Pro</option>
+              <option value="CABLE">Cable</option>
+              <option value="CAMARA">Camara</option>
+              <option value="MICA">Mica</option>
+          </select>
     <div class="row mx-1">
       <div class="form-group col-12">
         <label for="model">Modelo</label>
@@ -125,7 +52,7 @@
                  id="file"
                  accept=".jpg" 
                  class="form-control"
-                 [disabled]="array.length === 0 || model === ''"
+                 [disabled]="model === '' || productType === ''"
                  (change)="uploadFile($event.target)">
         </div>
       </div>
