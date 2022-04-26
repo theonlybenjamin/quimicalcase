@@ -24,7 +24,7 @@
         <i class='bx bx-plus' style="color: white"></i>
       </div>
       <ul #iphone class="submenu collapse">
-        <li><a class="nav-link" *ngFor="let iphone of IPhoneProducts" (click)="showCatalog(iphone.replace(' ', ''))" >{{iphone}}</a></li>
+        <li><a class="nav-link" *ngFor="let iphone of IPhoneProducts" (click)="showCatalog(iphone.replace(' ', '-'))" (click)="sideBar.classList.toggle('hide')">{{iphone}}</a></li>
       </ul>
     </li>
     <li class="nav-item has-submenu">
@@ -57,6 +57,6 @@
   </ul>
 </nav>
 </section>
-<section style="margin-top: 70px;">
+<section style="margin-top: 90px;">
   <router-outlet></router-outlet>
 </section>

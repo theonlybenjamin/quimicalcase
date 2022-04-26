@@ -8,15 +8,15 @@ import { Router } from '@angular/router';
 })
 export class TiendaComponent implements OnInit {
   public IPhoneProducts = [
-    'Iphone 13 Pro Max',
+    'IPhone 13 Pro Max',
     'IPhone 13 Pro',
     'IPhone 13 Mini',
-    'Iphone 13',
-    'Iphone 12 Pro Max',
-    'Iphone 12/12pro',
-    'Iphone 12 Mini',
-    'Iphone 11 Pro Max',
-    'Iphone 11 Pro',
+    'IPhone 13',
+    'IPhone 12 Pro Max',
+    'IPhone 12/12pro',
+    'IPhone 12 Mini',
+    'IPhone 11 Pro Max',
+    'IPhone 11 Pro',
     'IPhone 11',
     'IPhone XR',
     'IPhone XS Max',

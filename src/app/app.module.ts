@@ -29,6 +29,8 @@ import { UploadImageComponent } from './views/upload-image/upload-image.componen
 import { NoWhiteSpacesDirective } from './directives/no-white-spaces.directive';
 import { HeaderComponent } from './components/header/header.component';
 import { ProductoComponent } from './views/producto/producto.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
+import { LowercaseDirective } from './directives/lowercase.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +51,9 @@ import { ProductoComponent } from './views/producto/producto.component';
     UploadImageComponent,
     NoWhiteSpacesDirective,
     HeaderComponent,
-    ProductoComponent
+    ProductoComponent,
+    ProductCardComponent,
+    LowercaseDirective
   ],
   imports: [
     BrowserModule,

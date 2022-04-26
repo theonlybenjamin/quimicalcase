@@ -49,9 +49,9 @@ export function idByIphoneName(name: string) {
       case 'IPhone X/XS': return StockCollections.IPhoneXS;
       case 'IPhone XS Max': return StockCollections.IPhoneXSMax;
       case 'IPhone XR': return StockCollections.IPhoneXR;
-      case 'Iphone 13': return StockCollections.IPhone13;
+      case 'IPhone 13': return StockCollections.IPhone13;
       case 'IPhone 13 Pro': return StockCollections.IPhone13Pro;
-      case 'Iphone 13 Pro Max': return StockCollections.IPhone13ProMax;
+      case 'IPhone 13 Pro Max': return StockCollections.IPhone13ProMax;
       case 'IPhone 13 Mini': return StockCollections.IPhone13Mini;
       case 'IPhone 7/8/SE2020': return StockCollections.IPhoneSE;
       case 'IPhone 7/8 plus': return StockCollections.IPhone8plus;

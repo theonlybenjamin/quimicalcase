@@ -142,7 +142,7 @@ export class AddProductComponent {
             this.isSameModelSubs = true
             if ((z !== null || undefined) && this.isSameModelChecked) {
               for (let i = 1; i <this.array.length; i++) {
-                this.array[i].get('model')?.setValue(z);
+                this.array[i].get('model')?.setValue(z.toLowerCase());
                 this.array[i].get('model')?.disable();
               }
             }
@@ -188,7 +188,7 @@ export class AddProductComponent {
       this.array[0].get('cant')?.setValue(this.array[0].get('cant')?.value)
     }
     if (this.isSameModelChecked) {
-      this.array[0].get('model')?.setValue(this.array[0].get('model')?.value)
+      this.array[0].get('model')?.setValue(this.array[0].get('model')?.value.toLowerCase())
     }
     if (this.isSamePriceChecked) {
       this.array[0].get('precio')?.setValue(this.array[0].get('precio')?.value)

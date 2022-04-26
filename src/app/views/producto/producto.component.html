@@ -1,1 +1,6 @@
-<p>producto works!</p>
+
+<div class="d-flex flex-wrap">
+    <div class="m-2" *ngFor="let product of justStock; let i = index">
+        <app-product-card [product]="product" [code]="iphoneCode"></app-product-card>
+    </div>
+</div>
