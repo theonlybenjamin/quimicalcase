@@ -50,9 +50,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    position: absolute;
+    position: fixed;
     min-height: 100%;
-    height: fit-content;
+    box-sizing: border-box;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: fill-available;
+    overflow-y: auto;
         
     & .header_toggle {
         cursor: pointer;
@@ -77,5 +81,5 @@
 	}
 }
 .hide {
-	display: none;
+	visibility: hidden;
 }

@@ -9,17 +9,17 @@ import { StorageUrl } from "../enums/storage.enum";
 export function iphoneNameById(id: string) {
     switch(id){
       case StockCollections.IPhone11: return 'IPhone 11';
-      case StockCollections.IPhone11Pro: return 'Iphone 11 Pro';
-      case StockCollections.IPhone11ProMax: return 'Iphone 11 Pro Max';
-      case StockCollections.IPhone12: return 'Iphone 12/12pro';
-      case StockCollections.IPhone12Mini: return 'Iphone 12 Mini';
-      case StockCollections.IPhone12ProMax: return 'Iphone 12 Pro Max';
+      case StockCollections.IPhone11Pro: return 'IPhone 11 Pro';
+      case StockCollections.IPhone11ProMax: return 'IPhone 11 Pro Max';
+      case StockCollections.IPhone12: return 'IPhone 12/12pro';
+      case StockCollections.IPhone12Mini: return 'IPhone 12 Mini';
+      case StockCollections.IPhone12ProMax: return 'IPhone 12 Pro Max';
       case StockCollections.IPhoneXS: return 'IPhone X/XS';
       case StockCollections.IPhoneXSMax: return 'IPhone XS Max';
       case StockCollections.IPhoneXR: return 'IPhone XR';
-      case StockCollections.IPhone13: return 'Iphone 13';
+      case StockCollections.IPhone13: return 'IPhone 13';
       case StockCollections.IPhone13Pro: return 'IPhone 13 Pro';
-      case StockCollections.IPhone13ProMax: return 'Iphone 13 Pro Max';
+      case StockCollections.IPhone13ProMax: return 'IPhone 13 Pro Max';
       case StockCollections.IPhone13Mini: return 'IPhone 13 Mini';
       case StockCollections.IPhoneSE: return 'IPhone 7/8/SE2020';
       case StockCollections.IPhone8plus: return 'IPhone 7/8 plus';
@@ -41,11 +41,11 @@ export function iphoneNameById(id: string) {
 export function idByIphoneName(name: string) {
     switch(name){
       case 'IPhone 11': return StockCollections.IPhone11;
-      case 'Iphone 11 Pro': return StockCollections.IPhone11Pro;
-      case 'Iphone 11 Pro Max': return StockCollections.IPhone11ProMax;
-      case 'Iphone 12/12pro': return StockCollections.IPhone12;
-      case 'Iphone 12 Mini': return StockCollections.IPhone12Mini;
-      case 'Iphone 12 Pro Max': return StockCollections.IPhone12ProMax;
+      case 'IPhone 11 Pro': return StockCollections.IPhone11Pro;
+      case 'IPhone 11 Pro Max': return StockCollections.IPhone11ProMax;
+      case 'IPhone 12/12pro': return StockCollections.IPhone12;
+      case 'IPhone 12 Mini': return StockCollections.IPhone12Mini;
+      case 'IPhone 12 Pro Max': return StockCollections.IPhone12ProMax;
       case 'IPhone X/XS': return StockCollections.IPhoneXS;
       case 'IPhone XS Max': return StockCollections.IPhoneXSMax;
       case 'IPhone XR': return StockCollections.IPhoneXR;
