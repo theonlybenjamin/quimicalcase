@@ -18,8 +18,8 @@
 </div>
   <ul class="nav flex-column" id="nav_accordion">
     <li class="nav-item has-submenu">
-      <div class="d-flex align-items-center justify-content-between">
-        <a class="nav-link" (click)="iphone.classList.toggle('show')">Cases para IPhone</a>
+      <div class="d-flex align-items-center justify-content-between" (click)="iphone.classList.toggle('show')">
+        <a class="nav-link">Cases para IPhone</a>
         <i class='bx bx-plus' style="color: white"></i>
       </div>
       <ul #iphone class="submenu collapse">
@@ -27,31 +27,33 @@
       </ul>
     </li>
     <li class="nav-item has-submenu">
-      <div class="d-flex align-items-center justify-content-between">
-        <a class="nav-link" (click)="airpods.classList.toggle('show')">Airpods</a>
+      <div class="d-flex align-items-center justify-content-between" (click)="airpods.classList.toggle('show')">
+        <a class="nav-link">Airpods</a>
         <i class='bx bx-plus' style="color: white"></i>
       </div>
       <ul #airpods class="submenu collapse">
-        <li><a class="nav-link">1/2da Generaci&oacute;n</a></li>
-        <li><a class="nav-link">Airpods Pro</a></li>
-        <li><a class="nav-link">3era Generaci&oacute;n</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Airpods 1era gen / 2da gen')" (click)="sideBar.classList.toggle('hide')">1/2da Generaci&oacute;n</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Airpods Pro')" (click)="sideBar.classList.toggle('hide')">Airpods Pro</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Airpods 3er gen')" (click)="sideBar.classList.toggle('hide')">3era Generaci&oacute;n</a></li>
       </ul>
+    </li>
+    <li class="nav-item">
+      <div class="d-flex align-items-center justify-content-between">
+        <a class="nav-link"  (click)="showCatalog('Watch')" (click)="sideBar.classList.toggle('hide')">Apple Watch</a>
+      </div>
     </li>
     <li class="nav-item has-submenu">
-      <div class="d-flex align-items-center justify-content-between">
-        <a class="nav-link" (click)="watch.classList.toggle('show')">Apple Watch</a>
+      <div class="d-flex align-items-center justify-content-between" (click)="micas.classList.toggle('show')">
+        <a class="nav-link">Protege tu iphone</a>
         <i class='bx bx-plus' style="color: white"></i>
       </div>
-      <ul #watch class="submenu collapse">
-        <li><a class="nav-link">40/41 mm</a></li>
-        <li><a class="nav-link">44/45 mm</a></li>
+      <ul #micas class="submenu collapse">
+        <li><a class="nav-link" (click)="showCatalog('Mica')" (click)="sideBar.classList.toggle('hide')">Mica</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Camara')" (click)="sideBar.classList.toggle('hide')">Protectores de c&aacute;mara</a></li>
       </ul>
     </li>
-    <li class="nav-item">
-      <a class="nav-link">Protectores</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link">Accesorios</a>
+    <li class="nav-item" (click)="showCatalog('Cable')" (click)="sideBar.classList.toggle('hide')">
+      <a class="nav-link">Accesorios para cable</a>
     </li>
   </ul>
 </nav>

@@ -23,12 +23,14 @@ export function iphoneNameById(id: string) {
       case StockCollections.IPhone13Mini: return 'IPhone 13 Mini';
       case StockCollections.IPhoneSE: return 'IPhone 7/8/SE2020';
       case StockCollections.IPhone8plus: return 'IPhone 7/8 plus';
-      case StockCollections.AirpodsPro: return 'Airpods Pro / Airpods 3er gen';
+      case StockCollections.AirpodsPro: return 'Airpods Pro';
+      case StockCollections.Airpods3era: return 'Airpods 3er gen';
       case StockCollections.Airpods1era: return 'Airpods 1era gen / 2da gen';
       case StockCollections.Cable: return 'Cable';
       case StockCollections.Mica: return 'Mica';
       case StockCollections.Camara: return 'Camara';
       case StockCollections.Gift: return 'Regalos';
+      case StockCollections.Watch: return 'Watch';
       default: return id;
     }
 }
@@ -55,12 +57,14 @@ export function idByIphoneName(name: string) {
       case 'IPhone 13 Mini': return StockCollections.IPhone13Mini;
       case 'IPhone 7/8/SE2020': return StockCollections.IPhoneSE;
       case 'IPhone 7/8 plus': return StockCollections.IPhone8plus;
-      case 'Airpods Pro / Airpods 3er gen': return StockCollections.AirpodsPro;
+      case 'Airpods Pro': return StockCollections.AirpodsPro;
+      case 'Airpods 3er gen': return StockCollections.AirpodsPro;
       case 'Airpods 1era gen / 2da gen': return StockCollections.Airpods1era;
       case 'Cable': return StockCollections.Cable;
       case 'Camara': return StockCollections.Camara;
       case 'Mica': return StockCollections.Mica;
       case 'Regalos': return StockCollections.Gift;
+      case 'Watch': return StockCollections.Watch;
       default: return name;
     }
 }
@@ -133,6 +137,7 @@ export function codeForStorage(code: string){
     case StockCollections.Cable: return StorageUrl.CABLE;
     case StockCollections.Mica: return StorageUrl.MICA;
     case StockCollections.Camara: return StorageUrl.CAMARA;
+    case StockCollections.Watch: return StorageUrl.WATCH;
     default: return code;
   }
 }

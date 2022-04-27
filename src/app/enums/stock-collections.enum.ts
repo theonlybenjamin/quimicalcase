@@ -16,8 +16,10 @@ export enum StockCollections {
     IPhone8plus = 'IPH8P',
     AirpodsPro = 'AIRP',
     Airpods1era = 'AIR',
+    Airpods3era = 'AIR3',
     Cable = 'CABLE',
     Mica = 'MICA',
     Camara = 'CAMARA',
-    Gift = 'GIFT'
+    Gift = 'GIFT',
+    Watch = 'WATCH'
 }
