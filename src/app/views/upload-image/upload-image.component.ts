@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { codeForStorage } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-upload-image',
@@ -32,7 +33,7 @@ export class UploadImageComponent implements OnInit, OnDestroy {
 
   public uploadFile(file: any){
     const fileEnd = file.files[0] as File;
-    const filePath = `${this.productType}${this.model}.jpg`;
+    const filePath = `${codeForStorage(this.productType)}${this.model}.jpg`;
     const task = this.storage.upload(filePath, fileEnd);
     this.fireService.showLoader();
     this.subscription.add(task.percentageChanges().pipe(
