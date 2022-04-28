@@ -232,7 +232,15 @@ export class AddProductComponent {
       concatMap(x => {
         if (x) {
           array = x;
-          array.data.push(dataBack);
+          const index = array.data.findIndex(x => x.producto === dataBack.producto);
+          if (index !== -1) {
+            array.data[index].cant += dataBack.cant;
+              if (array.data[index].precio !== dataBack.precio) {
+                array.data[index].precio = Number(((array.data[index].precio + dataBack.precio) /2).toFixed(1));
+              }
+          } else {
+            array.data.push(dataBack);
+          }
           return this.sendNewProduct(document, dataBack, array);
         }
         return x;
