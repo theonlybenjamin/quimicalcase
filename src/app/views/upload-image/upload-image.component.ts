@@ -19,6 +19,7 @@ export class UploadImageComponent implements OnInit, OnDestroy {
   public productType: string = '';
   @ViewChild('successModal') successModal: ElementRef | undefined;
   public subscription = new Subscription();
+  public gaa: any;
   constructor(
     private storage: AngularFireStorage,
     private fireService: FirebaseService,
@@ -26,30 +27,39 @@ export class UploadImageComponent implements OnInit, OnDestroy {
     private router: Router) { }
 
   ngOnInit(): void {
+    console.log()
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
-  public async uploadFile(file: any) {
+  public uploadFile(file: any) {
     const fileEnd = file.files[0] as File;
     const filePath = `${codeForStorage(this.productType)}${this.model}.jpg`;
-    const newFile = await imageCompression(fileEnd, { fileType: 'image/jpeg', maxSizeMB: 1.2 });
-    console.log(newFile);
-    const task = this.storage.upload(filePath, newFile);
-    this.fireService.showLoader();
-    this.subscription.add(task.percentageChanges().pipe(
-        map(x => this.uploadPercent = x),
-        finalize(() => {
-          this.fireService.hideLoader();
-          this.modalService?.open(this.successModal, {centered: true});
-        }),
-        catchError(error => {
-          alert(error);
-          return error;
-        })
-      ).subscribe());
+    imageCompression(fileEnd, { fileType: 'image/jpeg', maxSizeMB: 1.2, useWebWorker: false }).then(newFile => {
+      console.log(newFile);
+      var reader = new FileReader();
+      
+      reader.onload = (e) => {
+      this.gaa = e?.target?.result;
+    };
+
+    reader.readAsDataURL(newFile);
+      const task = this.storage.upload(filePath, newFile);
+      this.fireService.showLoader();
+      this.subscription.add(task.percentageChanges().pipe(
+          map(x => this.uploadPercent = x),
+          finalize(() => {
+            this.fireService.hideLoader();
+            this.modalService?.open(this.successModal, {centered: true});
+          }),
+          catchError(error => {
+            alert(error);
+            return error;
+          })
+        ).subscribe());
+    }).catch(x => console.log('error', x));
   }
 
   public reloadCurrentRoute() {
