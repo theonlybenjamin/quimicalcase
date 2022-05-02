@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { codeForStorage } from 'src/app/utils/utils';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-upload-image',
@@ -31,10 +32,12 @@ export class UploadImageComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  public uploadFile(file: any){
+  public async uploadFile(file: any) {
     const fileEnd = file.files[0] as File;
     const filePath = `${codeForStorage(this.productType)}${this.model}.jpg`;
-    const task = this.storage.upload(filePath, fileEnd);
+    const newFile = await imageCompression(fileEnd, { fileType: 'image/jpeg', maxSizeMB: 1.2 });
+    console.log(newFile);
+    const task = this.storage.upload(filePath, newFile);
     this.fireService.showLoader();
     this.subscription.add(task.percentageChanges().pipe(
         map(x => this.uploadPercent = x),

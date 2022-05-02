@@ -31,6 +31,9 @@ import { HeaderComponent } from './components/header/header.component';
 import { ProductoComponent } from './views/producto/producto.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { LowercaseDirective } from './directives/lowercase.directive';
+import { LandingComponent } from './views/landing/landing.component';
+import { CatalogComponent } from './views/catalog/catalog.component';
+import { CatalogCardComponent } from './components/catalog-card/catalog-card.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,7 +56,10 @@ import { LowercaseDirective } from './directives/lowercase.directive';
     HeaderComponent,
     ProductoComponent,
     ProductCardComponent,
-    LowercaseDirective
+    LowercaseDirective,
+    LandingComponent,
+    CatalogComponent,
+    CatalogCardComponent
   ],
   imports: [
     BrowserModule,

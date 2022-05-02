@@ -4,8 +4,10 @@ import { TrackidComponent } from './components/trackid/trackid.component';
 import { IsLoggedGuard } from './guards/is-logged.guard';
 import { UserLoggedGuard } from './guards/user-logged.guard';
 import { AddProductComponent } from './views/add-product/add-product.component';
+import { CatalogComponent } from './views/catalog/catalog.component';
 import { FinancesComponent } from './views/finances/finances.component';
 import { HomeComponent } from './views/home/home.component';
+import { LandingComponent } from './views/landing/landing.component';
 import { ListSaleComponent } from './views/list-sale/list-sale.component';
 import { LoginComponent } from './views/login/login.component';
 import { NewSaleComponent } from './views/new-sale/new-sale.component';
@@ -61,6 +63,14 @@ const routes: Routes = [
     {
       path: 'producto',
       component: ProductoComponent
+    },
+    {
+      path: '',
+      component: LandingComponent
+    },
+    {
+      path: 'catalogo',
+      component: CatalogComponent
     }
   ]
 },
