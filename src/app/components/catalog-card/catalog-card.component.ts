@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { CatalogProduct } from 'src/app/interfaces/catalog.interface';
 
 @Component({
   selector: 'app-catalog-card',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CatalogCardComponent implements OnInit {
 
+  @Input() product: CatalogProduct= {} as CatalogProduct;
   constructor() { }
 
   ngOnInit(): void {
