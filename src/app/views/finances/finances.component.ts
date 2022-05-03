@@ -19,21 +19,18 @@ export class FinancesComponent {
   public months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
-  public totalExpenses: number = 0;
   public salary = 1200;
-  public publicity = 203.52;
-  // sueldo + vino y no estabamos + malvinas + plaza norte + malvinas
-  public emanuel = 177 + 10 + 15 + 16 + 34;
-  public gastosImprevistos = 0;
+  public emanuel = 182;
+  public gastosIngresados = 0;
   public reinversion = 0;
   public ingresoBruto = 0;
   public prestamo = 300;
-  public fixedTotalExpenses = 0;
+  public gastosProgramados = 0;
   public moneyOnCard: number = 0;
   constructor(
     public fireService: FirebaseService
   ) {
-    this.totalExpenses  = this.salary + this.publicity + this.emanuel;
+    this.gastosProgramados  = Number((this.salary + this.emanuel + this.prestamo).toFixed(1));
     this.fireService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
     this.getSends(this.actualMonth).subscribe();
@@ -53,10 +50,7 @@ export class FinancesComponent {
         this.profit.cantidad_ventas = x.data.length;
         this.profit.monto = total;
         this.ingresoBruto = Number(this.profit.monto.toFixed(1));
-        this.fixedTotalExpenses = Number(this.totalExpenses.toFixed(1));
-        this.gastosImprevistos = Number((this.totalExpenses - this.salary - this.emanuel - this.publicity).toFixed(1));
-        this.moneyOnCard = Number((this.ingresoBruto - this.gastosImprevistos - this.publicity).toFixed(1))
-        this.reinversion = Number((this.profit.monto - this.totalExpenses).toFixed(1))
+        this.moneyOnCard = Number((this.ingresoBruto - this.gastosIngresados).toFixed(1))
         this.fireService.hideLoader();
       })
     )
@@ -68,9 +62,9 @@ export class FinancesComponent {
         this.finances = x;
         for (let i = 0; i < x.gastos.length; i++) {
             this.expenses[i] = x.gastos[i];
-            this.totalExpenses += x.gastos[i].monto ? Number(x.gastos[i].monto.toFixed(1)) : x.gastos[i].monto;
+            this.gastosIngresados += x.gastos[i].monto ? Number(x.gastos[i].monto.toFixed(1)) : x.gastos[i].monto;
           }
-  
+          this.gastosIngresados = Number(this.gastosIngresados.toFixed(1));
         this.fireService.hideLoader();
         return this.getTotalSales(month);
       })
@@ -79,7 +73,7 @@ export class FinancesComponent {
 
   public changeMonth($event: string) {
     this.expenses = [];
-    this.totalExpenses = this.salary + this.publicity + this.emanuel + this.prestamo;
+    this.gastosIngresados = 0;
     this.getSends(Number($event)).subscribe();
   }
 

@@ -33,29 +33,22 @@
         <p>Resumen:</p>
         <p style="color: blue">Cantidad de ventas: {{ profit.cantidad_ventas }}</p>
         <p style="color: green">Ingreso Bruto: {{ ingresoBruto }}</p>
-        <p style="color: red"><b>Total gastos: {{ fixedTotalExpenses }}</b></p>
+        <p style="color: red"><b>Gastos ingresados: {{ gastosIngresados }}</b></p>
         <p style="color: green"><b>Dinero en tarjeta: {{ moneyOnCard }}</b></p>
-        <p style="color: red"><b>Solo gastos ingresados: {{ gastosImprevistos }}</b></p>
-        <p style="color: blue">Total a reinvertir: {{ reinversion }}</p>
+        <br>
+        <p style="color: orange"><b>Gastos programados: {{ gastosProgramados }}</b></p>
+        <!-- <p style="color: blue">Total a reinvertir: {{ reinversion }}</p> -->
   
       </div>
       <div class="col">
         <p>Hoja de gastos:</p>
-        <p style="color: red"><b>Sueldo:</b> S/. {{salary}}</p>
-        <p style="color: red"><b>Publicidad:</b> S/. {{publicity}}</p>
-        <p style="color: red"><b>Emanuel:</b> S/. {{emanuel}}</p>
-        <p style="color: red"><b>Prestamo:</b> S/. {{prestamo}} (pago minmimo S/.139.9)</p>
+        <p style="color: orange"><b>Sueldo:</b> S/. {{salary}}</p>
+        <p style="color: orange"><b>Emanuel:</b> S/. {{emanuel}}</p>
+        <p style="color: orange"><b>Prestamo:</b> S/. {{prestamo}} (pago minmimo S/.139.9)</p>
         <p *ngFor="let expense of expenses; let i = index" style="color: red">{{expense.fecha}} {{expense.detalle}}: {{ expense.monto}}</p>
       </div>
     </div>
     <div class="row text-center mt-5">
-      <span>
-        <b>Rappi:</b>
-        <p>&Uacute;ltimo día de pago: 10.</p>
-        <p>fecha de corte: 30. </p>
-        <p>Si compras antes o el 30 de {{months[actualMonth -1]}}, lo pagas el 10 de {{months[actualMonth]}}.</p>
-        <p>Si compras despues o el 1 de {{months[actualMonth]}}, lo pagas el 10 de {{months[actualMonth +1]}}.</p>
-      </span>
       <span>
         <b>Ripley:</b>
         <p>&Uacute;ltimo día de pago: 15.</p>
