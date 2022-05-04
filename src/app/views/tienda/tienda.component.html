@@ -1,5 +1,5 @@
 <header class="header" id="header">
-  <div class="header_toggle ml-2" (click)="sideBar.classList.toggle('hide')">
+  <div class="header_toggle ml-2" (click)="closeSideBar()">
       <i class='bx bx-menu' id="header-toggle"></i>
   </div>
   <figure (click)="router.navigate(['tienda/'])">
@@ -11,9 +11,9 @@
       </div>
   </div>
 </header>
-<section class="sidebar hide" #sideBar>
+<section class="sidebar hide" #sideBar id="sideBar">
 <nav class="sidebar card py-2 mb-4">
-  <div class="header_toggle ml-2" (click)="sideBar.classList.toggle('hide')">
+  <div class="header_toggle ml-2" (click)="closeSideBar()">
     <i class='bx bxs-x-circle' style="color: white; font-size: 2rem"></i>
 </div>
   <ul class="nav flex-column" id="nav_accordion">
@@ -22,8 +22,8 @@
         <a class="nav-link">Cases para IPhone</a>
         <i class='bx bx-plus' style="color: white"></i>
       </div>
-      <ul #iphone class="submenu collapse">
-        <li><a class="nav-link" *ngFor="let iphone of IPhoneProducts" (click)="showCatalog(iphone.replace(' ', '-'))" (click)="sideBar.classList.toggle('hide')">{{iphone}}</a></li>
+      <ul #iphone id="iphone" class="submenu collapse">
+        <li><a class="nav-link" *ngFor="let iphone of IPhoneProducts" (click)="showCatalog(iphone.replace(' ', '-'))" (click)="closeSideBar()">{{iphone}}</a></li>
       </ul>
     </li>
     <li class="nav-item has-submenu">
@@ -31,33 +31,38 @@
         <a class="nav-link">Airpods</a>
         <i class='bx bx-plus' style="color: white"></i>
       </div>
-      <ul #airpods class="submenu collapse">
-        <li><a class="nav-link" (click)="showCatalog('Airpods 1era gen / 2da gen')" (click)="sideBar.classList.toggle('hide')">1/2da Generaci&oacute;n</a></li>
-        <li><a class="nav-link" (click)="showCatalog('Airpods Pro')" (click)="sideBar.classList.toggle('hide')">Airpods Pro</a></li>
-        <li><a class="nav-link" (click)="showCatalog('Airpods 3er gen')" (click)="sideBar.classList.toggle('hide')">3era Generaci&oacute;n</a></li>
+      <ul #airpods id="airpods" class="submenu collapse">
+        <li><a class="nav-link" (click)="showCatalog('Airpods 1era gen / 2da gen')" (click)="closeSideBar()">1/2da Generaci&oacute;n</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Airpods Pro')" (click)="closeSideBar()">Airpods Pro</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Airpods 3er gen')" (click)="closeSideBar()">3era Generaci&oacute;n</a></li>
       </ul>
     </li>
-    <li class="nav-item">
+    <li class="nav-item has-submenu">
       <div class="d-flex align-items-center justify-content-between">
-        <a class="nav-link"  (click)="showCatalog('Watch')" (click)="sideBar.classList.toggle('hide')">Apple Watch</a>
+        <a class="nav-link" (click)="watch.classList.toggle('show')">Apple Watch</a>
+        <i class='bx bx-plus' style="color: white"></i>
       </div>
+      <ul #watch id="watch" class="submenu collapse">
+        <li><a class="nav-link" (click)="showCatalog('Watch')" (click)="closeSideBar()">44/42 mm</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Watch')" (click)="closeSideBar()">40/38 mm</a></li>
+      </ul>
     </li>
     <li class="nav-item has-submenu">
       <div class="d-flex align-items-center justify-content-between" (click)="micas.classList.toggle('show')">
         <a class="nav-link">Protege tu iphone</a>
         <i class='bx bx-plus' style="color: white"></i>
       </div>
-      <ul #micas class="submenu collapse">
-        <li><a class="nav-link" (click)="showCatalog('Mica')" (click)="sideBar.classList.toggle('hide')">Mica</a></li>
-        <li><a class="nav-link" (click)="showCatalog('Camara')" (click)="sideBar.classList.toggle('hide')">Protectores de c&aacute;mara</a></li>
+      <ul #micas id="micas" class="submenu collapse">
+        <li><a class="nav-link" (click)="showCatalog('Mica')" (click)="closeSideBar()">Mica</a></li>
+        <li><a class="nav-link" (click)="showCatalog('Camara')" (click)="closeSideBar()">Protectores de c&aacute;mara</a></li>
       </ul>
     </li>
-    <li class="nav-item" (click)="showCatalog('Cable')" (click)="sideBar.classList.toggle('hide')">
+    <li class="nav-item" (click)="showCatalog('Cable')" (click)="closeSideBar()">
       <a class="nav-link">Accesorios para cable</a>
     </li>
   </ul>
 </nav>
 </section>
-<section style="margin-top: 90px;">
+<section style="margin-top: 100px;">
   <router-outlet></router-outlet>
 </section>

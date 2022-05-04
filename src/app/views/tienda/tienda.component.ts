@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-tienda',
@@ -7,6 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./tienda.component.scss']
 })
 export class TiendaComponent implements OnInit {
+  @ViewChild('sideBar') sideBar: ElementRef = {} as ElementRef;
+  @ViewChild('iphone') iphone: ElementRef = {} as ElementRef;
+  @ViewChild('micas') micas: ElementRef = {} as ElementRef;
+
   public IPhoneProducts = [
     'IPhone 13 Pro Max',
     'IPhone 13 Pro',
@@ -25,13 +30,24 @@ export class TiendaComponent implements OnInit {
     'IPhone 7/8/SE2020',
   ];
   constructor(
-    public router: Router
-  ) { }
+    public router: Router,
+    private sharedData: SharedDataService
+  ) {
+    this.sharedData.subscribe(x => {
+      this.closeSideBar()
+      document.getElementById(x)?.classList.add('show');
+    })
+  }
 
   ngOnInit(): void {
   }
 
   public showCatalog(id: string) {
     this.router.navigate(['tienda', 'producto'], {queryParams: {id:id}});
+  }
+
+  public closeSideBar(){
+    this.sideBar.nativeElement.classList.toggle('hide');
+    this.iphone.nativeElement.classList.remove('show');
   }
 }

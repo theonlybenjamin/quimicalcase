@@ -1,3 +1,3 @@
 <div class="my-5" *ngFor="let product of products">
-    <app-catalog-card [product]="product"></app-catalog-card>
+    <app-catalog-card [product]="product" (click)="product.func()"></app-catalog-card>
 </div>

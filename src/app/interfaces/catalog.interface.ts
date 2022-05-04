@@ -3,4 +3,5 @@ export interface CatalogProduct {
     name: string;
     title: string;
     subtitle: string;
+    func?: any;
 }

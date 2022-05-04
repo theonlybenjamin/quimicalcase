@@ -65,12 +65,17 @@ const routes: Routes = [
       component: ProductoComponent
     },
     {
-      path: '',
+      path: 'landing',
       component: LandingComponent
     },
     {
       path: 'catalogo',
       component: CatalogComponent
+    },
+    {
+      path: '',
+      pathMatch: 'full',
+      redirectTo: 'catalogo'
     }
   ]
 },
