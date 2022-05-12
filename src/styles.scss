@@ -1,2 +1,9 @@
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+@font-face{
+    font-family:"sailors-regular";
+    src:url("assets/fonts/Sailors.otf") format("woff"),
+    url("assets/fonts/Sailors.otf") format("opentype"),
+    url("assets/fonts/Sailors.otf") format("truetype");
+}
+*{font-family:"sailors-regular";text-transform:none;}
