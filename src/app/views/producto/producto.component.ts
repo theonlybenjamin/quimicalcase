@@ -16,6 +16,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
   public iphoneCode: string = '';
   public justStock: Array<Product> = []
   private subscriptions = new Subscription();
+  public title = '';
   constructor(
     private route: ActivatedRoute,
     private fireService: FirebaseService
@@ -25,6 +26,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
       concatMap(x => {
         this.fireService.showLoader();
         this.iphoneCode = idByIphoneName(x['id'].replace("-", " "));
+        this.title = x['id'].replace("-", " ");
         return this.fireService.getStockSpecificDocumentAlone(this.iphoneCode).pipe(
           take(1),
           map(x => this.justStock = x.data),

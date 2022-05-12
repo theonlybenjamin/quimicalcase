@@ -1,3 +1,5 @@
-<div class="my-5" *ngFor="let product of products">
-    <app-catalog-card [product]="product" (click)="product.func()"></app-catalog-card>
+<div class="row">
+    <div class="my-5 col-sm-6 col-xs-6 col-md-5 col-lg-5 mx-auto" *ngFor="let product of products">
+        <app-catalog-card [product]="product" (click)="product.func()"></app-catalog-card>
+    </div>
 </div>
