@@ -20,7 +20,7 @@ export class CatalogComponent implements OnInit {
     },
     {
       name: 'Watch',
-      url: 'url(https://firebasestorage.googleapis.com/v0/b/quimicalcase-47f4e.appspot.com/o/iphone%2Fsmile-amarillo.jpg?alt=media&token=d5368aea-b4c9-407b-aee0-169348d9cfb4)',
+      url: 'url(https://firebasestorage.googleapis.com/v0/b/quimicalcase-47f4e.appspot.com/o/watch%2Fportada.jpg?alt=media&token=4f4553fb-9658-42be-bf8e-76dbed4619b5)',
       title: 'Ver correas para Apple Watch',
       subtitle: '@quimicalcase',
       func: this.sendType.bind(this, 'watch')
