@@ -20,7 +20,8 @@ export class FinancesComponent {
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
   public salary = 1200;
-  public emanuel = 182;
+  // emanuel tiene 2 extra que se suman
+  public emanuel = 182 + 14 + 14;
   public gastosIngresados = 0;
   public reinversion = 0;
   public ingresoBruto = 0;
