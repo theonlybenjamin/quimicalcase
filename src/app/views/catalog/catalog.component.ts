@@ -32,13 +32,13 @@ export class CatalogComponent implements OnInit {
       subtitle: '@quimicalcase',
       func: this.routeTo.bind(this,'Cable')
     },
-    {
-      name: 'Protectores de camara',
-      url: 'url(https://firebasestorage.googleapis.com/v0/b/quimicalcase-47f4e.appspot.com/o/iphone%2Fsmile-amarillo.jpg?alt=media&token=d5368aea-b4c9-407b-aee0-169348d9cfb4)',
-      title: 'Ver protectores de camara',
-      subtitle: '@quimicalcase',
-      func: this.routeTo.bind(this, 'Camara')
-    },
+    // {
+    //   name: 'Protectores de camara',
+    //   url: 'url(https://firebasestorage.googleapis.com/v0/b/quimicalcase-47f4e.appspot.com/o/iphone%2Fsmile-amarillo.jpg?alt=media&token=d5368aea-b4c9-407b-aee0-169348d9cfb4)',
+    //   title: 'Ver protectores de camara',
+    //   subtitle: '@quimicalcase',
+    //   func: this.routeTo.bind(this, 'Camara')
+    // },
     {
       name: 'Airpods',
       url: 'url(https://firebasestorage.googleapis.com/v0/b/quimicalcase-47f4e.appspot.com/o/airpods%2Fflores-blue.jpg?alt=media&token=7e900a08-e084-4ed5-9df3-18ebb1753e65)',

@@ -10,9 +10,9 @@
     </div>
   </header>
   <section style="margin-top: 100px;">
-    <header>
-      <h2 class="text-center">Formulario para env&iacute;os</h2>
-      <p>Solo falta este paso para alistar tu pedido, por favor, llena todos los campos para que el env&iacute;o sea &eacute;xitoso :)</p>
+    <header class="text-center">
+      <h2>Formulario para env&iacute;os</h2>
+      <p>Solo falta este paso para alistar tu pedido, por favor, llena todos los campos para que el env&iacute;o sea exitoso :)</p>
     </header>
       <form class="form" [formGroup]="userForm">
           <div class="form-group">
@@ -30,17 +30,26 @@
           </div>
           <div class="form-group">
             <label for="courier">Selecciona tu courier</label>
-            <select class="form-select" id="courier" formControlName="courier">
-              <option value="olva" selected>Olva</option>
+            <select class="form-select" id="courier" formControlName="courier" (click)="selectCourier()">
+              <option value="null" selected>Selecciona una opci&oacute;n</option>
+              <option value="olva-domicilio">Olva (Env&iacute;o a domicilio)</option>
+              <option value="olva-agencia">Olva (Recojo en agencia)</option>
               <option value="shalom">Shalom</option>
             </select>
           </div>
-          <section *ngIf="userForm.get('courier')?.value === 'olva'">
+          <div class="form-group" *ngIf="isOlvaCourier">
+            <label for="phone">N&uacute;mero de contacto</label>
+            <input type="text" formControlName="phone" class="form-control" id="phone" placeholder="Ejemplo: 963852741" aria-describedby="phoneHelp">
+            <small id="phoneHelp" class="form-text text-muted">Solo se usar&aacute; para que el courier se comunique contigo</small>
+          </div>
+          <section *ngIf="userForm.get('courier')?.value === 'olva-agencia'">
             <div class="form-group">
-              <label for="phone">N&uacute;mero de contacto</label>
-              <input type="text" formControlName="phone" class="form-control" id="phone" placeholder="Ejemplo: 963852741" aria-describedby="phoneHelp">
-              <small id="phoneHelp" class="form-text text-muted">Solo se usar&aacute; para que el courier se comunique contigo</small>
+              <label for="agencyOlva">Ingresa tu agencia</label>
+              <input type="text" formControlName="agency" class="form-control" id="agencyOlva" placeholder="Ejemplo: agencia lima - puente piedra - zapallal" aria-describedby="agencyOlvahelp">
+              <small id="agencyOlvahelp" class="form-text text-muted">Ingresa a <a href="https://www.olvacourier.com/nuestras-oficinas/" target="_blank">https://www.olvacourier.com/nuestras-oficinas/</a> y ubica tu agencia mas cercana  </small>
             </div>
+          </section>
+          <section *ngIf="userForm.get('courier')?.value === 'olva-domicilio'">
             <div class="form-group">
               <label for="district">Ingresa tu distrito</label>
               <input type="text" formControlName="district" class="form-control" id="district" placeholder="Ejemplo: lima - lima - san miguel" aria-describedby="districtHelp">
@@ -59,10 +68,10 @@
             <div class="form-group">
               <label for="agency">Agencia Shalom <b>(Ingresar al link)</b></label>
               <input type="text" formControlName="agency" class="form-control" id="agency" placeholder="Ejemplo: agencia lima - puente piedra - zapallal" aria-describedby="agencyHelp">
-              <small id="agencyHelp" class="form-text text-muted">Ingresa a <a href="https://agencias.shalom.pe/">https://agencias.shalom.pe/</a> y ubica tu agencia mas cercana </small>
+              <small id="agencyHelp" class="form-text text-muted">Ingresa a <a href="https://agencias.shalom.pe/" target="_blank">https://agencias.shalom.pe/</a> y ubica tu agencia mas cercana </small>
             </div>
           </section>
-          <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+          <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid" (click)="sendForm()">Enviar</button>
       </form>
   </section>
 </div>
