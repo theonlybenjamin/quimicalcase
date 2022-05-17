@@ -1,0 +1,68 @@
+<div class="container">
+  <header class="header" id="header">
+    <figure>
+        <img src="assets/logo2.png" alt="" height="60">
+    </figure>
+    <div>
+        <!-- <div class="shop-icon">
+            <i class='bx bx-cart' style='color:#ffffff; font-size:1.2rem'></i>
+        </div> -->
+    </div>
+  </header>
+  <section style="margin-top: 100px;">
+    <header>
+      <h2 class="text-center">Formulario para env&iacute;os</h2>
+      <p>Solo falta este paso para alistar tu pedido, por favor, llena todos los campos para que el env&iacute;o sea &eacute;xitoso :)</p>
+    </header>
+      <form class="form" [formGroup]="userForm">
+          <div class="form-group">
+            <label for="username">Nombre de usuario de instagram</label>
+            <input type="text" formControlName="username" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Ingresa tu nombre de usuario">
+            <small id="usernameHelp" class="form-text text-muted">Solo lo usaremos para ubicar tu pedido</small>
+          </div>
+          <div class="form-group">
+            <label for="document-id">N&uacute;mero de DNI o CE</label>
+            <input type="text" formControlName="documentNumber" class="form-control" id="document-id" placeholder="Documento de identidad">
+          </div>
+          <div class="form-group">
+            <label for="full-name">Nombres y apellidos de quien recibe</label>
+            <input type="text" formControlName="fullname" class="form-control" id="full-name" placeholder="Ingresa tu nombre">
+          </div>
+          <div class="form-group">
+            <label for="courier">Selecciona tu courier</label>
+            <select class="form-select" id="courier" formControlName="courier">
+              <option value="olva" selected>Olva</option>
+              <option value="shalom">Shalom</option>
+            </select>
+          </div>
+          <section *ngIf="userForm.get('courier')?.value === 'olva'">
+            <div class="form-group">
+              <label for="phone">N&uacute;mero de contacto</label>
+              <input type="text" formControlName="phone" class="form-control" id="phone" placeholder="Ejemplo: 963852741" aria-describedby="phoneHelp">
+              <small id="phoneHelp" class="form-text text-muted">Solo se usar&aacute; para que el courier se comunique contigo</small>
+            </div>
+            <div class="form-group">
+              <label for="district">Ingresa tu distrito</label>
+              <input type="text" formControlName="district" class="form-control" id="district" placeholder="Ejemplo: lima - lima - san miguel" aria-describedby="districtHelp">
+              <small id="districtHelp" class="form-text text-muted">departamento - provincia - distrito </small>
+            </div>
+            <div class="form-group">
+              <label for="address">Ingresa tu direcci&oacute;n</label>
+              <input type="text" formControlName="address" class="form-control" id="address" placeholder="Ejemplo: Av. faucett 356" aria-describedby="addressHelp">
+            </div>
+            <div class="form-group">
+              <label for="reference">Ingresa una referencia (e indicaciones)</label>
+              <input type="text" formControlName="reference" class="form-control" id="reference" placeholder="Ejemplo: Al costado del parque bicentenario, dpto 380, dejar en porteria" aria-describedby="addressHelp">
+            </div>
+          </section>
+          <section *ngIf="userForm.get('courier')?.value === 'shalom'">
+            <div class="form-group">
+              <label for="agency">Agencia Shalom <b>(Ingresar al link)</b></label>
+              <input type="text" formControlName="agency" class="form-control" id="agency" placeholder="Ejemplo: agencia lima - puente piedra - zapallal" aria-describedby="agencyHelp">
+              <small id="agencyHelp" class="form-text text-muted">Ingresa a <a href="https://agencias.shalom.pe/">https://agencias.shalom.pe/</a> y ubica tu agencia mas cercana </small>
+            </div>
+          </section>
+          <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+      </form>
+  </section>
+</div>

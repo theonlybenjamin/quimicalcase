@@ -34,6 +34,7 @@ import { LowercaseDirective } from './directives/lowercase.directive';
 import { LandingComponent } from './views/landing/landing.component';
 import { CatalogComponent } from './views/catalog/catalog.component';
 import { CatalogCardComponent } from './components/catalog-card/catalog-card.component';
+import { SendFormComponent } from './views/send-form/send-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +60,8 @@ import { CatalogCardComponent } from './components/catalog-card/catalog-card.com
     LowercaseDirective,
     LandingComponent,
     CatalogComponent,
-    CatalogCardComponent
+    CatalogCardComponent,
+    SendFormComponent
   ],
   imports: [
     BrowserModule,

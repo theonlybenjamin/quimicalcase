@@ -12,6 +12,7 @@ import { ListSaleComponent } from './views/list-sale/list-sale.component';
 import { LoginComponent } from './views/login/login.component';
 import { NewSaleComponent } from './views/new-sale/new-sale.component';
 import { ProductoComponent } from './views/producto/producto.component';
+import { SendFormComponent } from './views/send-form/send-form.component';
 import { SendPendingComponent } from './views/send-pending/send-pending.component';
 import { StockComponent } from './views/stock/stock.component';
 import { TiendaComponent } from './views/tienda/tienda.component';
@@ -55,7 +56,11 @@ const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'nueva-venta'
   }]
-}, 
+},
+{
+  path: 'formulario-envio',
+  component: SendFormComponent
+},
 {
   path: 'tienda',
   component: TiendaComponent,
