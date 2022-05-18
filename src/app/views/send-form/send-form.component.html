@@ -22,7 +22,8 @@
           </div>
           <div class="form-group">
             <label for="document-id">N&uacute;mero de DNI o CE</label>
-            <input type="text" formControlName="documentNumber" class="form-control" id="document-id" placeholder="Documento de identidad">
+            <input type="text" formControlName="documentNumber" class="form-control" id="document-id" aria-describedby="documentError" placeholder="Documento de identidad">
+            <small id="documentError" *ngIf="formControlError('documentNumber')" style="color:red;" class="form-text">Debe tener m&iacute;nimo 8 d&iacute;gitos</small>
           </div>
           <div class="form-group">
             <label for="full-name">Nombres y apellidos de quien recibe</label>
@@ -71,7 +72,50 @@
               <small id="agencyHelp" class="form-text text-muted">Ingresa a <a href="https://agencias.shalom.pe/" target="_blank">https://agencias.shalom.pe/</a> y ubica tu agencia mas cercana </small>
             </div>
           </section>
-          <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid" (click)="sendForm()">Enviar</button>
+          <section class="mx-auto mb-4">
+            <button type="submit" class="btn btn-primary w-100" style="background-color: #9F89C1 !important; border-color: #9F89C1 !important" [disabled]="userForm.invalid" (click)="sendForm()">Enviar</button>
+          </section>
       </form>
   </section>
 </div>
+<ng-template #sucessModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Datos enviados correctamente</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Hemos registrado correctamente tus datos, te mostramos un resumen
+    </p>
+    <div>
+        <span *ngIf="userForm.get('username')?.value !== null"><b>Username:</b>{{userForm.get('username')?.value}}<br></span>
+        <span *ngIf="userForm.get('documentNumber')?.value !== null"><b>DNI:</b>{{userForm.get('documentNumber')?.value}}<br></span>
+        <span *ngIf="userForm.get('fullname')?.value !== null"><b>Nombre completo:</b>{{userForm.get('fullname')?.value}}<br></span>
+        <span *ngIf="userForm.get('courier')?.value !== null"><b>Courier:</b>{{userForm.get('courier')?.value}}<br></span>
+        <span *ngIf="userForm.get('district')?.value !== null"><b>Distrito:</b>{{userForm.get('district')?.value}}<br></span>
+        <span *ngIf="userForm.get('address')?.value !== null"><b>Direccion:</b>{{userForm.get('address')?.value}}<br></span>
+        <span *ngIf="userForm.get('phone')?.value !== null"><b>Telefono:</b>{{userForm.get('phone')?.value}}<br></span>
+        <span *ngIf="userForm.get('reference')?.value !== null"><b>Refrencia:</b>{{userForm.get('reference')?.value}}<br></span>
+        <span *ngIf="userForm.get('agency')?.value !== null"><b>Agency:</b>{{userForm.get('agency')?.value}}<br></span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="goToCatalog()">Entendido</button>
+  </div>
+</ng-template>
+<ng-template #errorModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Ha ocurrido un error</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Por favor, notificanos del error e intenta de nuevo en unos minutos.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Entendido</button>
+  </div>
+</ng-template>

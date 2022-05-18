@@ -201,7 +201,7 @@ export class FirebaseService {
   public updateSotckAfterSale(document: string, data: Stock): Observable<any> {
     return from(this.afs.collection(Collections.STOCK).doc(document).update(data));
   }
-  
+
   /**
    * Metodo para setear los pendientes de envio
    * @param dataBack - venta a agregar
