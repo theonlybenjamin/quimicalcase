@@ -45,10 +45,12 @@
   <form class="form" [formGroup]="saleForm">
     <div class="form-group">
       <label for="client">Nombre de usuario en instagram</label>
-      <input type="text"
-             class="form-control"
-             id="client"
-             formControlName="client">
+      <select class="form-select"
+              formControlName="client"
+              id="client">
+          <option selected>Selecciona el cliente</option>
+          <option [value]="user" *ngFor="let user of notRegisteredSales">{{ user }}</option>
+      </select>
     </div>
     <div class="form-group">
       <fieldset disabled>

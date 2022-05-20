@@ -1,34 +1,84 @@
 <div class="filter-result">
-    <p class="mb-30 ff-montserrat">{{summaryText}} <b>{{ orders.length }}</b></p>
-    <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let order of orders; let i = index">
-        <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
-            <div class="job-content">
-                <h5 class="text-md-left">{{ order.cliente }}</h5>
-                <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans" style="flex-direction: column">
-                    <li class="mr-md-4">
-                        <i class="zmdi zmdi-pin mr-2"></i> {{ order.tipo_entrega }}
-                    </li>
-                    <li class="mr-md-4" style="margin-top: 20px;">
-                        <p *ngFor="let producto of order.productos; let i = index"> {{producto.cant}} <b>{{ producto.producto }} </b> de <b>{{ producto.iphoneCode }}</b></p>
-                    </li>
-                    <li class="mr-md-4" *ngIf="showTotal">
-                        <span style="color: blue"> Total: <b>S/.</b> {{ order.total}}</span>
-                    </li>
-                    <li class="mr-md-4" *ngIf="showTotal">
-                        <span> Inversion: <b>S/.</b> {{ order.capital }}</span><br>
-                        <span> Packaging y Publicidad: <b>S/.</b> {{ packagingPrice + advertisingPrice }}</span><br>
-                        <span style="color: red"> Gastos: <b>S/.</b> {{ getExpensesSummary(order) }}</span> <br>
-                    </li>
-                    <li class="mr-md-4" *ngIf="showTotal">
-                        <span style="color: green"> Ganancia: <b>S/.</b> {{ getProfit(order) }}</span><br>
-                    </li>
-                </ul>
+    <section *ngIf="orders.length > 0">
+        <p class="mb-30 ff-montserrat">{{summaryText}} <b>{{ orders.length }}</b></p>
+        <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let order of orders; let i = index">
+            <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                <div class="job-content">
+                    <h5 class="text-md-left">{{ order.cliente }}</h5>
+                    <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans" style="flex-direction: column">
+                        <li class="mr-md-4">
+                            <i class="zmdi zmdi-pin mr-2"></i> {{ order.tipo_entrega }}
+                        </li>
+                        <li class="mr-md-4" style="margin-top: 20px;">
+                            <p *ngFor="let producto of order.productos; let i = index"> {{producto.cant}} <b>{{ producto.producto }} </b> de <b>{{ producto.iphoneCode }}</b></p>
+                        </li>
+                        <li class="mr-md-4" *ngIf="showTotal">
+                            <span style="color: blue"> Total: <b>S/.</b> {{ order.total}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="job-right my-4 flex-shrink-0 text-center">
+                <img height="50" *ngIf="order.canal_venta" alt="canal de venta" class="mb-3" [src]="order.canal_venta === 'Whatsapp' ? 'assets/icons/whatsapp.png': 'assets/icons/instagram.png'">
+                <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitButton1(order)">{{textButton}}</button>
+                <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitButton2(order)">{{textButton2}}</button>
             </div>
         </div>
-        <div class="job-right my-4 flex-shrink-0 text-center">
-            <img height="50" *ngIf="order.canal_venta" alt="canal de venta" class="mb-3" [src]="order.canal_venta === 'Whatsapp' ? 'assets/icons/whatsapp.png': 'assets/icons/instagram.png'">
-            <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitButton1(order)">{{textButton}}</button>
-            <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitButton2(order)">{{textButton2}}</button>
+    </section>
+    <section *ngIf="pendingOrders.length > 0">
+        <p class="mb-30 ff-montserrat">{{summaryText}} <b>{{ pendingOrders.length }}</b></p>
+        <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let pendingOrder of pendingOrders; let i = index">
+            <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                <div class="job-content">
+                    <h5 class="text-md-left">{{ pendingOrder.username }}</h5>
+                    <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans" style="flex-direction: column">
+                        <li class="mr-md-4">
+                            <i class="zmdi zmdi-pin mr-2"></i> {{ pendingOrder.courier }}
+                        </li>
+                        <li class="mr-md-4" style="margin-top: 20px; color: #47237C; opacity: 1;" *ngIf="noHaveProducts(pendingOrder); else noProducts">
+                            <p *ngFor="let producto of pendingOrder.products; let i = index"> {{producto.cant}} <b>{{ producto.producto }} </b> de <b>{{ producto.iphoneCode }}</b></p>
+                        </li>
+                        <ng-template #noProducts>
+                            <li style="color: red; font-size: 18px; text-align: center;">{{"Venta pendiente de registrar" | uppercase}}</li>
+                        </ng-template>
+                        <li style="color: black; opacity: 1;">
+                            <span class="mr-md-4" *ngIf="pendingOrder.documentNumber">
+                                <b>DNI:</b> {{ pendingOrder.documentNumber}}
+                                <br>
+                            </span>
+                            <span class="mr-md-4" *ngIf="pendingOrder.phone">
+                                <b>Telefono:</b> {{ pendingOrder.phone}}
+                                <br>
+                            </span>
+                            <span class="mr-md-4" *ngIf="pendingOrder.fullname">
+                                <b>Nombre:</b> {{ pendingOrder.fullname}}
+                                <br>
+                            </span>
+                            <span class="mr-md-4" *ngIf="pendingOrder.district">
+                                <b>Distrito:</b> {{ pendingOrder.district}}
+                                <br>
+                            </span>
+                            <span class="mr-md-4" *ngIf="pendingOrder.address">
+                                <b>Direccion:</b> {{ pendingOrder.address}}
+                                <br>
+                            </span>
+                            <span class="mr-md-4" *ngIf="pendingOrder.reference">
+                                <b>Referencia:</b> {{ pendingOrder.reference}}
+                                <br>
+                            </span>
+                            <span class="mr-md-4" *ngIf="pendingOrder.agency">
+                                <b>Agencia:</b> {{ pendingOrder.agency}}
+                                <br>
+                            </span>
+                            
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="job-right my-4 flex-shrink-0 text-center">
+                <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitButton1(pendingOrder)" [disabled]="!noHaveProducts(pendingOrder)">{{textButton}}</button>
+                <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitButton2(pendingOrder)">{{textButton2}}</button>
+            </div>
         </div>
-    </div>
+    </section>
 </div>

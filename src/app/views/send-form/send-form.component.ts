@@ -28,7 +28,8 @@ export class SendFormComponent implements OnInit {
       address: new FormControl(null),
       phone: new FormControl(null),
       reference: new FormControl(null),
-      agency: new FormControl(null)
+      agency: new FormControl(null),
+      products: new FormControl(null)
     })
   }
 

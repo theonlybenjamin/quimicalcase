@@ -9,6 +9,7 @@ import { Sale } from 'src/app/interfaces/sale';
 import { IPhone, Product, Stock } from 'src/app/interfaces/stock';
 import { ProductSelled } from 'src/app/interfaces/sale';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { EnviosDocService } from 'src/app/services/envios-doc.service';
 
 @Component({
   selector: 'app-new-sale',
@@ -29,16 +30,25 @@ export class NewSaleComponent {
   public ERROR: any;
   public capital: number = 0;
   public newSale: Sale = {} as Sale;
+  public notRegisteredSales: Array<string> = [];
   constructor(
     public firebaseService: FirebaseService,
     public router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private envios: EnviosDocService
     ) {
     this.firebaseService.showLoader();
     this.firebaseService.getStockAllDocumentsName().subscribe(x => {
       this.codes = x;
       this.firebaseService.hideLoader();
     });
+    this.envios.getPending().subscribe(x => {
+      x.data.forEach(x => {
+        if (x.products === null) {
+          this.notRegisteredSales.push(x.username);
+        }
+      })
+    })
     this.saleForm = new FormGroup({
       client: new FormControl(null, Validators.required),
       sell_type: new FormControl('delivery', Validators.required),
@@ -188,9 +198,8 @@ export class NewSaleComponent {
   }
 
   public prepareSendPendingData(newSale: Sale) {
-    return this.firebaseService.addOrderToPendingList(newSale);
+    return this.envios.addProductToOrder(newSale);
   }
-
   public sendTotalToFinance() {
     return this.firebaseService.setNewTotalSales(this.saleForm.get('summary')?.value);
   }

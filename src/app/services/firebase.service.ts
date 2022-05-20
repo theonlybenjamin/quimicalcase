@@ -203,30 +203,6 @@ export class FirebaseService {
   }
 
   /**
-   * Metodo para setear los pendientes de envio
-   * @param dataBack - venta a agregar
-   * @returns 
-   */
-  public addOrderToPendingList(newSale: Sale): Observable<SaleArray> {
-    this.showLoader();
-    var array: SaleArray = {
-      data: []
-    };
-    return this.getSendPending().pipe(
-      take(1),
-      map(x => {
-        array = x
-        array.data.push(newSale);
-        return x;
-      }),
-      finalize(() => {
-        this.afs.collection(Collections.VENTAS).doc(Documents.SEND_PENDING).set(array);
-        this.hideLoader();
-      })
-    )
-  }
-
-  /**
    * Metodo para agregar una venta a las ventas generales
    * @param newSale - venta a agregar
    * @returns 

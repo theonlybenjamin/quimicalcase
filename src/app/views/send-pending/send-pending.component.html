@@ -6,7 +6,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <p>¿Segura que el pedido de <b>{{ selectedOrder.cliente }}</b> fue enviado? </p>
+      <p>¿Segura que el pedido de <b>{{ selectedOrder.username }}</b> fue enviado? </p>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-danger" (click)="confirmCompleteOrder()">S&iacute;</button>
@@ -26,14 +26,20 @@
 
             <div class="row">
                 <div class="col-lg-10 mx-auto">
-                    <div class="career-search mb-60" *ngIf="showSends">
-                        <app-send-pending-item [orders]="reversedOrders"
+                    <div class="career-search mb-60" *ngIf="showSends && reversedOrders.length > 0; else noPendingOrders">
+                        <app-send-pending-item [pendingOrders]="reversedOrders"
                                                summaryText="Total pedidos a enviar:"
                                                [showButton]="true"
                                                (actionButton1)="completeOrder($event)"
                                                textButton="Pedido Enviado"
                                                ></app-send-pending-item>
                     </div>
+                    <ng-template #noPendingOrders>
+                      <div class="text-center">
+                        <h2>Felcidades</h2>
+                        <p>No hay pedidos pendientes por enviar o ventas sin registrar</p>
+                      </div>
+                    </ng-template>
                 </div>
             </div>
 

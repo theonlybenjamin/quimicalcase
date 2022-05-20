@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Sale } from 'src/app/interfaces/sale';
+import { IPending } from 'src/app/interfaces/envios.interface';
+import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -10,14 +11,15 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class SendPendingComponent {
 
-  public orders: Array<Sale> = [];
-  public reversedOrders: Array<Sale> = [];
+  public orders: Array<IPending> = [];
+  public reversedOrders: Array<IPending> = [];
   public showSends = false;
-  public selectedOrder: Sale = {} as Sale;
+  public selectedOrder: IPending = {} as IPending;
   @ViewChild('successModal') successModal: ElementRef | undefined;
   constructor(
     public fireService: FirebaseService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private enviosService: EnviosDocService
   ) {
     this.getSends();
   }
@@ -25,7 +27,7 @@ export class SendPendingComponent {
   public getSends() {
     this.fireService.showLoader();
     this.showSends = false;
-    this.fireService.getSendPending().subscribe(x => {
+    this.enviosService.getPending().subscribe(x => {
       this.orders = []
       for (let i = 0; i < x.data.length; i++) {
           this.orders[i] = x.data[i];
@@ -36,13 +38,13 @@ export class SendPendingComponent {
     });
   }
 
-  public completeOrder(order: Sale) {
+  public completeOrder(order: IPending) {
     this.selectedOrder = order;
     this.modalService.open(this.successModal, {centered: true});
   }
 
   public confirmCompleteOrder() {
     this.modalService.dismissAll();
-    this.fireService.deleteOrderOfPendingList(this.selectedOrder).subscribe();
+    this.enviosService.deleteOrderOfPendingList(this.selectedOrder).subscribe();
   }
 }

@@ -1,3 +1,5 @@
+import { ProductSelled } from "./sale";
+
 export interface IPendingArray {
     data: Array<IPending>;
 }
@@ -12,4 +14,5 @@ export interface IPending {
     phone: string;
     reference: string;
     username: string;
+    products: Array<ProductSelled>;
 }
