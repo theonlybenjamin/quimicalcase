@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IPending, IPendingArray } from 'src/app/interfaces/envios.interface';
+import { IPending } from 'src/app/interfaces/envios.interface';
 import { Sale } from 'src/app/interfaces/sale';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-send-pending-item',
-  templateUrl: './send-pending-item.component.html',
-  styleUrls: ['./send-pending-item.component.scss']
+  templateUrl: './send-pending-item.component.html'
 })
 export class SendPendingItemComponent implements OnInit {
 

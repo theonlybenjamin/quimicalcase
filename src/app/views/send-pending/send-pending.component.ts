@@ -6,8 +6,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-send-pending',
-  templateUrl: './send-pending.component.html',
-  styleUrls: ['./send-pending.component.scss']
+  templateUrl: './send-pending.component.html'
 })
 export class SendPendingComponent {
 

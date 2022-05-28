@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   firebaseConfig : {
     apiKey: "AIzaSyBGW025aWN8ly4apjKNl0yaQ_qHRvHNMjM",
-    authDomain: "quimicalcase-47f4e.firebaseapp.com",
+    authDomain: "chatos16.firebaseapp.com",
     projectId: "quimicalcase-47f4e",
     storageBucket: "quimicalcase-47f4e.appspot.com",
     messagingSenderId: "1068191622723",

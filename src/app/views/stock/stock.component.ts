@@ -6,8 +6,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { idByIphoneName, iphoneNameById, setDashesToName } from '../../utils/utils'
 @Component({
   selector: 'app-stock',
-  templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.scss']
+  templateUrl: './stock.component.html'
 })
 export class StockComponent implements OnInit {
   

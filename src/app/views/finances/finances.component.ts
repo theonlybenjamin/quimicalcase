@@ -20,8 +20,11 @@ export class FinancesComponent {
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
   public salary = 1200;
-  // emanuel tiene 2 extra que se suman
-  public emanuel = 182 + 14 + 14;
+  // costo por ida * veces que ha ido
+  public malvinas = 28 * 1;
+  // costo por ida * veces que ha ido + extra de mi casa de andrea a mi casa
+  public puente = (14 * 16) + 7;
+  public emanuel = this.malvinas + this.puente;
   public gastosIngresados = 0;
   public reinversion = 0;
   public ingresoBruto = 0;
@@ -42,7 +45,7 @@ export class FinancesComponent {
   }
 
   public getTotalSales(month: number) {
-    var total:number = 0;
+    var total = 0;
     return this.fireService.getAllSales(getMonthOnSalesDOC(month)).pipe(
       map(x => {
         for (let i = 0; i < x.data.length; i++) {
@@ -50,8 +53,8 @@ export class FinancesComponent {
         }
         this.profit.cantidad_ventas = x.data.length;
         this.profit.monto = total;
-        this.ingresoBruto = Number(this.profit.monto.toFixed(1));
-        this.moneyOnCard = Number((this.ingresoBruto - this.gastosIngresados).toFixed(1))
+        this.ingresoBruto = Number(this.profit.monto.toFixed(2));
+        this.moneyOnCard = Number((this.ingresoBruto - this.gastosIngresados).toFixed(2))
         this.fireService.hideLoader();
       })
     )
@@ -63,9 +66,9 @@ export class FinancesComponent {
         this.finances = x;
         for (let i = 0; i < x.gastos.length; i++) {
             this.expenses[i] = x.gastos[i];
-            this.gastosIngresados += x.gastos[i].monto ? Number(x.gastos[i].monto.toFixed(1)) : x.gastos[i].monto;
+            this.gastosIngresados += x.gastos[i].monto ? Number(x.gastos[i].monto) : x.gastos[i].monto;
           }
-          this.gastosIngresados = Number(this.gastosIngresados.toFixed(1));
+          this.gastosIngresados = Number(this.gastosIngresados.toFixed(2));
         this.fireService.hideLoader();
         return this.getTotalSales(month);
       })
