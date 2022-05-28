@@ -23,7 +23,18 @@
                     </div>
                 </div>
             </div>
-
+            <div class="class row d-flex justify-content-center my-3">
+              <div class="form-group col-lg-5 col-md-5 col-sm-6 mb-1">
+                <label for="client">Selecciona el cliente ya registrado</label>
+                <input list="client" [(ngModel)]="historicClient" class="form-control" placeholder="Selecciona al cliente">
+                <datalist id="client">
+                  <option class="list-group-item list-group-item-action" *ngFor="let client of historic">{{client.username}}</option>
+                </datalist>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 align-self-end mb-1">
+                <button type="button" class="btn btn-dark w-100" (click)="registerHistoricClient()" [disabled]="historicClient === ''">Registrar direccion</button>
+              </div>
+            </div>
             <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="career-search mb-60" *ngIf="showSends && reversedOrders.length > 0; else noPendingOrders">

@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { finalize } from 'rxjs/operators';
 import { IPending } from 'src/app/interfaces/envios.interface';
 import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -14,6 +15,8 @@ export class SendPendingComponent {
   public reversedOrders: Array<IPending> = [];
   public showSends = false;
   public selectedOrder: IPending = {} as IPending;
+  public historic: Array<IPending> = [];
+  public historicClient: string = '';
   @ViewChild('successModal') successModal: ElementRef | undefined;
   constructor(
     private loaderService: LoaderService,
@@ -21,6 +24,7 @@ export class SendPendingComponent {
     private enviosService: EnviosDocService
   ) {
     this.getSends();
+    this.getHistoricSends();
   }
 
   public getSends() {
@@ -37,6 +41,12 @@ export class SendPendingComponent {
     });
   }
 
+  public getHistoricSends() {
+    this.enviosService.getHisotric().subscribe(x => {
+      this.historic = x.data;
+    });
+  }
+
   public completeOrder(order: IPending) {
     this.selectedOrder = order;
     this.modalService.open(this.successModal, {centered: true});
@@ -45,5 +55,15 @@ export class SendPendingComponent {
   public confirmCompleteOrder() {
     this.modalService.dismissAll();
     this.enviosService.deleteOrderOfPendingList(this.selectedOrder).subscribe();
+  }
+
+  public registerHistoricClient() {
+    this.loaderService.showLoader();
+    const user = this.historic.find(x => x.username === this.historicClient);
+    if (user) {
+      this.enviosService.addOrderToPendingList(user).pipe(
+        finalize(() => this.loaderService.hideLoader())
+      ).subscribe()
+    }
   }
 }
