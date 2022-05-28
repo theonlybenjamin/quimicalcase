@@ -25,6 +25,7 @@ import { UploadImageComponent } from './views/upload-image/upload-image.componen
 import { NoWhiteSpacesDirective } from './directives/no-white-spaces.directive';
 
 import { LowercaseDirective } from './directives/lowercase.directive';
+import { PaymentImagePipe } from './pipes/payment-image.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +41,8 @@ import { LowercaseDirective } from './directives/lowercase.directive';
     LoaderComponent,
     UploadImageComponent,
     NoWhiteSpacesDirective,
-    LowercaseDirective
+    LowercaseDirective,
+    PaymentImagePipe
   ],
   imports: [
     BrowserModule,

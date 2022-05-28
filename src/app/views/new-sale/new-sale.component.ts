@@ -58,6 +58,7 @@ export class NewSaleComponent {
       sell_type: new FormControl('delivery', Validators.required),
       sale_channel: new FormControl(null, Validators.required),
       summary: new FormControl(null, Validators.required),
+      payment_type: new FormControl(null, Validators.required),
       products: new FormArray([
         new FormGroup({
           iphoneCode: new FormControl(null, Validators.required),
@@ -159,7 +160,8 @@ export class NewSaleComponent {
           total: this.saleForm.get('summary')?.value,
           productos: this.updatedModels,
           capital: this.capital,
-          canal_venta: this.saleForm.get('sale_channel')?.value
+          canal_venta: this.saleForm.get('sale_channel')?.value,
+          payment_type: this.saleForm.get('payment_type')?.value
         };
         return this.firebaseService.updateSotckAfterSale(x.value.iphoneCode, finalResult).pipe(
           catchError(error => {
