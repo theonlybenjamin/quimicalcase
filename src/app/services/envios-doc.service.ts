@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
@@ -27,6 +28,14 @@ export class EnviosDocService {
   }
 
   /**
+   * Metodo para obtener los pendientes de envío
+   * @returns mock
+   */
+   public getHisotric(): Observable<IPendingArray> {
+    return this.afs.collection<IPendingArray>(Collections.ENVIOS).doc(Documents.HISTORIC).valueChanges() as Observable<IPendingArray>;
+  }
+
+  /**
    * Metodo para setear los pendientes de envio
    * @param newOrder - venta a agregar
    * @returns 
@@ -41,10 +50,8 @@ export class EnviosDocService {
       map(x => {
         array = x;
         const index = array.data.findIndex(y => y.username === newOrder.cliente);
-        console.log(index, newOrder.cliente, x)
         if (index !== -1) {
           array.data[index].products = newOrder.productos;
-          console.log(array.data[index].products);
         }
         return x;
       }),
@@ -79,6 +86,29 @@ export class EnviosDocService {
     )
   }
 
+  /**
+   * Metodo para setear en el historico
+   * @param newOrder - venta a agregar
+   * @returns 
+   */
+   public addOrderToHistoricList(newOrder: IPending): Observable<IPendingArray> {
+    this.loaderService.showLoader();
+    var array: IPendingArray = {
+      data: []
+    };
+    return this.getHisotric().pipe(
+      take(1),
+      map(x => {
+        array = x
+        array.data.push(newOrder);
+        return x;
+      }),
+      finalize(() => {
+        this.afs.collection(Collections.ENVIOS).doc(Documents.HISTORIC).set(array);
+        this.loaderService.hideLoader();
+      })
+    )
+  }
   
   /**
    * Metodo para eliminar una venta de la lista de pendientes de envio
