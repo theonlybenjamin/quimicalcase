@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
-import { FirebaseService } from 'src/app/services/firebase.service';
 import { codeForStorage } from 'src/app/utils/utils';
 import imageCompression from 'browser-image-compression';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-upload-image',
@@ -22,7 +22,7 @@ export class UploadImageComponent implements OnInit, OnDestroy {
   public gaa: any;
   constructor(
     private storage: AngularFireStorage,
-    private fireService: FirebaseService,
+    private loaderService: LoaderService,
     private modalService: NgbModal,
     private router: Router) { }
 
@@ -47,11 +47,11 @@ export class UploadImageComponent implements OnInit, OnDestroy {
 
     reader.readAsDataURL(newFile);
       const task = this.storage.upload(filePath, newFile);
-      this.fireService.showLoader();
+      this.loaderService.showLoader();
       this.subscription.add(task.percentageChanges().pipe(
           map(x => this.uploadPercent = x),
           finalize(() => {
-            this.fireService.hideLoader();
+            this.loaderService.hideLoader();
             this.modalService?.open(this.successModal, {centered: true});
           }),
           catchError(error => {

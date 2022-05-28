@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IPending } from 'src/app/interfaces/envios.interface';
 import { EnviosDocService } from 'src/app/services/envios-doc.service';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-send-pending',
@@ -16,7 +16,7 @@ export class SendPendingComponent {
   public selectedOrder: IPending = {} as IPending;
   @ViewChild('successModal') successModal: ElementRef | undefined;
   constructor(
-    public fireService: FirebaseService,
+    private loaderService: LoaderService,
     private modalService: NgbModal,
     private enviosService: EnviosDocService
   ) {
@@ -24,7 +24,7 @@ export class SendPendingComponent {
   }
 
   public getSends() {
-    this.fireService.showLoader();
+    this.loaderService.showLoader();
     this.showSends = false;
     this.enviosService.getPending().subscribe(x => {
       this.orders = []
@@ -33,7 +33,7 @@ export class SendPendingComponent {
         }
       this.reversedOrders = this.orders.slice().reverse();
       this.showSends = true;
-      this.fireService.hideLoader();
+      this.loaderService.hideLoader();
     });
   }
 

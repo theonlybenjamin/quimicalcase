@@ -6,7 +6,7 @@ import { Collections } from '../config/collections';
 import { Documents } from '../config/documents';
 import { IPending, IPendingArray } from '../interfaces/envios.interface';
 import { Sale } from '../interfaces/sale';
-import { FirebaseService } from './firebase.service';
+import { LoaderService } from './loader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class EnviosDocService {
 
   constructor(
     private readonly afs: AngularFirestore,
-    private fireService: FirebaseService
+    private loaderService: LoaderService
   ) { }
 
   /**
@@ -32,7 +32,7 @@ export class EnviosDocService {
    * @returns 
    */
    public addProductToOrder(newOrder: Sale): Observable<IPendingArray> {
-    this.fireService.showLoader();
+    this.loaderService.showLoader();
     var array: IPendingArray = {
       data: []
     };
@@ -50,7 +50,7 @@ export class EnviosDocService {
       }),
       finalize(() => {
         this.afs.collection(Collections.ENVIOS).doc(Documents.PENDIENTES).set(array);
-        this.fireService.hideLoader();
+        this.loaderService.hideLoader();
       })
     )
   }
@@ -61,7 +61,7 @@ export class EnviosDocService {
    * @returns 
    */
    public addOrderToPendingList(newOrder: IPending): Observable<IPendingArray> {
-    this.fireService.showLoader();
+    this.loaderService.showLoader();
     var array: IPendingArray = {
       data: []
     };
@@ -74,7 +74,7 @@ export class EnviosDocService {
       }),
       finalize(() => {
         this.afs.collection(Collections.ENVIOS).doc(Documents.PENDIENTES).set(array);
-        this.fireService.hideLoader();
+        this.loaderService.hideLoader();
       })
     )
   }

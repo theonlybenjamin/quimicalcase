@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IPending } from 'src/app/interfaces/envios.interface';
 import { Sale } from 'src/app/interfaces/sale';
-import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-send-pending-item',
@@ -21,7 +20,6 @@ export class SendPendingItemComponent implements OnInit {
   @Output() actionButton2 = new EventEmitter<any>();
   public totalSummary: number = 0;
   constructor(
-    public fireService: FirebaseService
     ) { }
 
   ngOnInit(): void {

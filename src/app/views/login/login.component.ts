@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { Routes } from 'src/app/config/routes.enum';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public showError: boolean = false;
   constructor(
-    private fireService: FirebaseService,
+    private fireService: AuthService,
+    private loaderService: LoaderService,
     private router: Router,
   ) {
     this.loginForm = new FormGroup({
@@ -28,7 +30,7 @@ export class LoginComponent implements OnInit {
   }
 
   async doLogin(){
-    this.fireService.showLoader();
+    this.loaderService.showLoader();
     var user = this.loginForm.get('user')?.value;
     var pass = this.loginForm.get('pass')?.value
     if( user !== null && pass !== null) {
@@ -39,7 +41,7 @@ export class LoginComponent implements OnInit {
         })
       ).subscribe(x => {
         this.router.navigate([Routes.HOME]);
-        this.fireService.hideLoader();
+        this.loaderService.hideLoader();
       })
     }
   }

@@ -8,8 +8,10 @@ import { Routes } from 'src/app/config/routes.enum';
 import { Sale } from 'src/app/interfaces/sale';
 import { IPhone, Product, Stock } from 'src/app/interfaces/stock';
 import { ProductSelled } from 'src/app/interfaces/sale';
-import { FirebaseService } from 'src/app/services/firebase.service';
 import { EnviosDocService } from 'src/app/services/envios-doc.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { SalesService } from 'src/app/services/sales.service';
+import { StockService } from 'src/app/services/stock.service';
 
 @Component({
   selector: 'app-new-sale',
@@ -32,15 +34,17 @@ export class NewSaleComponent {
   public newSale: Sale = {} as Sale;
   public notRegisteredSales: Array<string> = [];
   constructor(
-    public firebaseService: FirebaseService,
+    public firebaseService: StockService,
+    private salesService: SalesService,
+    private loaderService: LoaderService,
     public router: Router,
     private modalService: NgbModal,
     private envios: EnviosDocService
     ) {
-    this.firebaseService.showLoader();
+    this.loaderService.showLoader();
     this.firebaseService.getStockAllDocumentsName().subscribe(x => {
       this.codes = x;
-      this.firebaseService.hideLoader();
+      this.loaderService.hideLoader();
     });
     this.envios.getPending().subscribe(x => {
       x.data.forEach(x => {
@@ -110,7 +114,7 @@ export class NewSaleComponent {
   }
 
   public doSale(): void {
-    this.firebaseService.showLoader();
+    this.loaderService.showLoader();
       from(this.array).pipe(
       concatMap(x => {
         /**
@@ -162,7 +166,7 @@ export class NewSaleComponent {
             this.prepareSendPendingData(this.newSale);
             this.ERROR = error;
             this.openErrorModal();
-            this.firebaseService.hideLoader();
+            this.loaderService.hideLoader();
             return error;
           }) 
         );
@@ -176,12 +180,11 @@ export class NewSaleComponent {
        forkJoin([
         this.sendAllSalesData(this.newSale),
         this.prepareSendPendingData(this.newSale),
-        this.sendTotalToFinance()
        ]).pipe(
          catchError(error =>{
           this.ERROR = error;
           this.openErrorModal();
-          this.firebaseService.hideLoader();
+          this.loaderService.hideLoader();
           return error;
          }),
         finalize(() => {
@@ -190,7 +193,7 @@ export class NewSaleComponent {
           } else {
             this.openModal();
           }
-          this.firebaseService.hideLoader();
+          this.loaderService.hideLoader();
         })
       ).subscribe()
       }))
@@ -200,12 +203,9 @@ export class NewSaleComponent {
   public prepareSendPendingData(newSale: Sale) {
     return this.envios.addProductToOrder(newSale);
   }
-  public sendTotalToFinance() {
-    return this.firebaseService.setNewTotalSales(this.saleForm.get('summary')?.value);
-  }
 
   public sendAllSalesData(newSale: Sale) {
-    return this.firebaseService.addSaleToAllSales(newSale);
+    return this.salesService.addSaleToAllSales(newSale);
   }
   
 }

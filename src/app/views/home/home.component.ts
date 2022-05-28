@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { Routes } from 'src/app/config/routes.enum';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +11,10 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class HomeComponent implements OnInit {
   public isMenuOpen = false;
-  constructor(private firebaseService: FirebaseService, private router: Router) { }
+  constructor(
+    private firebaseService: AuthService,
+    private router: Router
+    ) { }
 
   ngOnInit(): void {
   }

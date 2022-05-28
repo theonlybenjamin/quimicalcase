@@ -5,7 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable, Subscription } from 'rxjs';
 import { catchError, concatMap, finalize, take, toArray } from 'rxjs/operators';
 import { IPhone, Stock, Product, ProductForm } from 'src/app/interfaces/stock';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { StockService } from 'src/app/services/stock.service';
 import { iphoneNameById } from 'src/app/utils/utils';
 
 @Component({
@@ -41,9 +42,10 @@ export class AddProductComponent {
   @ViewChild('successModal') successModal: ElementRef | undefined;
 
   constructor(
-    public firebaseService: FirebaseService,
+    public firebaseService: StockService,
     public router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private loaderService: LoaderService
     ) {
     this.firebaseService.getStockAllDocumentsName().subscribe(x => this.codes = x);
     this.productForm = new FormGroup({
@@ -200,7 +202,7 @@ export class AddProductComponent {
   }
 
   saveFormGroup() {
-    this.firebaseService.showLoader();
+    this.loaderService.showLoader();
      from(this.arrayValues).pipe(
        concatMap((x) => {
         var dataBack: Product;
@@ -212,7 +214,7 @@ export class AddProductComponent {
         return this.getProducts(x.code, dataBack);
        }),toArray(),
        finalize(() => {
-        this.firebaseService.hideLoader();
+        this.loaderService.hideLoader();
         this.modalService?.open(this.successModal, {centered: true});
         this.reloadCurrentRoute()
        }),

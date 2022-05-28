@@ -4,7 +4,9 @@ import { from } from 'rxjs';
 import { concatMap, finalize } from 'rxjs/operators';
 import { Sale, SaleArray } from 'src/app/interfaces/sale';
 import { ProductSelled } from 'src/app/interfaces/sale';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { SalesService } from 'src/app/services/sales.service';
+import { StockService } from 'src/app/services/stock.service';
 import { getMonthOnSalesDOC } from 'src/app/utils/utils';
 
 @Component({
@@ -27,17 +29,19 @@ export class ListSaleComponent {
   public months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
   constructor(
-    public fireService: FirebaseService,
-    private modalService: NgbModal
+    public fireService: StockService,
+    private modalService: NgbModal,
+    private loaderService: LoaderService,
+    private salesService: SalesService
   ) {
-    this.fireService.showLoader();
+    this.loaderService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
     this.getSends(getMonthOnSalesDOC(this.actualMonth));
   }
 
   public getSends(doc: string) {
     this.showSends = false;
-    this.fireService.getAllSales(doc).subscribe(x => {
+    this.salesService.getAllSales(doc).subscribe(x => {
       this.orders = []
       for (let i = 0; i < x.data.length; i++) {
           this.justDevVar = x;
@@ -45,7 +49,7 @@ export class ListSaleComponent {
         }
       this.reversedOrders = this.orders.slice().reverse();
       this.showSends = true;
-      this.fireService.hideLoader();
+      this.loaderService.hideLoader();
     });
   }
 
@@ -65,8 +69,8 @@ export class ListSaleComponent {
 
   public confirmDelete() {
     this.modalService.dismissAll();
-    this.fireService.showLoader();
-    this.fireService.deleteSale(this.selectedOrder).subscribe();
+    this.loaderService.showLoader();
+    this.salesService.deleteSale(this.selectedOrder).subscribe();
     from(this.selectedOrder.productos).pipe(
       concatMap(x => {
         var productToRestore: ProductSelled = {
@@ -77,7 +81,7 @@ export class ListSaleComponent {
         }
         return this.fireService.restoreProduct(productToRestore);
       }),
-      finalize(()=> this.fireService.hideLoader())
+      finalize(()=> this.loaderService.hideLoader())
     ).subscribe();
 
   }

@@ -1,18 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { Component } from '@angular/core';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-loader',
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.scss']
 })
-export class LoaderComponent implements OnInit {
+export class LoaderComponent {
 
   constructor(
-    public fireService: FirebaseService
+    public fireService: LoaderService
   ) { }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -3,13 +3,13 @@ import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Routes } from '../config/routes.enum';
-import { FirebaseService } from '../services/firebase.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IsLoggedGuard implements CanActivate {
-  constructor(private fireAuthService: FirebaseService, private router: Router){}
+  constructor(private fireAuthService: AuthService, private router: Router){}
   canActivate(): boolean | Observable<boolean> {
       return this.fireAuthService.auth.authState.pipe(
         map(x => {

@@ -2,7 +2,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { concatMap, map } from 'rxjs/operators';
 import { FinancesDoc, FinancesGastos, FinancesIngresos } from 'src/app/interfaces/finances';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { FinancesService } from 'src/app/services/finances.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { SalesService } from 'src/app/services/sales.service';
 import { getMonthOnFinaceDOC, getMonthOnSalesDOC } from 'src/app/utils/utils';
 
 @Component({
@@ -32,10 +34,12 @@ export class FinancesComponent {
   public gastosProgramados = 0;
   public moneyOnCard: number = 0;
   constructor(
-    public fireService: FirebaseService
+    public fireService: FinancesService,
+    private loaderService: LoaderService,
+    private salesService: SalesService
   ) {
     this.gastosProgramados  = Number((this.salary + this.emanuel + this.prestamo).toFixed(1));
-    this.fireService.showLoader();
+    this.loaderService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
     this.getSends(this.actualMonth).subscribe();
     this.expenseForm = new FormGroup({
@@ -46,7 +50,7 @@ export class FinancesComponent {
 
   public getTotalSales(month: number) {
     var total = 0;
-    return this.fireService.getAllSales(getMonthOnSalesDOC(month)).pipe(
+    return this.salesService.getAllSales(getMonthOnSalesDOC(month)).pipe(
       map(x => {
         for (let i = 0; i < x.data.length; i++) {
           total += x.data[i].total;
@@ -55,7 +59,7 @@ export class FinancesComponent {
         this.profit.monto = total;
         this.ingresoBruto = Number(this.profit.monto.toFixed(2));
         this.moneyOnCard = Number((this.ingresoBruto - this.gastosIngresados).toFixed(2))
-        this.fireService.hideLoader();
+        this.loaderService.hideLoader();
       })
     )
   }
@@ -69,7 +73,7 @@ export class FinancesComponent {
             this.gastosIngresados += x.gastos[i].monto ? Number(x.gastos[i].monto) : x.gastos[i].monto;
           }
           this.gastosIngresados = Number(this.gastosIngresados.toFixed(2));
-        this.fireService.hideLoader();
+        this.loaderService.hideLoader();
         return this.getTotalSales(month);
       })
     );

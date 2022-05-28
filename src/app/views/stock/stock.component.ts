@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ProductSelled } from 'src/app/interfaces/sale';
 import { Stock } from 'src/app/interfaces/stock';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { StockService } from 'src/app/services/stock.service';
 import { idByIphoneName, iphoneNameById, setDashesToName } from '../../utils/utils'
 @Component({
   selector: 'app-stock',
@@ -38,10 +39,11 @@ export class StockComponent implements OnInit {
   ];
   public codeValue: string = '';
   constructor(
-    public fireService: FirebaseService
+    public fireService: StockService,
+    private loaderService: LoaderService
   ) {
     var result: Array<ProductSelled> = [];
-    this.fireService.showLoader();
+    this.loaderService.showLoader();
     this.fireService.getAllProductNames().pipe(
       map((x: Stock[]) => {
         for (let i = 0; i < x.length; i++) {
@@ -64,7 +66,7 @@ export class StockComponent implements OnInit {
       this.products = x;
       this.productBackup = x;
       result = [];
-      this.fireService.hideLoader();
+      this.loaderService.hideLoader();
       this.searchByCode({ value: 'IPhone 11'})
     })
   }
