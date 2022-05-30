@@ -20,7 +20,7 @@
             </div>
             <div class="job-right my-4 flex-shrink-0 text-center">
                 <img height="50" *ngIf="order.canal_venta" alt="canal de venta" class="mb-3" [src]="order.canal_venta === 'Whatsapp' ? 'assets/icons/whatsapp.png': 'assets/icons/instagram.png'">
-                <img height="80" *ngIf="order.payment_type" alt="canal de venta" class="mb-3" [src]="order.payment_type | paymentImage">
+                <img width="50" *ngIf="order.payment_type" alt="canal de venta" class="mb-3" [src]="order.payment_type | paymentImage">
                 <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitButton1(order)">{{textButton}}</button>
                 <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitButton2(order)">{{textButton2}}</button>
             </div>
