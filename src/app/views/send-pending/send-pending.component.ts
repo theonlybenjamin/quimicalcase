@@ -59,11 +59,13 @@ export class SendPendingComponent {
 
   public registerHistoricClient() {
     this.loaderService.showLoader();
-    const user = this.historic.find(x => x.username === this.historicClient);
+    const user = this.historic.find(x => x.username.toLowerCase().trim() === this.historicClient.toLowerCase().trim());
     if (user) {
       this.enviosService.addOrderToPendingList(user).pipe(
         finalize(() => this.loaderService.hideLoader())
       ).subscribe()
+    } else {
+      this.loaderService.hideLoader();
     }
   }
 }
