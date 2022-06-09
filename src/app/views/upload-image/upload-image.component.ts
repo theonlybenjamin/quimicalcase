@@ -27,7 +27,6 @@ export class UploadImageComponent implements OnInit, OnDestroy {
     private router: Router) { }
 
   ngOnInit(): void {
-    console.log()
   }
 
   ngOnDestroy(): void {
@@ -38,7 +37,6 @@ export class UploadImageComponent implements OnInit, OnDestroy {
     const fileEnd = file.files[0] as File;
     const filePath = `${codeForStorage(this.productType)}${this.model}.jpg`;
     imageCompression(fileEnd, { fileType: 'image/jpeg', maxSizeMB: 1.2, useWebWorker: false }).then(newFile => {
-      console.log(newFile);
       var reader = new FileReader();
       
       reader.onload = (e) => {

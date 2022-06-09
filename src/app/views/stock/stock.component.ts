@@ -92,7 +92,6 @@ export class StockComponent implements OnInit {
   }
 
   public searchByCode(code: any) {
-    console.log(code.value);
     var id = idByIphoneName(code.value);
     this.codeValue = id;
     this.getCaseModel();

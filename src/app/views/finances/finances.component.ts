@@ -23,9 +23,9 @@ export class FinancesComponent {
   public finances: FinancesDoc = {} as FinancesDoc;
   public salary = 1200;
   // costo por ida * veces que ha ido
-  public malvinas = 28 * 1;
+  public malvinas = 28 * 0;
   // costo por ida * veces que ha ido + extra de mi casa de andrea a mi casa
-  public puente = (14 * 16) + 7;
+  public puente = (14 * 13) + 3 + 6;
   public emanuel = this.malvinas + this.puente;
   public gastosIngresados = 0;
   public reinversion = 0;
@@ -33,6 +33,7 @@ export class FinancesComponent {
   public prestamo = 300;
   public gastosProgramados = 0;
   public moneyOnCard: number = 0;
+  public sobranteMesAnterior = 204.46;
   constructor(
     public fireService: FinancesService,
     private loaderService: LoaderService,
@@ -41,6 +42,7 @@ export class FinancesComponent {
     this.gastosProgramados  = Number((this.salary + this.emanuel + this.prestamo).toFixed(1));
     this.loaderService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
+    console.log(this.actualMonth);
     this.getSends(this.actualMonth).subscribe();
     this.expenseForm = new FormGroup({
       expense_detail: new FormControl(null, Validators.required),
@@ -58,7 +60,7 @@ export class FinancesComponent {
         this.profit.cantidad_ventas = x.data.length;
         this.profit.monto = total;
         this.ingresoBruto = Number(this.profit.monto.toFixed(2));
-        this.moneyOnCard = Number((this.ingresoBruto - this.gastosIngresados).toFixed(2))
+        this.moneyOnCard = Number((this.ingresoBruto + this.sobranteMesAnterior - this.gastosIngresados).toFixed(2));
         this.loaderService.hideLoader();
       })
     )
