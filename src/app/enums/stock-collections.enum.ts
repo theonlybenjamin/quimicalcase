@@ -21,5 +21,6 @@ export enum StockCollections {
     Mica = 'MICA',
     Camara = 'CAMARA',
     Gift = 'GIFT',
-    Watch = 'WATCH'
+    Watch = 'WATCH',
+    Popsocket = 'Popsocket'
 }

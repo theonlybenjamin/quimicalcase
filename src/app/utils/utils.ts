@@ -31,6 +31,7 @@ export function iphoneNameById(id: string) {
       case StockCollections.Camara: return 'Camara';
       case StockCollections.Gift: return 'Regalos';
       case StockCollections.Watch: return 'Watch';
+      case StockCollections.Popsocket: return 'Popsocket'
       default: return id;
     }
 }
@@ -65,6 +66,7 @@ export function idByIphoneName(name: string) {
       case 'Mica': return StockCollections.Mica;
       case 'Regalos': return StockCollections.Gift;
       case 'Watch': return StockCollections.Watch;
+      case 'Popsocket': return StockCollections.Popsocket;
       default: return name;
     }
 }
@@ -138,6 +140,7 @@ export function codeForStorage(code: string){
     case StockCollections.Mica: return StorageUrl.MICA;
     case StockCollections.Camara: return StorageUrl.CAMARA;
     case StockCollections.Watch: return StorageUrl.WATCH;
+    case StockCollections.Popsocket: return StorageUrl.WATCH;
     default: return code;
   }
 }
