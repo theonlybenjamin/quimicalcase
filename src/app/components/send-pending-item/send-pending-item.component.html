@@ -43,6 +43,10 @@
                             <li style="color: red; font-size: 18px; text-align: center;">{{"Venta pendiente de registrar" | uppercase}}</li>
                         </ng-template>
                         <li style="color: black; opacity: 1;">
+                            <span class="mr-md-4" *ngIf="pendingOrder.date">
+                                <b>Fecha:</b> {{ pendingOrder.date}}
+                                <br>
+                            </span>
                             <span class="mr-md-4" *ngIf="pendingOrder.documentNumber">
                                 <b>DNI:</b> {{ pendingOrder.documentNumber}}
                                 <br>
@@ -71,7 +75,6 @@
                                 <b>Agencia:</b> {{ pendingOrder.agency}}
                                 <br>
                             </span>
-                            
                         </li>
                     </ul>
                 </div>

@@ -11,10 +11,15 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HomeComponent implements OnInit {
   public isMenuOpen = false;
+  public showAdminOptions = false;
   constructor(
     private firebaseService: AuthService,
     private router: Router
-    ) { }
+    ) {
+      if (this.firebaseService.userEmail.startsWith('benja.') || this.firebaseService.userEmail.startsWith('andreal')) {
+        this.showAdminOptions = true;
+      }
+    }
 
   ngOnInit(): void {
   }

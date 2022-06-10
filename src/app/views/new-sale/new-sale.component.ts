@@ -65,7 +65,8 @@ export class NewSaleComponent {
           producto: new FormControl(null, Validators.required),
           cant: new FormControl(1, Validators.required)
         })
-      ])
+      ]),
+      date: new FormControl(null)
     });
   }
 
@@ -154,6 +155,8 @@ export class NewSaleComponent {
           precio: price
         }
         this.updatedModels.push(updatedModel);
+        const fecha = new Date();
+
         this.newSale = {
           cliente: this.saleForm.get('client')?.value,
           tipo_entrega: this.saleForm.get('sell_type')?.value,
@@ -161,7 +164,8 @@ export class NewSaleComponent {
           productos: this.updatedModels,
           capital: this.capital,
           canal_venta: this.saleForm.get('sale_channel')?.value,
-          payment_type: this.saleForm.get('payment_type')?.value
+          payment_type: this.saleForm.get('payment_type')?.value,
+          date: fecha.getDate() + '/' + fecha.getMonth()
         };
         return this.firebaseService.updateSotckAfterSale(x.value.iphoneCode, finalResult).pipe(
           catchError(error => {

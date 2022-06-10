@@ -7,6 +7,7 @@ import { from, Observable } from 'rxjs';
 })
 export class AuthService {
 
+  public userEmail: string = '';
   constructor(
     public readonly auth: AngularFireAuth
   ) { }

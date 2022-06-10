@@ -15,6 +15,7 @@ export class UserLoggedGuard implements CanActivate {
       map(x => {
         const value = x;
         if (value && value.email) {
+          this.fireAuthService.userEmail = value?.email;
           return true;
         } else {
           this.router.navigate([Routes.LOGIN]);

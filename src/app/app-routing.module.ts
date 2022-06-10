@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminGuard } from './guards/admin.guard';
 import { IsLoggedGuard } from './guards/is-logged.guard';
 import { UserLoggedGuard } from './guards/user-logged.guard';
 import { AddProductComponent } from './views/add-product/add-product.component';
@@ -24,26 +25,41 @@ const routes: Routes = [
     canActivate: [UserLoggedGuard],
     children: [{
       path: 'nueva-venta',
-      component: NewSaleComponent
+      component: NewSaleComponent,
+      canActivate: [
+        AdminGuard
+      ]
     }, {
       path: 'pendiente-envio',
       component: SendPendingComponent
     }, {
       path: 'ventas',
-      component: ListSaleComponent
+      component: ListSaleComponent,
+      canActivate: [
+        AdminGuard
+      ]
     }, {
       path: 'stock',
       component: StockComponent
     }, {
       path: 'agregar-producto',
-      component: AddProductComponent
+      component: AddProductComponent,
+      canActivate: [
+        AdminGuard
+      ]
     }, {
       path: 'finanzas',
-      component: FinancesComponent
+      component: FinancesComponent,
+      canActivate: [
+        AdminGuard
+      ]
     },
     {
       path: 'subir-imagen',
-      component: UploadImageComponent
+      component: UploadImageComponent,
+      canActivate: [
+        AdminGuard
+      ]
     },
     {
       path: '',

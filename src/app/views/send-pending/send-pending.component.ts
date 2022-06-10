@@ -61,6 +61,8 @@ export class SendPendingComponent {
     this.loaderService.showLoader();
     const user = this.historic.find(x => x.username.toLowerCase().trim() === this.historicClient.toLowerCase().trim());
     if (user) {
+      const fecha = new Date();
+      user.date = fecha.getDate() + '/' + fecha.getMonth();
       this.enviosService.addOrderToPendingList(user).pipe(
         finalize(() => this.loaderService.hideLoader())
       ).subscribe()

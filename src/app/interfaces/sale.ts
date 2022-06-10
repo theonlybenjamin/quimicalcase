@@ -6,6 +6,7 @@ export interface Sale {
     capital: number;
     canal_venta: string;
     payment_type?: string;
+    date?: string;
 }
 
 export interface SaleArray {

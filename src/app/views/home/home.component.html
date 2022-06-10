@@ -6,7 +6,7 @@
                     <i class='bx bx-menu header_toggle' id="header-toggle" (click)="changeMenuStatus()"></i>
                 </span>
                 <div class="nav_list">
-                    <a class="nav_link" routerLinkActive="active" routerLink="/home/nueva-venta">
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/nueva-venta" *ngIf="showAdminOptions">
                         <i class='bx bx-cart nav_icon'></i>
                         <span class="nav_name">Registrar venta</span>
                     </a>
@@ -14,7 +14,7 @@
                         <i class='bx bx-send nav_icon' ></i>
                         <span class="nav_name">Pendientes de env&iacute;o</span>
                     </a>
-                    <a class="nav_link" routerLinkActive="active" routerLink="/home/ventas">
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/ventas" *ngIf="showAdminOptions">
                         <i class='bx bxs-shopping-bags nav_icon' ></i>
                         <span class="nav_name">Listado de ventas</span>
                     </a>
@@ -22,15 +22,15 @@
                         <i class='bx bx-barcode nav_icon'></i>
                         <span class="nav_name">Stock</span>
                     </a>
-                    <a class="nav_link" routerLinkActive="active" routerLink="/home/agregar-producto">
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/agregar-producto" *ngIf="showAdminOptions">
                         <i class='bx bx-comment-add nav_icon'></i> 
                         <span class="nav_name">Agregar productos</span>
                     </a>
-                    <a class="nav_link" routerLinkActive="active" routerLink="/home/finanzas">
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/finanzas" *ngIf="showAdminOptions">
                         <i class='bx bx-credit-card-alt nav_icon'></i> 
                         <span class="nav_name">Finanzas</span>
                     </a>
-                    <a class="nav_link" routerLinkActive="active" routerLink="/home/subir-imagen">
+                    <a class="nav_link" routerLinkActive="active" routerLink="/home/subir-imagen" *ngIf="showAdminOptions">
                         <i class='bx bx-image-add nav_icon'></i> 
                         <span class="nav_name">Subir imagen</span>
                     </a>
