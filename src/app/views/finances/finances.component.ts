@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { concatMap, map } from 'rxjs/operators';
 import { FinancesDoc, FinancesGastos, FinancesIngresos } from 'src/app/interfaces/finances';
+import { AuthService } from 'src/app/services/auth.service';
 import { FinancesService } from 'src/app/services/finances.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { SalesService } from 'src/app/services/sales.service';
@@ -25,7 +26,7 @@ export class FinancesComponent {
   // costo por ida * veces que ha ido
   public malvinas = 28 * 0;
   // costo por ida * veces que ha ido + extra de mi casa de andrea a mi casa
-  public puente = (14 * 13) + 3 + 6;
+  public puente = (14 * 12) + 3 + 6 + 22;
   public emanuel = this.malvinas + this.puente;
   public gastosIngresados = 0;
   public reinversion = 0;
@@ -37,7 +38,8 @@ export class FinancesComponent {
   constructor(
     public fireService: FinancesService,
     private loaderService: LoaderService,
-    private salesService: SalesService
+    private salesService: SalesService,
+    public authService: AuthService
   ) {
     this.gastosProgramados  = Number((this.salary + this.emanuel + this.prestamo).toFixed(1));
     this.loaderService.showLoader();

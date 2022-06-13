@@ -49,10 +49,7 @@ const routes: Routes = [
       ]
     }, {
       path: 'finanzas',
-      component: FinancesComponent,
-      canActivate: [
-        AdminGuard
-      ]
+      component: FinancesComponent
     },
     {
       path: 'subir-imagen',
