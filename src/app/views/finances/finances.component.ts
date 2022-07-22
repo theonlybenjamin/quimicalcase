@@ -23,25 +23,19 @@ export class FinancesComponent {
   public profit: FinancesIngresos = {} as FinancesIngresos;
   public finances: FinancesDoc = {} as FinancesDoc;
   public salary = 1200;
-  // costo por ida * veces que ha ido
-  public malvinas = 28 * 0;
-  // costo por ida * veces que ha ido + extra de mi casa de andrea a mi casa
-  public puente = (14 * 12) + 3 + 6 + 22;
-  public emanuel = this.malvinas + this.puente;
   public gastosIngresados = 0;
-  public reinversion = 0;
   public ingresoBruto = 0;
   public prestamo = 300;
   public gastosProgramados = 0;
   public moneyOnCard: number = 0;
-  public sobranteMesAnterior = 204.46;
+  public sobranteMesAnterior = 0;
   constructor(
     public fireService: FinancesService,
     private loaderService: LoaderService,
     private salesService: SalesService,
     public authService: AuthService
   ) {
-    this.gastosProgramados  = Number((this.salary + this.emanuel + this.prestamo).toFixed(1));
+    this.gastosProgramados  = Number((this.salary + this.prestamo).toFixed(1));
     this.loaderService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
     console.log(this.actualMonth);

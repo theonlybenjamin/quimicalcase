@@ -39,8 +39,7 @@
       </div>
       <div class="col">
         <p>Hoja de gastos:</p>
-        <p style="color: orange"><b>Emanuel:</b> S/. {{emanuel}}</p>
-        <p style="color: orange"><b>Prestamo:</b> S/. {{prestamo}} (pago minmimo S/.139.9)</p>
+        <p style="color: orange"><b>Prestamo:</b> S/. {{prestamo}} (pago minimo S/.139.9)</p>
         <p *ngFor="let expense of expenses; let i = index" style="color: red">{{expense.fecha}} {{expense.detalle}}: {{
           expense.monto}}</p>
       </div>

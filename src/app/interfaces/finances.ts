@@ -1,5 +1,4 @@
 export interface FinancesDoc {
-    ingresos: FinancesIngresos;
     gastos: Array<FinancesGastos>
 }
 
