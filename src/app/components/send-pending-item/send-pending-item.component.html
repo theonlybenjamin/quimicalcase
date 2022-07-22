@@ -80,8 +80,17 @@
                 </div>
             </div>
             <div class="job-right my-4 flex-shrink-0 text-center">
-                <button type="button" *ngIf="showButton" class="btn d-block w-100 d-sm-inline-block btn-danger" (click)="emitButton1(pendingOrder)" [disabled]="!noHaveProducts(pendingOrder)">{{textButton}}</button>
-                <button type="button" *ngIf="showButton2" class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2" (click)="emitButton2(pendingOrder)">{{textButton2}}</button>
+                <button type="button" *ngIf="showButton"
+                        class="btn d-block w-100 d-sm-inline-block btn-danger"
+                        (click)="emitButton1(pendingOrder)"
+                        [disabled]="!noHaveProducts(pendingOrder)">{{textButton}}</button>
+
+                <button type="button" *ngIf="showButton && !noHaveProducts(pendingOrder)"
+                        class="btn d-block w-100 d-sm-inline-block btn-warning my-2"
+                        (click)="emitButton1(pendingOrder)">Cancelar Envio</button>
+                <button type="button" *ngIf="showButton2"
+                        class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2"
+                        (click)="emitButton2(pendingOrder)">{{textButton2}}</button>
             </div>
         </div>
     </section>

@@ -141,13 +141,15 @@ export class EnviosDocService {
   public searchItemToDelete(array: IPendingArray, order: IPending): IPending {
     return array.data.find(x => {
       if (x.username === order.username && x.documentNumber === order.documentNumber) {
-        for (let i = 0; i < x.products.length; i++) {
-          if (x.products[i].iphoneCode === order.products[i].iphoneCode && x.products[i].producto === order.products[i].producto) {
-            return x;
-          } else {
+        if (order.products?.length > 0) {
+          for (let i = 0; i < x.products.length; i++) {
+            if (x.products[i].iphoneCode === order.products[i].iphoneCode && x.products[i].producto === order.products[i].producto) {
+              return x;
+            }
             return undefined;
           }
         }
+        return x;
       }
         return undefined;
     }) as IPending;
