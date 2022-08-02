@@ -59,18 +59,18 @@ export class SalesService {
    * @param sale - venta a eliminar
    * @returns 
    */
-   public deleteSale(sale: Sale) {
+   public deleteSale(sale: Sale, month?: number) {
     var allSales: SaleArray = {
       data: []
     };
-    return this.getAllSales(getMonthOnSalesDOC(this.actualMonth)).pipe(
+    return this.getAllSales(getMonthOnSalesDOC(month && month!== 0? month : this.actualMonth)).pipe(
       take(1),
       concatMap(x => {
         allSales = x;
         const searchObject = this.searchItemToDelete(allSales, sale);
         const indexToDelete = allSales.data.indexOf(searchObject);
         allSales.data.splice(indexToDelete, 1);
-        return this.afs.collection(Collections.VENTAS).doc(getMonthOnSalesDOC(this.actualMonth)).set(allSales);
+        return this.afs.collection(Collections.VENTAS).doc(getMonthOnSalesDOC(month && month!== 0? month : this.actualMonth)).set(allSales);
       })
     )
   }

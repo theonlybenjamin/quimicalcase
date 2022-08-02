@@ -27,6 +27,7 @@ export class ListSaleComponent {
     data: []
   };
   public months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  public selectedMonth: number = 0;
 
   constructor(
     public fireService: StockService,
@@ -54,6 +55,7 @@ export class ListSaleComponent {
   }
 
   public changeMonth($event: string) {
+    this.selectedMonth = Number($event);
     this.getSends(getMonthOnSalesDOC(Number($event)));
   }
 
@@ -70,7 +72,7 @@ export class ListSaleComponent {
   public confirmDelete() {
     this.modalService.dismissAll();
     this.loaderService.showLoader();
-    this.salesService.deleteSale(this.selectedOrder).subscribe();
+    this.salesService.deleteSale(this.selectedOrder, this.selectedMonth ? this.selectedMonth : 0).subscribe();
     from(this.selectedOrder.productos).pipe(
       concatMap(x => {
         var productToRestore: ProductSelled = {
