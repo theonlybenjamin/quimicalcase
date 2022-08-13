@@ -7,7 +7,7 @@ import { Documents } from '../config/documents';
 import { IPending, IPendingArray } from '../interfaces/envios.interface';
 import { Sale } from '../interfaces/sale';
 import { LoaderService } from './loader.service';
-
+import { isEqual } from 'lodash';
 @Injectable({
   providedIn: 'root'
 })
@@ -122,35 +122,11 @@ export class EnviosDocService {
       take(1),
       concatMap((x) => {
         pendingList = x;
-        const searchObject = this.searchItemToDelete(pendingList, order)
-        const indexToDelete = pendingList.data.indexOf(searchObject);
-        pendingList.data.splice(indexToDelete, 1);
+        const index = pendingList.data.findIndex(y => isEqual(y, order));
+        pendingList.data.splice(index, 1);
         
         return this.afs.collection(Collections.ENVIOS).doc(Documents.PENDIENTES).set(pendingList);
       })
     )
-  }
-
-  /**
-   * Funcion para buscar el objeto
-   * @param array - donde se hará la busqueda
-   * @param order - el objeto que se buscara
-   * @returns la orden buscada
-   */
-  public searchItemToDelete(array: IPendingArray, order: IPending): IPending {
-    return array.data.find(x => {
-      if (x.username === order.username && x.documentNumber === order.documentNumber) {
-        if (order.products?.length > 0) {
-          for (let i = 0; i < x.products.length; i++) {
-            if (x.products[i].iphoneCode === order.products[i].iphoneCode && x.products[i].producto === order.products[i].producto) {
-              return x;
-            }
-            return undefined;
-          }
-        }
-        return x;
-      }
-        return undefined;
-    }) as IPending;
   }
 }

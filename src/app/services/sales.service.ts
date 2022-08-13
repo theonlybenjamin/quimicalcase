@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { isEqual } from 'lodash';
 import { Observable } from 'rxjs';
 import { take, map, finalize, concatMap } from 'rxjs/operators';
 import { Collections } from '../config/collections';
@@ -67,26 +68,10 @@ export class SalesService {
       take(1),
       concatMap(x => {
         allSales = x;
-        const searchObject = this.searchItemToDelete(allSales, sale);
-        const indexToDelete = allSales.data.indexOf(searchObject);
-        allSales.data.splice(indexToDelete, 1);
+        const index = allSales.data.findIndex(y => isEqual(y, sale));
+        allSales.data.splice(index, 1);
         return this.afs.collection(Collections.VENTAS).doc(getMonthOnSalesDOC(month && month!== 0? month : this.actualMonth)).set(allSales);
       })
     )
-  }
-
-  public searchItemToDelete(array: SaleArray, order: Sale): Sale {
-    return array.data.find(x => {
-      if (x.cliente === order.cliente && x.tipo_entrega === order.tipo_entrega) {
-        for (let i = 0; i < x.productos.length; i++) {
-          if (x.productos[i].iphoneCode === order.productos[i].iphoneCode && x.productos[i].producto === order.productos[i].producto) {
-            return x;
-          } else {
-            return undefined;
-          }
-        }
-      }
-        return undefined;
-    }) as Sale;
   }
 }
