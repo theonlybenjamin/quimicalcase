@@ -1,10 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs';
 import { concatMap, finalize } from 'rxjs/operators';
+import { Routes } from 'src/app/config/routes.enum';
 import { Sale, SaleArray } from 'src/app/interfaces/sale';
 import { ProductSelled } from 'src/app/interfaces/sale';
+import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { LoaderService } from 'src/app/services/loader.service';
+import { MessageService } from 'src/app/services/message.service';
 import { SalesService } from 'src/app/services/sales.service';
 import { StockService } from 'src/app/services/stock.service';
 import { getMonthOnSalesDOC } from 'src/app/utils/utils';
@@ -33,7 +37,10 @@ export class ListSaleComponent {
     public fireService: StockService,
     private modalService: NgbModal,
     private loaderService: LoaderService,
-    private salesService: SalesService
+    private salesService: SalesService,
+    private messageService: MessageService,
+    private router: Router,
+    private enviosService: EnviosDocService
   ) {
     this.loaderService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
@@ -64,9 +71,18 @@ export class ListSaleComponent {
     this.modalService.open(this.successModal, {centered: true});
   }
 
-  public editOrder(order: Sale) {
+  public editOrderModal(order: Sale) {
     this.selectedOrder = order;
-    this.modalService.open(this.editModal, {centered: true});
+    this.modalService.open(this.editModal, { centered: true });
+  }
+
+  public editOrder() {
+    this.messageService.setEditSale(this.selectedOrder);
+    this.confirmDelete();
+    this.enviosService.historicToPending(this.selectedOrder.cliente).
+    pipe(
+      finalize(() => this.router.navigate([Routes.NEW_SALE]))
+    ).subscribe();
   }
 
   public confirmDelete() {

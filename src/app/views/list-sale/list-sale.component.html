@@ -22,7 +22,7 @@
                                      textButton="Cancelar pedido"
                                      textButton2="Editar pedido"
                                      (actionButton1)="deleteOrder($event)"
-                                     (actionButton2)="editOrder($event)"
+                                     (actionButton2)="editOrderModal($event)"
                                      [showTotal]="true"></app-send-pending-item>
           </div>
       </div>
@@ -51,9 +51,10 @@
     </button>
   </div>
   <div class="modal-body">
-    <p>Por el momento, para editar el pedido porfavor, cancelarlo y agregarlo de nuevo </p>
+    <p>¿Segura que quieres Editar el pedido de <b>{{ selectedOrder.cliente }}</b>? </p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Salir</button>
+    <button type="button" class="btn btn-outline-danger" (click)="editOrder()">S&iacute;</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
   </div>
 </ng-template>

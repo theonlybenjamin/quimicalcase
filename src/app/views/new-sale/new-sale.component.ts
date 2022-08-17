@@ -12,6 +12,7 @@ import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { SalesService } from 'src/app/services/sales.service';
 import { StockService } from 'src/app/services/stock.service';
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-new-sale',
@@ -39,8 +40,9 @@ export class NewSaleComponent {
     private loaderService: LoaderService,
     public router: Router,
     private modalService: NgbModal,
-    private envios: EnviosDocService
-    ) {
+    private envios: EnviosDocService,
+    private messageService: MessageService
+  ) {
     this.loaderService.showLoader();
     this.firebaseService.getStockAllDocumentsName().subscribe(x => {
       this.codes = x;
@@ -48,17 +50,20 @@ export class NewSaleComponent {
     });
     this.envios.getPending().subscribe(x => {
       x.data.forEach(x => {
-        if (x.products === null) {
+        console.log(x);
+        if (x.products === null || x.products?.length === 0) {
           this.notRegisteredSales.push(x.username);
         }
       })
     })
+
+    const messageSale = this.messageService.getEditSale();
     this.saleForm = new FormGroup({
-      client: new FormControl(null, Validators.required),
-      sell_type: new FormControl('delivery', Validators.required),
-      sale_channel: new FormControl(null, Validators.required),
-      summary: new FormControl(null, Validators.required),
-      payment_type: new FormControl(null, Validators.required),
+      client: new FormControl(messageSale?.cliente || null, Validators.required),
+      sell_type: new FormControl(messageSale?.tipo_entrega || 'delivery', Validators.required),
+      sale_channel: new FormControl(messageSale?.canal_venta || null, Validators.required),
+      summary: new FormControl(messageSale?.total || null, Validators.required),
+      payment_type: new FormControl(messageSale?.payment_type || null, Validators.required),
       products: new FormArray([
         new FormGroup({
           iphoneCode: new FormControl(null, Validators.required),
@@ -78,11 +83,11 @@ export class NewSaleComponent {
     return this.products.controls;
   }
 
-  getArrayFormGroup(i:number) {
+  getArrayFormGroup(i: number) {
     return this.array[i] as FormGroup;
   }
 
-  public searchIphoneCases(index: number){
+  public searchIphoneCases(index: number) {
     const formGroupValue = this.getArrayFormGroup(index).value;
     this.firebaseService.getProductStock(formGroupValue.iphoneCode).subscribe(x => {
       this.cases[index] = x.data
@@ -103,11 +108,11 @@ export class NewSaleComponent {
   }
 
   public openModal() {
-    this.modalService?.open(this.modal, {centered: true});
+    this.modalService?.open(this.modal, { centered: true });
   }
 
   public openErrorModal() {
-    this.modalService?.open(this.errorModal, {centered: true});
+    this.modalService?.open(this.errorModal, { centered: true });
   }
 
   public goPending() {
@@ -117,7 +122,7 @@ export class NewSaleComponent {
 
   public doSale(): void {
     this.loaderService.showLoader();
-      from(this.array).pipe(
+    from(this.array).pipe(
       concatMap(x => {
         /**
          * @this.@cases traera todo el array de modelos (estos tienen de todos los codigos que fueron llamados)
@@ -174,34 +179,34 @@ export class NewSaleComponent {
             this.openErrorModal();
             this.loaderService.hideLoader();
             return error;
-          }) 
+          })
         );
       }),
       toArray(),
       finalize(() => {
-       /**
-        * Una vez terminado el loop, procedemos a preparar la data a enviar y a
-        * rutear al home o mostrar el modal de cases a elminar
-        */
-       forkJoin([
-        this.sendAllSalesData(this.newSale),
-        this.prepareSendPendingData(this.newSale),
-       ]).pipe(
-         catchError(error =>{
-          this.ERROR = error;
-          this.openErrorModal();
-          this.loaderService.hideLoader();
-          return error;
-         }),
-        finalize(() => {
-          if (this.deleteFromDrive.length === 0) {
-            this.router.navigate([Routes.SEND_PENDING]);
-          } else {
-            this.openModal();
-          }
-          this.loaderService.hideLoader();
-        })
-      ).subscribe()
+        /**
+         * Una vez terminado el loop, procedemos a preparar la data a enviar y a
+         * rutear al home o mostrar el modal de cases a elminar
+         */
+        forkJoin([
+          this.sendAllSalesData(this.newSale),
+          this.prepareSendPendingData(this.newSale),
+        ]).pipe(
+          catchError(error => {
+            this.ERROR = error;
+            this.openErrorModal();
+            this.loaderService.hideLoader();
+            return error;
+          }),
+          finalize(() => {
+            if (this.deleteFromDrive.length === 0) {
+              this.router.navigate([Routes.SEND_PENDING]);
+            } else {
+              this.openModal();
+            }
+            this.loaderService.hideLoader();
+          })
+        ).subscribe()
       }))
       .subscribe()
   }
@@ -213,5 +218,5 @@ export class NewSaleComponent {
   public sendAllSalesData(newSale: Sale) {
     return this.salesService.addSaleToAllSales(newSale);
   }
-  
+
 }

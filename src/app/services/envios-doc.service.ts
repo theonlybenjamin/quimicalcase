@@ -22,7 +22,7 @@ export class EnviosDocService {
    * Metodo para obtener los pendientes de envío
    * @returns mock
    */
-   public getPending(): Observable<IPendingArray> {
+  public getPending(): Observable<IPendingArray> {
     return this.afs.collection<IPendingArray>(Collections.ENVIOS).doc(Documents.PENDIENTES).valueChanges() as Observable<IPendingArray>;
   }
 
@@ -30,7 +30,7 @@ export class EnviosDocService {
    * Metodo para obtener los pendientes de envío
    * @returns mock
    */
-   public getHisotric(): Observable<IPendingArray> {
+  public getHisotric(): Observable<IPendingArray> {
     return this.afs.collection<IPendingArray>(Collections.ENVIOS).doc(Documents.HISTORIC).valueChanges() as Observable<IPendingArray>;
   }
 
@@ -39,7 +39,7 @@ export class EnviosDocService {
    * @param newOrder - venta a agregar
    * @returns 
    */
-   public addProductToOrder(newOrder: Sale): Observable<IPendingArray> {
+  public addProductToOrder(newOrder: Sale): Observable<IPendingArray> {
     this.loaderService.showLoader();
     var array: IPendingArray = {
       data: []
@@ -66,7 +66,7 @@ export class EnviosDocService {
    * @param newOrder - venta a agregar
    * @returns 
    */
-   public addOrderToPendingList(newOrder: IPending): Observable<IPendingArray> {
+  public addOrderToPendingList(newOrder: IPending): Observable<IPendingArray> {
     this.loaderService.showLoader();
     var array: IPendingArray = {
       data: []
@@ -90,7 +90,7 @@ export class EnviosDocService {
    * @param newOrder - venta a agregar
    * @returns 
    */
-   public addOrderToHistoricList(newOrder: IPending): Observable<IPendingArray> {
+  public addOrderToHistoricList(newOrder: IPending): Observable<IPendingArray> {
     this.loaderService.showLoader();
     var array: IPendingArray = {
       data: []
@@ -108,13 +108,13 @@ export class EnviosDocService {
       })
     )
   }
-  
+
   /**
    * Metodo para eliminar una venta de la lista de pendientes de envio
    * @param order - venta a eliminar
    * @returns 
    */
-   public deleteOrderOfPendingList(order: IPending) {
+  public deleteOrderOfPendingList(order: IPending) {
     var pendingList: IPendingArray = {
       data: []
     };
@@ -124,8 +124,49 @@ export class EnviosDocService {
         pendingList = x;
         const index = pendingList.data.findIndex(y => isEqual(y, order));
         pendingList.data.splice(index, 1);
-        
+
         return this.afs.collection(Collections.ENVIOS).doc(Documents.PENDIENTES).set(pendingList);
+      })
+    )
+  }
+
+  /**
+   * Metodo para eliminar una venta de la lista de pendientes de envio
+   * @param order - venta a eliminar
+   * @returns 
+   */
+  public historicToPending(username: string) {
+
+    return this.getPending().pipe(
+      take(1),
+      concatMap((x) => {
+        const order = x.data.find(y => y.username === username) as IPending;
+        if (order) {
+
+          return this.deleteOrderOfPendingList(order)
+            .pipe(
+              concatMap(() => {
+                order.products = [];
+                return this.addOrderToPendingList(order)
+              })
+            )
+        }
+
+        return this.getHisotric().pipe(
+          take(1),
+          concatMap(y => {
+            const order = y.data.find(y => y.username === username) as IPending;
+            console.log(order)
+            return this.deleteOrderOfPendingList(order)
+              .pipe(
+                concatMap(() => {
+                  order.products = [];
+
+                  return this.addOrderToPendingList(order)
+                })
+              )
+          })
+        )
       })
     )
   }
