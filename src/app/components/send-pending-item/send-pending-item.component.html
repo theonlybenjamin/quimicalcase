@@ -37,7 +37,12 @@
                             <i class="zmdi zmdi-pin mr-2"></i> {{ pendingOrder.courier }}
                         </li>
                         <li class="mr-md-4" style="margin-top: 20px; color: #47237C; opacity: 1;" *ngIf="noHaveProducts(pendingOrder); else noProducts">
-                            <p *ngFor="let producto of pendingOrder.products; let i = index"> {{producto.cant}} <b>{{ producto.producto }} </b> de <b>{{ producto.iphoneCode }}</b></p>
+                            <span *ngFor="let producto of pendingOrder.products; let i = index">
+                                <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
+                                    <img alt="" [src]="getImageURL(producto.producto, producto.iphoneCode) | getDownloadURL">
+                                </div>
+                                <p> {{producto.cant}} <b>{{ producto.producto }} </b> de <b>{{ producto.iphoneCode }}</b></p>
+                            </span>
                         </li>
                         <ng-template #noProducts>
                             <li style="color: red; font-size: 18px; text-align: center;">{{"Venta pendiente de registrar" | uppercase}}</li>

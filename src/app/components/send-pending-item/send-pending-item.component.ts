@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IPending } from 'src/app/interfaces/envios.interface';
 import { Sale } from 'src/app/interfaces/sale';
+import { setDashesToName } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-send-pending-item',
@@ -38,5 +39,9 @@ export class SendPendingItemComponent implements OnInit {
 
   public emitButton2(order: any) {
     this.actionButton2.emit(order);
+  }
+
+  public getImageURL(name: string, code: string) {
+    return setDashesToName(name, code);
   }
 }
