@@ -3,6 +3,17 @@
     <h3 class="top-c-sep">Finanzas</h3>
     <p>Aqu&iacute; puedes agregar gastos</p>
   </div>
+  <div class="form row">
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="expenseType">
+      <option value="" selected>Seleccionar el tipo de gasto</option>
+      <option value="compra">Compra</option>
+      <option value="andrea">Pago Andrea</option>
+      <option value="emanuel">Pago Courier(emanuel, flavio, etc)</option>
+      <option value="olva">Pago olva</option>
+      <option value="publicidad">Publicidad</option>
+      <option value="otro">Otro</option>
+    </select>
+  </div>
   <form class="form row px-5" [formGroup]="expenseForm">
     <div class="form-group col-sm-5 col-lg-4 col-md-4">
       <label for="detail">Detalle del gasto</label>
@@ -14,7 +25,7 @@
     </div>
     <div class="form-group col-sm-2 col-lg-1 col-md-1 pt-3">
       <button type="button" class="btn btn-dark btn-send" (click)="addExpense()"
-        [disabled]="!expenseForm.valid">Enviar</button>
+        [disabled]="!expenseForm.valid || expenseType === ''">Enviar</button>
     </div>
   </form>
   <div *ngIf="authService.userEmail.startsWith('benja.') || authService.userEmail.startsWith('andreal')">
@@ -29,18 +40,25 @@
     <div class="row text-center pt-5 summary">
       <div class="col">
         <p>Resumen:</p>
-        <p style="color: blue">Cantidad de ventas: {{ profit.cantidad_ventas }}</p>
+        <p style="color: blue">Cantidad de ventas: {{ sellsCount }}</p>
         <p style="color: green">Ingreso Bruto: {{ ingresoBruto }}</p>
         <p style="color: red"><b>Gastos ingresados: {{ gastosIngresados }}</b></p>
-        <p style="color: blueviolet"><b>Sobrante mes anterior: {{ sobranteMesAnterior }}</b></p>
         <p style="color: green"><b>Dinero en tarjeta: {{ moneyOnCard }}</b></p>
         <br>
 
       </div>
       <div class="col">
         <p>Hoja de gastos:</p>
-        <p style="color: orange"><b>Prestamo:</b> S/. {{prestamo}} (pago minimo S/.139.9)</p>
-        <p *ngFor="let expense of expenses; let i = index" style="color: red">{{expense.fecha}} {{expense.detalle}}: {{
+        <p style="color: red"><b>Gastos Olva: </b>{{totalOlva}}</p>
+        <p style="color: red"><b>Gastos Emanuel: </b>{{totalEmanuel}}</p>
+        <p style="color: red"><b>Gastos Andrea: </b>{{totalAndrea}}</p>
+        <p style="color: red"><b>Gastos Otros: </b>{{totalOtro}}</p>
+        <p style="color: orange"><b>Gastos Publi.: </b>{{totalPublicidad}}</p>
+        <p style="color: orange"><b>Gastos Compras: </b>{{totalBuy}}</p>
+        <br>
+        <b>Detalles:</b>
+        <br>
+        <p *ngFor="let expense of expenses; let i = index" style="color: red">{{expense.fecha}} {{expense.detalle}} S/. {{
           expense.monto}}</p>
       </div>
     </div>

@@ -1,7 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { concatMap, map } from 'rxjs/operators';
-import { FinancesDoc, FinancesGastos, FinancesIngresos } from 'src/app/interfaces/finances';
+import { Router } from '@angular/router';
+import { pipe } from 'rxjs';
+import { concatMap, finalize, map } from 'rxjs/operators';
+import { FinancesDoc, FinancesGastos } from 'src/app/interfaces/finances';
 import { AuthService } from 'src/app/services/auth.service';
 import { FinancesService } from 'src/app/services/finances.service';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -20,26 +22,30 @@ export class FinancesComponent {
   @ViewChild('successModal') successModal: ElementRef | undefined;
   public expenseForm: FormGroup;
   public months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  public profit: FinancesIngresos = {} as FinancesIngresos;
+  public sellsCount: number = 0;
   public finances: FinancesDoc = {} as FinancesDoc;
-  public salary = 1200;
   public gastosIngresados = 0;
   public ingresoBruto = 0;
-  public prestamo = 300;
-  public gastosProgramados = 0;
   public moneyOnCard: number = 0;
-  public sobranteMesAnterior = 0;
+  public expenseType: string = '';
+
+  public totalBuy = 0;
+  public totalAndrea = 0;
+  public totalOlva = 0;
+  public totalEmanuel = 0;
+  public totalOtro = 0;
+  public totalPublicidad = 0;
+
   constructor(
     public fireService: FinancesService,
     private loaderService: LoaderService,
     private salesService: SalesService,
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) {
-    this.gastosProgramados  = Number((this.salary + this.prestamo).toFixed(1));
     this.loaderService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
-    console.log(this.actualMonth);
-    this.getSends(this.actualMonth).subscribe();
+    this.getExpenses(this.actualMonth).subscribe();
     this.expenseForm = new FormGroup({
       expense_detail: new FormControl(null, Validators.required),
       expense_amount: new FormControl(null, Validators.required),
@@ -53,24 +59,44 @@ export class FinancesComponent {
         for (let i = 0; i < x.data.length; i++) {
           total += x.data[i].total;
         }
-        this.profit.cantidad_ventas = x.data.length;
-        this.profit.monto = total;
-        this.ingresoBruto = Number(this.profit.monto.toFixed(2));
-        this.moneyOnCard = Number((this.ingresoBruto + this.sobranteMesAnterior - this.gastosIngresados).toFixed(2));
+        this.sellsCount = x.data.length;
+        this.ingresoBruto = Number(total.toFixed(2));
+        this.moneyOnCard = Number((this.ingresoBruto - this.gastosIngresados).toFixed(2));
         this.loaderService.hideLoader();
       })
     )
   }
 
-  public getSends(month: number) {
+  public getExpenses(month: number) {
     return this.fireService.getFinances(getMonthOnFinaceDOC(month)).pipe(
       concatMap(x => {
         this.finances = x;
-        for (let i = 0; i < x.gastos.length; i++) {
-            this.expenses[i] = x.gastos[i];
-            this.gastosIngresados += x.gastos[i].monto ? Number(x.gastos[i].monto) : x.gastos[i].monto;
+        this.expenses = x.gastos;
+        x.gastos.map(z => {
+          if(z.detalle.startsWith('compra:')){
+            this.totalBuy += z.monto;
+          } else if (z.detalle.startsWith('andrea:')) {
+            this.totalAndrea += z.monto;
+          } else if (z.detalle.startsWith('emanuel:')) {
+            this.totalEmanuel += z.monto;
+          } else if (z.detalle.startsWith('olva:')) {
+            this.totalOlva += z.monto;
+          } else if (z.detalle.startsWith('publicidad:')) {
+            this.totalPublicidad += z.monto;
+          } else if (z.detalle.startsWith('otro:')) {
+            this.totalOtro += z.monto;
+          } else {
+            this.totalOtro += z.monto;
           }
-          this.gastosIngresados = Number(this.gastosIngresados.toFixed(2));
+          this.gastosIngresados += z.monto;
+        });
+        this.totalBuy = Number(this.totalBuy.toFixed(2));
+        this.totalAndrea = Number(this.totalAndrea.toFixed(2));
+        this.totalOlva = Number(this.totalOlva.toFixed(2));
+        this.totalEmanuel = Number(this.totalEmanuel.toFixed(2));
+        this.totalOtro = Number(this.totalOtro.toFixed(2));
+        this.totalPublicidad = Number(this.totalPublicidad.toFixed(2));
+        this.gastosIngresados = Number(this.gastosIngresados.toFixed(2));
         this.loaderService.hideLoader();
         return this.getTotalSales(month);
       })
@@ -80,7 +106,7 @@ export class FinancesComponent {
   public changeMonth($event: string) {
     this.expenses = [];
     this.gastosIngresados = 0;
-    this.getSends(Number($event)).subscribe();
+    this.getExpenses(Number($event)).subscribe();
   }
 
   /**
@@ -89,13 +115,16 @@ export class FinancesComponent {
   public addExpense() {
     if (this.expenseForm.valid) {
       var expense: FinancesGastos = {
-        detalle: this.expenseForm.get('expense_detail')?.value,
+        detalle: this.expenseType + ': ' + this.expenseForm.get('expense_detail')?.value,
         monto: this.expenseForm.get('expense_amount')?.value,
         fecha: new Date().getDate() + '/' + this.actualMonth
       };
       this.finances.gastos.push(expense);
-      this.fireService.setNewExpense(getMonthOnFinaceDOC(this.actualMonth), this.finances).subscribe();
-      this.expenseForm.reset();
+      this.fireService.setNewExpense(getMonthOnFinaceDOC(this.actualMonth), this.finances).pipe(
+        finalize(() => {
+          location.reload();
+        })
+      ).subscribe();
     }
   }
 }
