@@ -142,8 +142,9 @@ export function codeForStorage(code: string){
     case StockCollections.Mica: return StorageUrl.MICA;
     case StockCollections.Camara: return StorageUrl.CAMARA;
     case StockCollections.Watch: return StorageUrl.WATCH;
-    case StockCollections.Popsocket: return StorageUrl.WATCH;
+    case StockCollections.Popsocket: return StorageUrl.POPSOCKET;
     case StockCollections.Preventa: return StorageUrl.IPHONE;
+    case StockCollections.Yaya: return StorageUrl.YAYA;
     default: return code;
   }
 }
