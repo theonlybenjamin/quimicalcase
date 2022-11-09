@@ -38,7 +38,7 @@ export class UploadImageComponent implements OnInit, OnDestroy {
     const filePath = `${codeForStorage(this.productType)}${this.model}.jpg`;
     imageCompression(fileEnd, { fileType: 'image/jpeg', maxSizeMB: 1.2, useWebWorker: false }).then(newFile => {
       var reader = new FileReader();
-      
+
       reader.onload = (e) => {
       this.gaa = e?.target?.result;
     };

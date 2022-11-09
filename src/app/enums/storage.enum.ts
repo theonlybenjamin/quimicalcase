@@ -5,5 +5,7 @@ export enum StorageUrl {
     AIRPODS = '/airpods/',
     AIRPODSPRO = '/airpodspro/',
     MICA = '/micas/',
-    IPHONE = '/iphone/'
+    IPHONE = '/iphone/',
+    YAYA = '/yaya/',
+    POPSOCKET = '/popsocket/'
 }
