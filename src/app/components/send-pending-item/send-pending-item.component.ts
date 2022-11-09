@@ -44,4 +44,13 @@ export class SendPendingItemComponent implements OnInit {
   public getImageURL(name: string, code: string) {
     return setDashesToName(name, code);
   }
+
+  public getSellChannelImageUrl(sellChannel: string) {
+    switch (sellChannel) {
+      case 'Whatsapp': return 'assets/icons/whatsapp.png';
+      case 'Instagram': return 'assets/icons/instagram.png';
+      case 'Web': return 'assets/logo2.png';
+      default: return 'assets/logo2.png';
+    }
+  }
 }

@@ -25,7 +25,7 @@ export class SalesService {
   /**
    * Metodo para obtener todas las ventas
    * @param doc  - el documento a consultar
-   * @returns 
+   * @returns
    */
    public getAllSales(doc: string): Observable<SaleArray> {
     return this.afs.collection<SaleArray>(Collections.VENTAS).doc(doc).valueChanges() as Observable<SaleArray>;
@@ -34,7 +34,7 @@ export class SalesService {
   /**
    * Metodo para agregar una venta a las ventas generales
    * @param newSale - venta a agregar
-   * @returns 
+   * @returns
    */
    public addSaleToAllSales(newSale: Sale): Observable<SaleArray> {
     this.loaderService.showLoader();
@@ -58,7 +58,7 @@ export class SalesService {
   /**
    * Metodo para eliminar una venta
    * @param sale - venta a eliminar
-   * @returns 
+   * @returns
    */
    public deleteSale(sale: Sale, month?: number) {
     var allSales: SaleArray = {

@@ -3,7 +3,6 @@ export interface Sale {
     productos: Array<ProductSelled>;
     tipo_entrega: string;
     total: number;
-    capital: number;
     canal_venta: string;
     payment_type?: string;
     date?: string;

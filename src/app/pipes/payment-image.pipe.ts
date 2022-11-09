@@ -25,6 +25,9 @@ export class PaymentImagePipe implements PipeTransform {
       case "scotia": {
         return 'assets/icons/scotia.jpg'
       }
+      case "Izipay": {
+        return 'assets/icons/scotia.jpg'
+      }
       case "credito": {
         return 'assets/icons/credito.png'
       }

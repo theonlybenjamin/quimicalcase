@@ -31,7 +31,6 @@ export class NewSaleComponent {
   @ViewChild('content') modal: ElementRef | undefined;
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   public ERROR: any;
-  public capital: number = 0;
   public newSale: Sale = {} as Sale;
   public notRegisteredSales: Array<string> = [];
   constructor(
@@ -127,7 +126,7 @@ export class NewSaleComponent {
         /**
          * @this.@cases traera todo el array de modelos (estos tienen de todos los codigos que fueron llamados)
          * es un arrays de arrays
-         * 
+         *
          * @codeIndex es la propiedad que almacena el index del codigo en cuestion
          * @modelIndex es la propiedad que almacena el modelo a editar
          * @finalResult se almacena el nuevo resultado del arrya
@@ -137,7 +136,6 @@ export class NewSaleComponent {
         const price = this.cases[codeIndex][modelIndex].precio;
         var finalResult: Stock = {} as Stock;
         this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
-        this.capital += this.cases[codeIndex][modelIndex]?.precio;
         /**
          * Si la cantidad actual del producto es 0, se agrega al modal que muestra los cases a eliminar
          * y se eliminar del array
@@ -167,7 +165,6 @@ export class NewSaleComponent {
           tipo_entrega: this.saleForm.get('sell_type')?.value,
           total: this.saleForm.get('summary')?.value,
           productos: this.updatedModels,
-          capital: this.capital,
           canal_venta: this.saleForm.get('sale_channel')?.value,
           payment_type: this.saleForm.get('payment_type')?.value,
           date: fecha.getDate() + '/' + fecha.getMonth()
