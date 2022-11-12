@@ -96,6 +96,7 @@ export class ListSaleComponent {
           precio: x.precio,
           producto: x.producto,
           iphoneCode: x.iphoneCode,
+          selectedQuantity: x.selectedQuantity ? x.selectedQuantity : 0
         }
         return this.fireService.restoreProduct(productToRestore);
       }),

@@ -17,4 +17,5 @@ export interface ProductSelled {
     precio: number;
     cant: number;
     iphoneCode: string;
+    selectedQuantity?: number;
 }

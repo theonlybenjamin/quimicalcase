@@ -1,17 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IPending } from 'src/app/interfaces/envios.interface';
 import { Sale } from 'src/app/interfaces/sale';
-import { setDashesToName } from 'src/app/utils/utils';
+import { iphoneNameById, setDashesToName } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-send-pending-item',
   templateUrl: './send-pending-item.component.html'
 })
-export class SendPendingItemComponent implements OnInit {
+export class SendPendingItemComponent {
 
   @Input() summaryText: string = '';
-  @Input() orders: Array<Sale> = [];
-  @Input() pendingOrders: Array<IPending> = [];
+  @Input() order!: Sale;
   @Input() showButton: boolean = true;
   @Input() textButton: string = '';
   @Input() showButton2: boolean = false;
@@ -19,12 +18,11 @@ export class SendPendingItemComponent implements OnInit {
   @Input() showTotal: boolean = false;
   @Output() actionButton1 = new EventEmitter<any>();
   @Output() actionButton2 = new EventEmitter<any>();
-  public totalSummary: number = 0;
   constructor(
     ) { }
 
-  ngOnInit(): void {
-    this.orders.forEach(x => this.totalSummary += (x.total? x.total : 0));
+  public iphoneNameByIdTS(id: string){
+    return iphoneNameById(id);
   }
 
   noHaveProducts(pendingOrder: any) {
@@ -41,7 +39,7 @@ export class SendPendingItemComponent implements OnInit {
     this.actionButton2.emit(order);
   }
 
-  public getImageURL(name: string, code: string) {
+  public getImageURL(name: string, code: string): string {
     return setDashesToName(name, code);
   }
 

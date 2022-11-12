@@ -1,57 +1,102 @@
 <ng-template #successModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Pedido enviado</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p>¿Segura que el pedido de <b>{{ selectedOrder.username }}</b> fue enviado? </p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-danger" (click)="confirmCompleteOrder()">S&iacute;</button>
-      <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
-    </div>
+  <div class="modal-header">
+    <h4 class="modal-title inter" id="modal-basic-title">Pedido enviado</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      ¿Segura que el pedido de <b>{{ selectedOrder.username }}</b> fue enviado?
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="confirmCompleteOrder()"
+    >
+      S&iacute;
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="c('Save click')"
+    >
+      No
+    </button>
+  </div>
 </ng-template>
 
-<div class="container">
-            <div class="row">
-                 <div class="col-lg-10 mx-auto mb-4">
-                    <div class="section-title text-center">
-                        <h3 class="top-c-sep">Pendientes de env&iacute;o</h3>
-                        <p>Revisar que los pedidos tengan todo antes de ser enviados</p>
-                    </div>
-                </div>
-            </div>
-            <div class="class row d-flex justify-content-center my-3">
-              <div class="form-group col-lg-5 col-md-5 col-sm-6 mb-1">
-                <label for="client">Selecciona el cliente ya registrado</label>
-                <input list="client" [(ngModel)]="historicClient" class="form-control" placeholder="Selecciona al cliente">
-                <datalist id="client">
-                  <option class="list-group-item list-group-item-action" *ngFor="let client of historic">{{client.username}}</option>
-                </datalist>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-6 align-self-end mb-1">
-                <button type="button" class="btn btn-dark w-100" (click)="registerHistoricClient()" [disabled]="historicClient === ''">Registrar direccion</button>
-              </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-10 mx-auto">
-                    <div class="career-search mb-60" *ngIf="showSends && reversedOrders.length > 0; else noPendingOrders">
-                        <app-send-pending-item [pendingOrders]="reversedOrders"
-                                               summaryText="Total pedidos a enviar:"
-                                               [showButton]="true"
-                                               (actionButton1)="completeOrder($event)"
-                                               textButton="Pedido Enviado"
-                                               ></app-send-pending-item>
-                    </div>
-                    <ng-template #noPendingOrders>
-                      <div class="text-center">
-                        <h2>Felcidades</h2>
-                        <p>No hay pedidos pendientes por enviar o ventas sin registrar</p>
-                      </div>
-                    </ng-template>
-                </div>
-            </div>
-
+<div class="mx-4 inter">
+  <div class="row">
+    <div class="col-lg-10">
+      <div class="text-left">
+        <h2 class="inter bold">Pendientes de env&iacute;o</h2>
+        <p class="mb-0">
+          Revisar que los pedidos tengan todo antes de ser enviados
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="class row d-flex my-3">
+    <div class="form-group col-lg-4 col-md-7 col-sm-6 mb-1">
+      <label class="inter demi" for="client"
+        >Selecciona el cliente ya registrado:</label
+      >
+      <input
+        list="client"
+        [(ngModel)]="historicClient"
+        class="form-control"
+        placeholder="Haz click aquí para seleccionar"
+      />
+      <datalist id="client">
+        <option
+          class="list-group-item list-group-item-action"
+          *ngFor="let client of historic"
+        >
+          {{ client.username }}
+        </option>
+      </datalist>
+    </div>
+    <div class="col-lg-3 col-md-5 col-sm-6 align-self-end mb-1">
+      <button
+        type="button"
+        class="btn btn-qc-primary w-100"
+        (click)="registerHistoricClient()"
+        [disabled]="historicClient === ''"
+      >
+        Registrar direccion
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div
+        class="career-search mb-60"
+        *ngIf="showSends && reversedOrders.length > 0; else noPendingOrders"
+      >
+      <p class="mb-30 inter demi">Total de pedidos a enviar: <b>{{ reversedOrders.length }}</b></p>
+      <div class="d-flex" style="flex-flow: wrap;">
+        <app-pending-send-card
+        style="margin: 10px 10px 0px 0px; flex-grow: 1;"
+        *ngFor="let pendingOrder of reversedOrders;"
+        [pendingOrder]="pendingOrder"
+        (sendOperation)="completeOrder($event)" >
+        </app-pending-send-card>
+      </div>
+      </div>
+      <ng-template #noPendingOrders>
+        <div class="text-center">
+          <h2>Felcidades</h2>
+          <p>No hay pedidos pendientes por enviar o ventas sin registrar</p>
         </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

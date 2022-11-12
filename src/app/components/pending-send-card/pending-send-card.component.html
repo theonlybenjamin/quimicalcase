@@ -1,0 +1,140 @@
+<div class="filter-result">
+  <div class="job-box">
+    <div class="job-left my-4 flex-wrap">
+      <div class="job-content">
+        <h5 class="text-md-left inter bold">
+          {{
+            pendingOrder.username ? pendingOrder.username : pendingOrder.email
+          }}
+        </h5>
+        <ul
+          class="flex-wrap text-capitalize"
+          style="flex-direction: column; padding-left: 10px"
+        >
+          <li class="mr-md-4">
+            <i class="mr-2"></i> {{ pendingOrder.courier }}
+          </li>
+          <li
+            class="mr-md-4"
+            style="margin-top: 20px; color: #7431f9; opacity: 1"
+            *ngIf="isPendingHasProducts(pendingOrder); else noProducts"
+          >
+            <span *ngFor="let producto of pendingOrder.products">
+              <div
+                class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex"
+              >
+                <img
+                  alt=""
+                  [src]="
+                    getImageURL(producto.producto, producto.iphoneCode)
+                      | getDownloadURL
+                  "
+                />
+              </div>
+              <p>
+                {{ producto.selectedQuantity }}
+                <b>{{ producto.producto }} </b> de
+                <b>{{ iphoneNameByIdTS(producto.iphoneCode) }}</b>
+              </p>
+            </span>
+          </li>
+          <ng-template #noProducts>
+            <li style="color: red; font-size: 18px; text-align: center">
+              {{ "Venta pendiente de registrar" | uppercase }}
+            </li>
+          </ng-template>
+          <li style="color: black; opacity: 1">
+            <span class="mr-md-4">
+              <b>Fecha:</b>
+              {{
+                pendingOrder.date ? pendingOrder.date : "No hay fecha ingresada"
+              }}
+              <br />
+            </span>
+            <span class="mr-md-4" *ngIf="pendingOrder.documentNumber">
+              <b>DNI:</b> {{ pendingOrder.documentNumber }}
+              <br />
+            </span>
+            <span class="mr-md-4">
+              <b>Telefono:</b>
+              {{
+                pendingOrder.phone
+                  ? pendingOrder.phone
+                  : "No hay telefono ingresado"
+              }}
+              <br />
+            </span>
+            <span class="mr-md-4" *ngIf="pendingOrder.fullname">
+              <b>Nombre:</b> {{ pendingOrder.fullname }}
+              <br />
+            </span>
+            <span class="mr-md-4">
+              <b>Distrito:</b>
+              {{
+                pendingOrder.district
+                  ? pendingOrder.district
+                  : "No hay distrito ingresado"
+              }}
+              <br />
+            </span>
+            <span class="mr-md-4">
+              <b>Direccion:</b>
+              {{
+                pendingOrder.address
+                  ? pendingOrder.address
+                  : "No hay direccion ingresado"
+              }}
+              <br />
+            </span>
+            <span class="mr-md-4">
+              <b>Referencia:</b>
+              {{
+                pendingOrder.reference
+                  ? pendingOrder.reference
+                  : "No hay referencia ingresada"
+              }}
+              <br />
+            </span>
+            <span class="mr-md-4">
+              <b>Agencia:</b>
+              {{
+                pendingOrder.agency
+                  ? pendingOrder.agency
+                  : "No hay agencia ingresada"
+              }}
+              <br />
+            </span>
+            <span class="mr-md-4">
+              <b>Correo:</b>
+              {{
+                pendingOrder.email
+                  ? pendingOrder.email
+                  : "No hay email ingresado"
+              }}
+              <br />
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="job-right my-4 flex-shrink-0 text-center">
+      <button
+        type="button"
+        class="btn d-block w-100 d-sm-inline-block btn-danger"
+        (click)="sendOperationToAction(pendingOrder)"
+        [disabled]="!isPendingHasProducts(pendingOrder)"
+      >
+        Pedido Enviado
+      </button>
+
+      <button
+        type="button"
+        *ngIf="!isPendingHasProducts(pendingOrder)"
+        class="btn d-block w-100 d-sm-inline-block btn-warning my-2"
+        (click)="sendOperationToAction(pendingOrder)"
+      >
+        Cancelar Envio
+      </button>
+    </div>
+  </div>
+</div>

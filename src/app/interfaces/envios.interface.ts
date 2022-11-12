@@ -16,4 +16,5 @@ export interface IPending {
     username: string;
     products: Array<ProductSelled>;
     date?: string;
+    email?: string;
 }

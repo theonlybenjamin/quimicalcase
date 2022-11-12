@@ -1,60 +1,118 @@
-<div class="container">
+<div class="container mx-3">
   <div class="row">
-      <div class="col-lg-10 mx-auto mb-4">
-          <div class="section-title text-center">
-              <h3 class="top-c-sep">Ventas registradas</h3>
-              <p>Aqu&iacute; se puede ver el total de ventas registradas</p>
-          </div>
+    <div class="col-lg-10 mb-4">
+      <div>
+        <h2 class="inter bold">Ventas registradas</h2>
+        <p>Aqu&iacute; se puede ver el total de ventas registradas</p>
       </div>
-      <div class="form-group d-flex" style="justify-content: space-evenly;">
-        <select aria-label="Mes" id="month" name="month" class="form-select" #monthSelect (change)="changeMonth(monthSelect.value)">
-          <option *ngFor="let month of months; let i = index" [value]="i+1" [hidden]="actualMonth<i+1" [selected]="actualMonth === i+1">{{month}}</option> 
-        </select>
-      </div>
+      <select
+        aria-label="Mes"
+        id="month"
+        name="month"
+        class="form-select"
+        #monthSelect
+        (change)="changeMonth(monthSelect.value)"
+      >
+        <option
+          *ngFor="let month of months; let i = index"
+          [value]="i + 1"
+          [hidden]="actualMonth < i + 1"
+          [selected]="actualMonth === i + 1"
+        >
+          {{ month }}
+        </option>
+      </select>
+    </div>
   </div>
   <div class="row">
-      <div class="col-lg-10 mx-auto">
-          <div class="career-search mb-60" *ngIf="showSends">
-              <app-send-pending-item [orders]="reversedOrders"
-                                     summaryText="Total de ventas:"
-                                     [showButton]="true"
-                                     [showButton2]="true"
-                                     textButton="Cancelar pedido"
-                                     textButton2="Editar pedido"
-                                     (actionButton1)="deleteOrder($event)"
-                                     (actionButton2)="editOrderModal($event)"
-                                     [showTotal]="true"></app-send-pending-item>
-          </div>
+    <div class="col-lg-12">
+      <div class="career-search mb-60" *ngIf="showSends">
+        <p class="mb-30 inter demi">
+          Total de pedidos a enviar: <b>{{ reversedOrders.length }}</b>
+        </p>
+        <div class="d-flex" style="flex-flow: wrap">
+          <app-send-pending-item
+            *ngFor="let sale of reversedOrders;"
+            style="margin: 10px 10px 0px 0px; flex-grow: 1;"
+            [order]="sale"
+            summaryText="Total de ventas:"
+            [showButton]="true"
+            [showButton2]="true"
+            textButton="Cancelar pedido"
+            textButton2="Editar pedido"
+            (actionButton1)="deleteOrder($event)"
+            (actionButton2)="editOrderModal($event)"
+            [showTotal]="true"
+          ></app-send-pending-item>
+        </div>
       </div>
+    </div>
   </div>
 </div>
 <ng-template #successModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Cancelar pedido</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p>¿Segura que quieres cancelar el pedido de <b>{{ selectedOrder.cliente }}</b>? </p>
+    <p>
+      ¿Segura que quieres cancelar el pedido de
+      <b>{{ selectedOrder.cliente }}</b
+      >?
+    </p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="confirmDelete()">S&iacute;</button>
-    <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="confirmDelete()"
+    >
+      S&iacute;
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="c('Save click')"
+    >
+      No
+    </button>
   </div>
 </ng-template>
 <ng-template #editModal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Editar pedido</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p>¿Segura que quieres Editar el pedido de <b>{{ selectedOrder.cliente }}</b>? </p>
+    <p>
+      ¿Segura que quieres Editar el pedido de <b>{{ selectedOrder.cliente }}</b
+      >?
+    </p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="editOrder()">S&iacute;</button>
-    <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">No</button>
+    <button type="button" class="btn btn-outline-danger" (click)="editOrder()">
+      S&iacute;
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="c('Save click')"
+    >
+      No
+    </button>
   </div>
 </ng-template>
