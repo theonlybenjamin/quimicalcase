@@ -20,7 +20,7 @@
               <b>{{ producto.iphoneCode }}</b>
             </p>
           </li>
-          <li class="mr-md-4" *ngIf="showTotal">
+          <li class="mr-md-4">
             <span style="color: blue">
               Total: <b>S/.</b> {{ order.total }}</span
             >
@@ -45,19 +45,17 @@
       />
       <button
         type="button"
-        *ngIf="showButton"
         class="btn d-block w-100 d-sm-inline-block btn-danger"
         (click)="emitButton1(order)"
       >
-        {{ textButton }}
+      Cancelar pedido
       </button>
       <button
         type="button"
-        *ngIf="showButton2"
         class="btn d-block w-100 d-sm-inline-block btn-secondary mb-2"
         (click)="emitButton2(order)"
       >
-        {{ textButton2 }}
+      Editar pedido
       </button>
     </div>
   </div>

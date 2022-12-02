@@ -5,6 +5,8 @@ export interface IPendingArray {
 }
 
 export interface IPending {
+    id?: string;
+    total?: string;
     address: string;
     agency: string;
     courier: string;

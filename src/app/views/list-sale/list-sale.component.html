@@ -35,14 +35,8 @@
             *ngFor="let sale of reversedOrders;"
             style="margin: 10px 10px 0px 0px; flex-grow: 1;"
             [order]="sale"
-            summaryText="Total de ventas:"
-            [showButton]="true"
-            [showButton2]="true"
-            textButton="Cancelar pedido"
-            textButton2="Editar pedido"
             (actionButton1)="deleteOrder($event)"
             (actionButton2)="editOrderModal($event)"
-            [showTotal]="true"
           ></app-send-pending-item>
         </div>
       </div>

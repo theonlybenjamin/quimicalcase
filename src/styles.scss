@@ -1,11 +1,5 @@
 /* Importing Bootstrap SCSS file. */
 @import "~bootstrap/scss/bootstrap";
-@font-face {
-  font-family: "sailors-regular";
-  src: url("assets/fonts/Sailors.otf") format("woff"),
-    url("assets/fonts/Sailors.otf") format("opentype"),
-    url("assets/fonts/Sailors.otf") format("truetype");
-}
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;700;800&display=swap");
 
 .inter {

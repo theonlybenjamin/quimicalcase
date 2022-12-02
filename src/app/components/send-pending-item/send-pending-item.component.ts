@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IPending } from 'src/app/interfaces/envios.interface';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Sale } from 'src/app/interfaces/sale';
 import { iphoneNameById, setDashesToName } from 'src/app/utils/utils';
 
@@ -8,14 +7,7 @@ import { iphoneNameById, setDashesToName } from 'src/app/utils/utils';
   templateUrl: './send-pending-item.component.html'
 })
 export class SendPendingItemComponent {
-
-  @Input() summaryText: string = '';
   @Input() order!: Sale;
-  @Input() showButton: boolean = true;
-  @Input() textButton: string = '';
-  @Input() showButton2: boolean = false;
-  @Input() textButton2: string = '';
-  @Input() showTotal: boolean = false;
   @Output() actionButton1 = new EventEmitter<any>();
   @Output() actionButton2 = new EventEmitter<any>();
   constructor(

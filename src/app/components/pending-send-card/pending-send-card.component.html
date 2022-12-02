@@ -4,7 +4,11 @@
       <div class="job-content">
         <h5 class="text-md-left inter bold">
           {{
-            pendingOrder.username ? pendingOrder.username : pendingOrder.email
+            pendingOrder.id
+              ? pendingOrder.id
+              : pendingOrder.email
+              ? pendingOrder.email
+              : pendingOrder.fullname
           }}
         </h5>
         <ul
@@ -46,9 +50,7 @@
           <li style="color: black; opacity: 1">
             <span class="mr-md-4">
               <b>Fecha:</b>
-              {{
-                pendingOrder.date ? pendingOrder.date : "No hay fecha ingresada"
-              }}
+              {{ pendingOrder.date ? pendingOrder.date : "-" }}
               <br />
             </span>
             <span class="mr-md-4" *ngIf="pendingOrder.documentNumber">
@@ -57,11 +59,7 @@
             </span>
             <span class="mr-md-4">
               <b>Telefono:</b>
-              {{
-                pendingOrder.phone
-                  ? pendingOrder.phone
-                  : "No hay telefono ingresado"
-              }}
+              {{ pendingOrder.phone ? pendingOrder.phone : "-" }}
               <br />
             </span>
             <span class="mr-md-4" *ngIf="pendingOrder.fullname">
@@ -70,47 +68,32 @@
             </span>
             <span class="mr-md-4">
               <b>Distrito:</b>
-              {{
-                pendingOrder.district
-                  ? pendingOrder.district
-                  : "No hay distrito ingresado"
-              }}
+              {{ pendingOrder.district ? pendingOrder.district : "-" }}
               <br />
             </span>
             <span class="mr-md-4">
               <b>Direccion:</b>
-              {{
-                pendingOrder.address
-                  ? pendingOrder.address
-                  : "No hay direccion ingresado"
-              }}
+              {{ pendingOrder.address ? pendingOrder.address : "-" }}
               <br />
             </span>
             <span class="mr-md-4">
               <b>Referencia:</b>
-              {{
-                pendingOrder.reference
-                  ? pendingOrder.reference
-                  : "No hay referencia ingresada"
-              }}
+              {{ pendingOrder.reference ? pendingOrder.reference : "-" }}
               <br />
             </span>
             <span class="mr-md-4">
               <b>Agencia:</b>
-              {{
-                pendingOrder.agency
-                  ? pendingOrder.agency
-                  : "No hay agencia ingresada"
-              }}
+              {{ pendingOrder.agency ? pendingOrder.agency : "-" }}
               <br />
             </span>
             <span class="mr-md-4">
               <b>Correo:</b>
-              {{
-                pendingOrder.email
-                  ? pendingOrder.email
-                  : "No hay email ingresado"
-              }}
+              {{ pendingOrder.email ? pendingOrder.email : "-" }}
+              <br />
+            </span>
+            <span class="mr-md-4">
+              <b>Total:</b>
+              {{ pendingOrder.total ? pendingOrder.total : "-" }}
               <br />
             </span>
           </li>
