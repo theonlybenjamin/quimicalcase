@@ -27,6 +27,7 @@ import { NoWhiteSpacesDirective } from './directives/no-white-spaces.directive';
 import { LowercaseDirective } from './directives/lowercase.directive';
 import { PaymentImagePipe } from './pipes/payment-image.pipe';
 import { PendingSendCardComponent } from './components/pending-send-card/pending-send-card.component';
+import { ModalComponent } from './components/modal/modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +45,8 @@ import { PendingSendCardComponent } from './components/pending-send-card/pending
     NoWhiteSpacesDirective,
     LowercaseDirective,
     PaymentImagePipe,
-    PendingSendCardComponent
+    PendingSendCardComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

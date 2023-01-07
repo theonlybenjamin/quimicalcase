@@ -59,10 +59,10 @@ export class NewSaleComponent {
     const messageSale = this.messageService.getEditSale();
     this.saleForm = new FormGroup({
       client: new FormControl(messageSale?.cliente || null, Validators.required),
-      sell_type: new FormControl(messageSale?.tipo_entrega || 'delivery', Validators.required),
+      sell_type: new FormControl(messageSale?.tipo_entrega || 'presencial', Validators.required),
       sale_channel: new FormControl(messageSale?.canal_venta || null, Validators.required),
       summary: new FormControl(messageSale?.total || null, Validators.required),
-      payment_type: new FormControl(messageSale?.payment_type || null, Validators.required),
+      payment_type: new FormControl(messageSale?.payment_type || 'yape', Validators.required),
       products: new FormArray([
         new FormGroup({
           iphoneCode: new FormControl(null, Validators.required),
@@ -80,6 +80,10 @@ export class NewSaleComponent {
 
   get array() {
     return this.products.controls;
+  }
+
+  get isDeliverySellType() {
+    return this.saleForm.controls['sell_type'].value === 'delivery'
   }
 
   getArrayFormGroup(i: number) {
@@ -123,23 +127,12 @@ export class NewSaleComponent {
     this.loaderService.showLoader();
     from(this.array).pipe(
       concatMap(x => {
-        /**
-         * @this.@cases traera todo el array de modelos (estos tienen de todos los codigos que fueron llamados)
-         * es un arrays de arrays
-         *
-         * @codeIndex es la propiedad que almacena el index del codigo en cuestion
-         * @modelIndex es la propiedad que almacena el modelo a editar
-         * @finalResult se almacena el nuevo resultado del arrya
-         */
         const codeIndex = this.cases.findIndex(y => y[y.length - 1] === x.value.iphoneCode);
         const modelIndex = this.cases[codeIndex].findIndex(z => z.producto === x.value.producto);
         const price = this.cases[codeIndex][modelIndex].precio;
         var finalResult: Stock = {} as Stock;
         this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
-        /**
-         * Si la cantidad actual del producto es 0, se agrega al modal que muestra los cases a eliminar
-         * y se eliminar del array
-         */
+
         if (this.cases[codeIndex][modelIndex].cant === 0) {
           this.deleteFromDrive.push(x.value);
           this.cases[codeIndex].splice(modelIndex, 1);

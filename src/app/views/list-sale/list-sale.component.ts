@@ -79,7 +79,7 @@ export class ListSaleComponent {
   public editOrder() {
     this.messageService.setEditSale(this.selectedOrder);
     this.confirmDelete();
-    this.enviosService.historicToPending(this.selectedOrder.cliente).
+    this.enviosService.historicToPending(this.selectedOrder.cliente || '').
     pipe(
       finalize(() => this.router.navigate([Routes.NEW_SALE]))
     ).subscribe();

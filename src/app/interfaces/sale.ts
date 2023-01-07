@@ -1,9 +1,9 @@
 export interface Sale {
-    cliente: string;
+    cliente?: string;
     productos: Array<ProductSelled>;
     tipo_entrega: string;
     total: number;
-    canal_venta: string;
+    canal_venta?: string;
     payment_type?: string;
     date?: string;
 }
