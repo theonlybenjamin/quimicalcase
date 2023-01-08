@@ -51,9 +51,9 @@ export class NewSaleComponent {
 
     const messageSale = this.messageService.getEditSale();
     this.saleForm = new FormGroup({
-      client: new FormControl(messageSale?.cliente || null, Validators.required),
-      sell_type: new FormControl(messageSale?.tipo_entrega || 'presencial', Validators.required),
-      sale_channel: new FormControl(messageSale?.canal_venta || null, Validators.required),
+      client: new FormControl(messageSale?.cliente || null),
+      sell_type: new FormControl(messageSale?.tipo_entrega || 'presencial'),
+      sale_channel: new FormControl(messageSale?.canal_venta || null),
       summary: new FormControl(messageSale?.total || null, Validators.required),
       payment_type: new FormControl(messageSale?.payment_type || 'yape', Validators.required),
       products: new FormArray([
