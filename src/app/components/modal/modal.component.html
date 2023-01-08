@@ -1,33 +1,33 @@
-<!-- <ng-template #modal let-c="close" let-d="dismiss">
+<ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+    <h4 class="modal-title">{{ modalContent.title }}</h4>
     <button
       type="button"
-      class="close"
+      class="btn-close"
       aria-label="Close"
-      (click)="d('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
   <div class="modal-body">
-    <p>Hubo un error, solo se actualizaron los siguientes modelos:</p>
-    <div *ngFor="let producto of updatedModels">
-      <span
-        ><b>{{ producto.producto }}</b> del
-        <b>{{ producto.iphoneCode }}</b></span
-      >
-    </div>
-    <p>Enviar captura de esto al administrador de sistemas. chula</p>
-    <p>{{ ERROR }}</p>
+    <div [innerHtml]="modalContent.body"></div>
   </div>
+
   <div class="modal-footer">
     <button
       type="button"
-      class="btn btn-outline-dark"
-      (click)="c('Save click')"
+      *ngIf="modalContent.showButton2"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
     >
-      Entendido
+      {{ modalContent.button2Text }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-qc-primary"
+      (click)="modalContent.button1Action()"
+      (click)="modal.close()"
+    >
+      {{ modalContent.button1Text ? modalContent.button1Text : "Cerrar" }}
     </button>
   </div>
-</ng-template> -->
+</ng-template>

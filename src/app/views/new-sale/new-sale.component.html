@@ -1,67 +1,3 @@
-<ng-template #content let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Stock Actualizado</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="d('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>
-      Por favor, toma nota o eliminar ahorita, debes eliminar del Drive los
-      siguientes cases:
-    </p>
-    <div *ngFor="let producto of deleteFromDrive">
-      <span
-        ><b>{{ producto.producto }}</b> del
-        <b>{{ producto.iphoneCode }}</b></span
-      >
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="goPending()">
-      Entendido
-    </button>
-  </div>
-</ng-template>
-<ng-template #errorModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Error actualizando</h4>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="d('Cross click')"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p>Hubo un error, solo se actualizaron los siguientes modelos:</p>
-    <div *ngFor="let producto of updatedModels">
-      <span
-        ><b>{{ producto.producto }}</b> del
-        <b>{{ producto.iphoneCode }}</b></span
-      >
-    </div>
-    <p>Enviar captura de esto al administrador de sistemas. chula</p>
-    <p>{{ ERROR }}</p>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-dark"
-      (click)="c('Save click')"
-    >
-      Entendido
-    </button>
-  </div>
-</ng-template>
-
 <section class="mx-4">
   <div class="section-title">
     <h2 class="inter bold">Nueva venta</h2>
@@ -82,7 +18,7 @@
       <label for="client">Nombre de usuario en instagram</label>
       <select class="form-select" formControlName="client" id="client">
         <option selected>Selecciona el cliente</option>
-        <option [value]="user" *ngFor="let user of notRegisteredSales">
+        <option [value]="user" *ngFor="let user of notRegisteredSalesToSelect">
           {{ user }}
         </option>
       </select>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
-import { map, take, concatMap } from 'rxjs/operators';
+import { map, take, concatMap, finalize } from 'rxjs/operators';
 import { Collections } from '../config/collections';
 import { ProductSelled } from '../interfaces/sale';
 import { Stock, IPhone } from '../interfaces/stock';
@@ -31,7 +31,7 @@ export class StockService {
   /**
    * Metodo para obtener el arreglo de stock de un producto determinado
    * @param collection - producto del cual queremos stock
-   * @returns observable 
+   * @returns observable
    */
   public getStockSpecificDocumentAlone(collection: string): Observable<Stock> {
     return this.afs.collection<Stock>(Collections.STOCK).doc(collection).valueChanges() as Observable<Stock>;
@@ -41,7 +41,7 @@ export class StockService {
    * Metodo setear un nuevo producto
    * @param document - producto del cual queremos stock
    * @param array - producto del cual queremos stock
-   * @returns observable 
+   * @returns observable
    */
   public addNewProduct(document: string, array: Stock): Observable<any> {
     return from(this.afs.collection(Collections.STOCK).doc(document).set(array)).pipe(
@@ -78,6 +78,7 @@ export class StockService {
    * @returns retorna observable con los codigos de productos
    */
   public getStockAllDocumentsName(): Observable<IPhone[]> {
+    this.loaderService.showLoader();
     return this.afs.collection(Collections.STOCK).get().pipe(
       take(1),
       map((x) => {
@@ -87,13 +88,14 @@ export class StockService {
           a.push(objectTemp)
         });
         return a;
-      })
+      }),
+      finalize(() => this.loaderService.hideLoader())
     );
   }
 
   /**
    * Metodo para obtener todos el stock de productos
-   * @returns 
+   * @returns
    */
   public getAllProductNames(): Observable<any> {
     return this.afs.collection(Collections.STOCK).valueChanges({ idField: 'docId' });
@@ -101,9 +103,9 @@ export class StockService {
 
   /**
    * Metodo para actualizar productos de una venta
-   * @param document 
-   * @param data 
-   * @returns 
+   * @param document
+   * @param data
+   * @returns
    */
   public updateSotckAfterSale(document: string, data: Stock): Observable<any> {
     return from(this.afs.collection(Collections.STOCK).doc(document).update(data));

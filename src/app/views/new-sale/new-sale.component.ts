@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +13,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { SalesService } from 'src/app/services/sales.service';
 import { StockService } from 'src/app/services/stock.service';
 import { MessageService } from 'src/app/services/message.service';
+import { ModalInterface } from 'src/app/interfaces/modal.interface';
 
 @Component({
   selector: 'app-new-sale',
@@ -24,15 +25,10 @@ export class NewSaleComponent {
   public codes: IPhone[] = [];
   public cases: Array<Array<Product>> = [];
   public saleForm: FormGroup;
-  public cantToSell = [0];
-  public showSelects = false;
-  public deleteFromDrive: Product[] = [];
   public updatedModels: ProductSelled[] = [];
-  @ViewChild('content') modal: ElementRef | undefined;
-  @ViewChild('errroModal') errorModal: ElementRef | undefined;
-  public ERROR: any;
   public newSale: Sale = {} as Sale;
-  public notRegisteredSales: Array<string> = [];
+  public notRegisteredSalesToSelect: Array<string> = [];
+
   constructor(
     public firebaseService: StockService,
     private salesService: SalesService,
@@ -42,16 +38,13 @@ export class NewSaleComponent {
     private envios: EnviosDocService,
     private messageService: MessageService
   ) {
-    this.loaderService.showLoader();
     this.firebaseService.getStockAllDocumentsName().subscribe(x => {
       this.codes = x;
-      this.loaderService.hideLoader();
     });
     this.envios.getPending().subscribe(x => {
       x.data.forEach(x => {
-        console.log(x);
         if (x.products === null || x.products?.length === 0) {
-          this.notRegisteredSales.push(x.username);
+          this.notRegisteredSalesToSelect.push(x.username);
         }
       })
     })
@@ -110,12 +103,12 @@ export class NewSaleComponent {
     this.array.pop();
   }
 
-  public openModal() {
-    this.modalService?.open(this.modal, { centered: true });
-  }
-
   public openErrorModal() {
-    this.modalService?.open(this.errorModal, { centered: true });
+    const modal: ModalInterface = {
+      title: 'Ocurrio un Error actualizando el stock',
+      body: 'Enviar captura al administrador'
+    }
+    this.messageService.openModal(modal);
   }
 
   public goPending() {
@@ -134,7 +127,6 @@ export class NewSaleComponent {
         this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
 
         if (this.cases[codeIndex][modelIndex].cant === 0) {
-          this.deleteFromDrive.push(x.value);
           this.cases[codeIndex].splice(modelIndex, 1);
         }
         finalResult.data = this.cases[codeIndex];
@@ -165,7 +157,6 @@ export class NewSaleComponent {
         return this.firebaseService.updateSotckAfterSale(x.value.iphoneCode, finalResult).pipe(
           catchError(error => {
             this.prepareSendPendingData(this.newSale);
-            this.ERROR = error;
             this.openErrorModal();
             this.loaderService.hideLoader();
             return error;
@@ -183,17 +174,18 @@ export class NewSaleComponent {
           this.prepareSendPendingData(this.newSale),
         ]).pipe(
           catchError(error => {
-            this.ERROR = error;
             this.openErrorModal();
             this.loaderService.hideLoader();
             return error;
           }),
           finalize(() => {
-            if (this.deleteFromDrive.length === 0) {
-              this.router.navigate([Routes.SEND_PENDING]);
-            } else {
-              this.openModal();
+            const modal: ModalInterface = {
+              title: 'Stock Actualizado',
+              body: '<p>Operacion ejecutada correctamente.</p>',
+              button1Text: 'Entendido',
+              button1Action: this.goPending.bind(this)
             }
+            this.messageService.openModal(modal);
             this.loaderService.hideLoader();
           })
         ).subscribe()
