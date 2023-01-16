@@ -1,19 +1,13 @@
 
 export interface Stock {
-    data: Array<Product>;
+    data: Array<IProduct>;
     docId?: string
 }
 
-export interface Product {
-    producto: string;
-    precio: number;
-    cant: number;
-    iphoneCode?: string;
-}
-
-export interface ProductForm {
-    model: string;
-    precio: number;
+export interface IProduct {
+    name: string;
+    sell_price: number;
+    buy_price: number;
     cant: number;
     code: string;
 }

@@ -6,7 +6,7 @@ import { forkJoin, from } from 'rxjs';
 import { catchError, concatMap, finalize, toArray } from 'rxjs/operators';
 import { Routes } from 'src/app/config/routes.enum';
 import { Sale } from 'src/app/interfaces/sale';
-import { IPhone, Product, Stock } from 'src/app/interfaces/stock';
+import { IPhone, IProduct, Stock } from 'src/app/interfaces/stock';
 import { ProductSelled } from 'src/app/interfaces/sale';
 import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -23,7 +23,7 @@ import { ModalInterface } from 'src/app/interfaces/modal.interface';
 export class NewSaleComponent {
 
   public codes: IPhone[] = [];
-  public cases: Array<Array<Product>> = [];
+  public cases: Array<Array<IProduct>> = [];
   public saleForm: FormGroup;
   public updatedModels: ProductSelled[] = [];
   public newSale: Sale = {} as Sale;
@@ -87,7 +87,7 @@ export class NewSaleComponent {
     const formGroupValue = this.getArrayFormGroup(index).value;
     this.firebaseService.getProductStock(formGroupValue.iphoneCode).subscribe(x => {
       this.cases[index] = x.data
-      this.cases[index].push(x.docId as unknown as Product);
+      this.cases[index].push(x.docId as unknown as IProduct);
     });
   }
 
@@ -121,8 +121,8 @@ export class NewSaleComponent {
     from(this.array).pipe(
       concatMap(x => {
         const codeIndex = this.cases.findIndex(y => y[y.length - 1] === x.value.iphoneCode);
-        const modelIndex = this.cases[codeIndex].findIndex(z => z.producto === x.value.producto);
-        const price = this.cases[codeIndex][modelIndex].precio;
+        const modelIndex = this.cases[codeIndex].findIndex(z => z.name === x.value.producto);
+        const price = this.cases[codeIndex][modelIndex].buy_price;
         var finalResult: Stock = {} as Stock;
         this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
 
@@ -138,9 +138,10 @@ export class NewSaleComponent {
         }
         var updatedModel: ProductSelled = {
           cant: x.value.cant,
-          producto: x.value.producto,
-          iphoneCode: x.value.iphoneCode,
-          precio: price
+          name: x.value.producto,
+          code: x.value.iphoneCode,
+          sell_price: x.value.sell_price,
+          buy_price: x.value.buyPrice,
         }
         this.updatedModels.push(updatedModel);
         const fecha = new Date();

@@ -13,7 +13,7 @@
   <div class="modal-body">
     <p>Hubo un error agregando el siguiente producto:</p>
     <p *ngFor="let model of modalErrorDetail; let i = index">
-      <b>{{ model.producto }}</b> del <b>{{ model.iphoneCode }}</b>
+      <b>{{ model.name }}</b> del <b>{{ model.code }}</b>
     </p>
     <p>
       Enviar captura de esto al administrador de sistemas. Y NO SALIR DE ESTA
@@ -48,7 +48,7 @@
   </div>
   <div class="modal-body">
     <p *ngFor="let model of modalDetail; let i = index">
-      <b>{{ model.producto }}</b> del <b>{{ model.iphoneCode }}</b>
+      <b>{{ model.name }}</b> del <b>{{ model.code }}</b>
     </p>
   </div>
   <div class="modal-footer">
@@ -67,9 +67,12 @@
     <h2 class="inter bold">Agregar producto</h2>
     <p>Aqu&iacute; puedes agregar los nuevos productos</p>
   </div>
-  <form class="form" [formGroup]="productForm">
+  <form class="form" [formGroup]="IProduct">
     <div class="row mx-1">
-      <div class="col-3 d-flex align-items-center" style="flex-basis: fit-content">
+      <div
+        class="col-3 d-flex align-items-center"
+        style="flex-basis: fit-content"
+      >
         <label for="check">Mismo codigo:</label>
         <input
           class="check"
@@ -103,14 +106,25 @@
         />
       </div>
       <div class="col-3" style="flex-basis: fit-content">
-        <label for="check4">Mismo precio:</label>
+        <label for="check4">Mismo precio de venta:</label>
         <input
           class="check"
           id="check4"
           type="checkbox"
           placeholder="Marcar"
           formControlName="samePrice"
-          (click)="samePrice(!isSamePriceChecked)"
+          (click)="sameSellPrice(!isSamePriceChecked)"
+        />
+      </div>
+      <div class="col-3" style="flex-basis: fit-content">
+        <label for="check4">Mismo precio de compra:</label>
+        <input
+          class="check"
+          id="check4"
+          type="checkbox"
+          placeholder="Marcar"
+          formControlName="samePrice"
+          (click)="sameBuyPrice(!isSameBuyPriceChecked)"
         />
       </div>
     </div>
@@ -130,18 +144,18 @@
         </div>
         <div class="row mx-1">
           <div class="form-group col-12">
-            <label for="model">Modelo</label>
+            <label for="model">Nombre</label>
             <input
               type="text"
               class="form-control"
               id="model"
               appLowercase
-              formControlName="model"
+              formControlName="name"
             />
           </div>
         </div>
         <div class="row mx-1">
-          <div class="form-group col-6">
+          <div class="form-group col-4">
             <label for="cant">Cantidad</label>
             <input
               type="number"
@@ -150,15 +164,26 @@
               formControlName="cant"
             />
           </div>
-          <div class="form-group col-6">
-            <label for="name">Precio</label>
+          <div class="form-group col-4">
+            <label for="name">Precio de venta</label>
             <input
               type="number"
               min="0.0"
               step="0.1"
               class="form-control"
               id="name"
-              formControlName="precio"
+              formControlName="sell_price"
+            />
+          </div>
+          <div class="form-group col-4">
+            <label for="name">Precio de compra</label>
+            <input
+              type="number"
+              min="0.0"
+              step="0.1"
+              class="form-control"
+              id="name"
+              formControlName="buy_price"
             />
           </div>
         </div>
@@ -186,7 +211,7 @@
         type="button"
         class="btn btn-success col my-5"
         (click)="saveFormGroup()"
-        [disabled]="!productForm.valid"
+        [disabled]="!IProduct.valid"
       >
         Añadir productos
       </button>

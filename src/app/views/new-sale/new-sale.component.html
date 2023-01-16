@@ -74,11 +74,11 @@
             <select class="form-select" formControlName="producto" id="case">
               <option selected>Selecciona el modelo</option>
               <option
-                [value]="case.producto"
+                [value]="case.name"
                 *ngFor="let case of cases[i]"
-                [hidden]="case.producto === undefined"
+                [hidden]="case.name === undefined"
               >
-                {{ case.producto }}
+                {{ case.name }}
               </option>
             </select>
           </div>

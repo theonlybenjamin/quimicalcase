@@ -13,9 +13,10 @@ export interface SaleArray {
 }
 
 export interface ProductSelled {
-    producto: string;
-    precio: number;
+    name: string;
+    sell_price: number;
     cant: number;
-    iphoneCode: string;
+    code: string;
     selectedQuantity?: number;
+    buy_price: number;
 }

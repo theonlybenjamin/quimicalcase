@@ -43,11 +43,28 @@ export class StockService {
    * @param array - producto del cual queremos stock
    * @returns observable
    */
-  public addNewProduct(document: string, array: Stock): Observable<any> {
+  public addNewProduct(document: string, array: any): Observable<any> {
     return from(this.afs.collection(Collections.STOCK).doc(document).set(array)).pipe(
       map(x => true)
     );
   }
+
+  // public newBD(document: string) {
+  //   return this.afs.collection(Collections.STOCK).doc(document).valueChanges().pipe(
+  //     concatMap((productArray: any) => {
+  //       console.log('NOW: ',productArray)
+  //       productArray.data.forEach((product: any) => {
+  //         product.name = product.producto;
+  //         product.sell_price = product.precio;
+  //         product.code = document;
+  //         product.buy_price = 16;
+  //         product.description = '';
+  //         delete product.producto;
+  //         delete product.precio;
+  //       });
+  //       return this.addNewProduct(document, productArray);
+  //     }));
+  // }
 
   /**
    * Metodo para resturar un producto de una venta cancelada
@@ -58,17 +75,17 @@ export class StockService {
     var productStock: Stock = {
       data: []
     };
-    return this.getStockSpecificDocumentAlone(product.iphoneCode).pipe(
+    return this.getStockSpecificDocumentAlone(product.code).pipe(
       take(1),
       concatMap(x => {
         productStock = x;
-        var productIndex = productStock.data.findIndex(z => z.producto.toLowerCase() === product.producto.toLowerCase() && z.precio == product.precio);
+        var productIndex = productStock.data.findIndex(z => z.name.toLowerCase() === product.name.toLowerCase() && z.sell_price == product.sell_price);
         if (productIndex !== -1) {
           productStock.data[productIndex].cant += product.cant;
         } else {
           productStock.data.push(product);
         }
-        return this.addNewProduct(product.iphoneCode, productStock);
+        return this.addNewProduct(product.code, productStock);
       })
     );
   }

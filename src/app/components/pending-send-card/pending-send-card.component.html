@@ -30,15 +30,15 @@
                 <img
                   alt=""
                   [src]="
-                    getImageURL(producto.producto, producto.iphoneCode)
+                    getImageURL(producto.name, producto.code)
                       | getDownloadURL
                   "
                 />
               </div>
               <p>
                 {{ producto.selectedQuantity }}
-                <b>{{ producto.producto }} </b> de
-                <b>{{ iphoneNameByIdTS(producto.iphoneCode) }}</b>
+                <b>{{ producto.name }} </b> de
+                <b>{{ iphoneNameByIdTS(producto.code) }}</b>
               </p>
             </span>
           </li>

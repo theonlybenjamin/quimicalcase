@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable, Subscription } from 'rxjs';
 import { catchError, concatMap, finalize, take, toArray } from 'rxjs/operators';
-import { IPhone, Stock, Product, ProductForm } from 'src/app/interfaces/stock';
+import { IPhone, Stock, IProduct } from 'src/app/interfaces/stock';
 import { LoaderService } from 'src/app/services/loader.service';
 import { StockService } from 'src/app/services/stock.service';
 import { iphoneNameById } from 'src/app/utils/utils';
@@ -17,13 +17,13 @@ import { iphoneNameById } from 'src/app/utils/utils';
 export class AddProductComponent {
 
   public codes: IPhone[] = [];
-  public cases: Array<Array<Product>> = [];
-  public productForm: FormGroup;
+  public cases: Array<Array<IProduct>> = [];
+  public IProduct: FormGroup;
   public cantToSell = [0];
   public showSelects = false;
   public ERROR: any;
-  public modalDetail: Array<Product> = [];
-  public modalErrorDetail: Array<Product> = [];
+  public modalDetail: Array<IProduct> = [];
+  public modalErrorDetail: Array<IProduct> = [];
   public dataBackUp: any;
   public uploadPercent: any = 0;
   public isSameModelChecked: boolean = false;
@@ -37,6 +37,8 @@ export class AddProductComponent {
   public cantSubscription: Subscription = new Subscription();
   public isSamePriceChecked: boolean = false;
   public isSamePriceSubs: boolean = false;
+  public isSameBuyPriceChecked: boolean = false;
+  public isSameBuyPriceSubs: boolean = false;
   public priceSubscription: Subscription = new Subscription();
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   @ViewChild('successModal') successModal: ElementRef | undefined;
@@ -48,13 +50,14 @@ export class AddProductComponent {
     private loaderService: LoaderService
     ) {
     this.firebaseService.getStockAllDocumentsName().subscribe(x => this.codes = x);
-    this.productForm = new FormGroup({
+    this.IProduct = new FormGroup({
       products: new FormArray([
         new FormGroup({
           code: new FormControl(null, Validators.required),
-          model: new FormControl(null, Validators.required),
+          name: new FormControl(null, Validators.required),
           cant: new FormControl(null, Validators.required),
-          precio: new FormControl(null, Validators.required)
+          sell_price: new FormControl(null, Validators.required),
+          buy_price: new FormControl(null, Validators.required)
         })
       ]),
       sameCode: new FormControl(null),
@@ -112,16 +115,16 @@ export class AddProductComponent {
       }
   }
 
-  public samePrice(state: boolean){
-    this.isSamePriceChecked = state;
-      if (this.isSamePriceChecked && !this.isSamePriceSubs){
+  public sameBuyPrice(state: boolean){
+    this.isSameBuyPriceChecked = state;
+      if (this.isSameBuyPriceChecked && !this.isSamePriceSubs){
         this.priceSubscription.add(
-          this.array[0].get('precio')?.valueChanges.subscribe(z => {
+          this.array[0].get('buy_price')?.valueChanges.subscribe(z => {
             this.isSamePriceSubs = true
-            if ((z !== null || undefined) && this.isSamePriceChecked) {
+            if ((z !== null || undefined) && this.isSameBuyPriceChecked) {
               for (let i = 1; i <this.array.length; i++) {
-                this.array[i].get('precio')?.setValue(z);
-                this.array[i].get('precio')?.disable();
+                this.array[i].get('buy_price')?.setValue(z);
+                this.array[i].get('buy_price')?.disable();
               }
             }
           })
@@ -131,7 +134,31 @@ export class AddProductComponent {
         this.priceSubscription = new Subscription();
         this.isSameModelSubs = false;
         for (let i = 1; i <this.array.length; i++) {
-          this.array[i].get('precio')?.enable();
+          this.array[i].get('buy_price')?.enable();
+        }
+      }
+  }
+
+  public sameSellPrice(state: boolean){
+    this.isSamePriceChecked = state;
+      if (this.isSamePriceChecked && !this.isSamePriceSubs){
+        this.priceSubscription.add(
+          this.array[0].get('sell_price')?.valueChanges.subscribe(z => {
+            this.isSamePriceSubs = true
+            if ((z !== null || undefined) && this.isSamePriceChecked) {
+              for (let i = 1; i <this.array.length; i++) {
+                this.array[i].get('sell_price')?.setValue(z);
+                this.array[i].get('sell_price')?.disable();
+              }
+            }
+          })
+        );
+      } else {
+        this.priceSubscription.unsubscribe();
+        this.priceSubscription = new Subscription();
+        this.isSameModelSubs = false;
+        for (let i = 1; i <this.array.length; i++) {
+          this.array[i].get('sell_price')?.enable();
         }
       }
   }
@@ -140,12 +167,12 @@ export class AddProductComponent {
     this.isSameModelChecked = state;
       if (this.isSameModelChecked && !this.isSameModelSubs){
         this.modelSubscription.add(
-          this.array[0].get('model')?.valueChanges.subscribe(z => {
+          this.array[0].get('name')?.valueChanges.subscribe(z => {
             this.isSameModelSubs = true
             if ((z !== null || undefined) && this.isSameModelChecked) {
               for (let i = 1; i <this.array.length; i++) {
-                this.array[i].get('model')?.setValue(z.toLowerCase());
-                this.array[i].get('model')?.disable();
+                this.array[i].get('name')?.setValue(z.toLowerCase());
+                this.array[i].get('name')?.disable();
               }
             }
           })
@@ -155,13 +182,13 @@ export class AddProductComponent {
         this.modelSubscription = new Subscription();
         this.isSameModelSubs = false;
         for (let i = 1; i <this.array.length; i++) {
-          this.array[i].get('model')?.enable();
+          this.array[i].get('name')?.enable();
         }
       }
   }
 
   get products() {
-    return this.productForm.get('products') as FormArray;
+    return this.IProduct.get('products') as FormArray;
   }
 
   get array() {
@@ -169,7 +196,7 @@ export class AddProductComponent {
   }
 
   get arrayValues() {
-    return this.products.getRawValue() as Array<ProductForm>;
+    return this.products.getRawValue() as Array<IProduct>;
   }
 
   getArrayFormGroup(i:number) {
@@ -179,9 +206,10 @@ export class AddProductComponent {
   addFormGroup() {
     this.products.push(new FormGroup({
       code: new FormControl(null, Validators.required),
-      model: new FormControl(null, Validators.required),
+      name: new FormControl(null, Validators.required),
       cant: new FormControl(null, Validators.required),
-      precio: new FormControl(null, Validators.required)
+      buy_price: new FormControl(null, Validators.required),
+      sell_price: new FormControl(null, Validators.required)
     }))
     if (this.isSameCodeChecked) {
       this.array[0].get('code')?.setValue(this.array[0].get('code')?.value)
@@ -190,10 +218,13 @@ export class AddProductComponent {
       this.array[0].get('cant')?.setValue(this.array[0].get('cant')?.value)
     }
     if (this.isSameModelChecked) {
-      this.array[0].get('model')?.setValue(this.array[0].get('model')?.value.toLowerCase())
+      this.array[0].get('name')?.setValue(this.array[0].get('name')?.value.toLowerCase())
     }
     if (this.isSamePriceChecked) {
-      this.array[0].get('precio')?.setValue(this.array[0].get('precio')?.value)
+      this.array[0].get('sell_price')?.setValue(this.array[0].get('sell_price')?.value)
+    }
+    if (this.isSameBuyPriceChecked) {
+      this.array[0].get('buy_price')?.setValue(this.array[0].get('buy_price')?.value)
     }
   }
 
@@ -204,15 +235,8 @@ export class AddProductComponent {
   saveFormGroup() {
     this.loaderService.showLoader();
      from(this.arrayValues).pipe(
-       concatMap((x) => {
-        var dataBack: Product;
-        dataBack = {
-          producto: x.model.toLowerCase(),
-          cant: Number(x.cant),
-          precio: x.precio
-        }
-        return this.getProducts(x.code, dataBack);
-       }),toArray(),
+       concatMap((x) => this.getProducts(x)),
+       toArray(),
        finalize(() => {
         this.loaderService.hideLoader();
         this.modalService?.open(this.successModal, {centered: true});
@@ -225,40 +249,40 @@ export class AddProductComponent {
      ).subscribe()
   }
 
-  public getProducts(document: string, dataBack: Product): Observable<Stock> {
+  public getProducts(product: IProduct): Observable<Stock> {
     var array: Stock = {
       data: []
     };
-    return this.firebaseService.getStockSpecificDocumentAlone(document).pipe(
+    return this.firebaseService.getStockSpecificDocumentAlone(product.code).pipe(
       take(1),
       concatMap(x => {
         if (x) {
           array = x;
-          const index = array.data.findIndex(x => x.producto === dataBack.producto);
+          const index = array.data.findIndex(x => x.name === product.name);
           if (index !== -1) {
-            array.data[index].cant += dataBack.cant;
-              if (array.data[index].precio !== dataBack.precio) {
-                array.data[index].precio = Number(((array.data[index].precio + dataBack.precio) /2).toFixed(1));
+            array.data[index].cant += product.cant;
+              if (array.data[index].sell_price !== product.sell_price) {
+                array.data[index].sell_price = Number(((array.data[index].sell_price + product.sell_price) /2).toFixed(1));
               }
           } else {
-            array.data.push(dataBack);
+            array.data.push(product);
           }
-          return this.sendNewProduct(document, dataBack, array);
+          return this.sendNewProduct(product, array);
         }
         return x;
       })
     );
   }
 
-  public sendNewProduct(document:string, dataBack: Product, array: Stock): Observable<any> {
-    return this.firebaseService.addNewProduct(document, array).pipe(
+  public sendNewProduct(product: IProduct, array: Stock): Observable<any> {
+    return this.firebaseService.addNewProduct(product.code, array).pipe(
       finalize(() => {
-        dataBack.iphoneCode = iphoneNameById(document);
-        this.modalDetail.push(dataBack);
+        product.code = iphoneNameById(product.code);
+        this.modalDetail.push(product);
       }),
       catchError((error) => {
         this.ERROR = error;
-        this.modalErrorDetail.push(dataBack);
+        this.modalErrorDetail.push(product);
         this.dataBackUp = array;
         return error;
       })

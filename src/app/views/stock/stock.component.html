@@ -41,23 +41,23 @@
 
                         <div class="filter-result">
                             <p class="mb-30 ff-montserrat">Total de productos: <b>{{ products.length }}</b></p>
-                        
+
                             <div class="job-box d-md-flex align-items-center justify-content-between mb-30" *ngFor="let product of products; let i = index" >
                                 <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
                                     <div class="img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex">
-                                        <img alt="" [src]="getImageURL(product.producto, product.iphoneCode) | getDownloadURL">
+                                        <img alt="" [src]="getImageURL(product.name, product.code) | getDownloadURL">
                                     </div>
                                     <div class="job-content">
-                                        <h5 class="text-md-left">{{ product.producto | titlecase }}</h5>
+                                        <h5 class="text-md-left">{{ product.name | titlecase }}</h5>
                                         <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans" style="flex-direction: row">
                                             <li class="mr-md-4">
-                                                <b class="mr-2">Precio: S/.</b> {{ product.precio }}
+                                                <b class="mr-2">Precio: S/.</b> {{ product.sell_price }}
                                             </li>
                                             <li class="mr-md-4">
                                                 <p> <b>Cantidad: </b><b>{{ product.cant }}</b></p>
                                             </li>
                                             <li class="mr-md-4">
-                                                <p><b>{{ iphoneNameById(product.iphoneCode) }}</b></p>
+                                                <p><b>{{ iphoneNameById(product.code) }}</b></p>
                                             </li>
                                         </ul>
                                     </div>
@@ -66,7 +66,7 @@
                                     <button type="button" class="btn d-block w-100 d-sm-inline-block btn-danger">Pedido Enviado</button>
                                 </div> -->
                             </div>
-                        
+
                         </div>
                     </div>
                 </div>

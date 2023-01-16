@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { StockCollections } from 'src/app/enums/stock-collections.enum';
 import { ProductSelled } from 'src/app/interfaces/sale';
 import { Stock } from 'src/app/interfaces/stock';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -9,8 +10,8 @@ import { idByIphoneName, iphoneNameById, setDashesToName } from '../../utils/uti
   selector: 'app-stock',
   templateUrl: './stock.component.html'
 })
-export class StockComponent implements OnInit {
-  
+export class StockComponent {
+
   public products: Array<ProductSelled> = [];
   public productBackup: Array<ProductSelled> = [];
   public IPhoneProducts = [
@@ -52,9 +53,10 @@ export class StockComponent implements OnInit {
             if (iphoneCode) {
               var stockWithCode: ProductSelled = {
                 cant: x[i].data[j].cant,
-                producto: x[i].data[j].producto,
-                precio: x[i].data[j].precio,
-                iphoneCode: iphoneCode
+                name: x[i].data[j].name,
+                sell_price: x[i].data[j].sell_price,
+                code: iphoneCode,
+                buy_price: x[i].data[j].buy_price
               }
               result.push(stockWithCode);
             }
@@ -68,10 +70,8 @@ export class StockComponent implements OnInit {
       result = [];
       this.loaderService.hideLoader();
       this.searchByCode({ value: 'IPhone 11'})
-    })
-  }
-
-  ngOnInit(): void {
+    });
+    // this.fireService.newBD(StockCollections.IPhone14ProMax).subscribe();
   }
 
   public iphoneNameById (id: string) {
@@ -81,11 +81,11 @@ export class StockComponent implements OnInit {
     var result: string[] = [];
     for (let i = 0; i < this.productBackup.length; i++){
       if (this.codeValue) {
-        if (this.codeValue === this.productBackup[i].iphoneCode) {
-          result.push(this.productBackup[i].producto);
+        if (this.codeValue === this.productBackup[i].code) {
+          result.push(this.productBackup[i].name);
         }
       } else {
-        result.push(this.productBackup[i].producto);
+        result.push(this.productBackup[i].name);
       }
     }
     return result;
@@ -95,18 +95,19 @@ export class StockComponent implements OnInit {
     var id = idByIphoneName(code.value);
     this.codeValue = id;
     this.getCaseModel();
-    var filter = this.productBackup.filter(x => x.iphoneCode === id);
+    var filter = this.productBackup.filter(x => x.code === id);
     if (code.value === 'reset') {
       this.products = this.productBackup;
       this.codeValue = '';
       this.getCaseModel();
     } else {
       this.products = filter;
+      console.log(this.products);
     }
   }
 
   public searchByModel(model: any) {
-    var filter = this.productBackup.filter(x => x.producto === model.value);
+    var filter = this.productBackup.filter(x => x.name === model.value);
     if (model.value === 'reset') {
       this.products = this.productBackup;
     } else {

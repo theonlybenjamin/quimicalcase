@@ -47,6 +47,7 @@ export class ListSaleComponent {
     this.getSends(getMonthOnSalesDOC(this.actualMonth));
   }
 
+
   public getSends(doc: string) {
     this.showSends = false;
     this.salesService.getAllSales(doc).subscribe(x => {
@@ -93,10 +94,11 @@ export class ListSaleComponent {
       concatMap(x => {
         var productToRestore: ProductSelled = {
           cant: x.cant,
-          precio: x.precio,
-          producto: x.producto,
-          iphoneCode: x.iphoneCode,
-          selectedQuantity: x.selectedQuantity ? x.selectedQuantity : 0
+          sell_price: x.sell_price,
+          name: x.name,
+          code: x.code,
+          selectedQuantity: x.selectedQuantity ? x.selectedQuantity : 0,
+          buy_price: x.buy_price
         }
         return this.fireService.restoreProduct(productToRestore);
       }),
