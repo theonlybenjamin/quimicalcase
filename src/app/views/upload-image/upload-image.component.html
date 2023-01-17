@@ -6,7 +6,7 @@
     </button>
   </div>
   <div class="modal-body">
-      <p>Nombre: <b>{{model}}</b></p>
+    <p>Nombre: <b>{{productName}}</b></p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="reloadCurrentRoute()">Entendido</button>
@@ -22,43 +22,33 @@
     </div>
   </section>
   <section>
-    <label for="sell_type">Tipo de producto</label>
-    <select class="form-select"
-                  [(ngModel)]="productType"
-                  id="sell_type">
-              <option selected>Selecciona el tipo de producto:</option>
-              <option value="IPH11">IPhone</option>
-              <option value="AIR">Airpods</option>
-              <option value="AIRP">Airpods Pro</option>
-              <option value="CABLE">Cable</option>
-              <option value="YAYA">Yaya</option>
-              <option value="CAMARA">Camara</option>
-              <option value="MICA">Mica</option>
-              <option value="WATCH">Watch</option>
-              <option value="POPSOCKET">Popsocket</option>
-          </select>
     <div class="row mx-1">
-      <div class="form-group col-12">
-        <label for="model">Modelo</label>
-        <input type="text"
-               class="form-control"
-               id="model"
-               appNoWhiteSpaces
-               appLowercase
-               [(ngModel)]="model">
+      <div class="form-group col-xl-4 col-md-6 col-sm-12">
+        <label for="code">C&oacute;digo</label>
+        <select class="form-select" id="code" (change)="listProductsName($event)">
+          <option selected>Selecciona el codigo</option>
+          <option [value]="iphone.id" *ngFor="let iphone of codes">
+            {{ iphone.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-xl-4 col-md-6 col-sm-12">
+        <label for="code">Modelo</label>
+        <select class="form-select" id="code" [disabled]="productType === ''" (change)="verifyIfAlreadyHasPhoto($event)">
+          <option selected>Selecciona el modelo</option>
+          <option [value]="productName.name" *ngFor="let productName of productsName">
+            {{ productName.name }}
+          </option>
+        </select>
+        <small style="color: green" *ngIf="productHasImage">Este Producto tiene foto, si subes una foto, estar&aacute;s remplazando la existente</small>
+        <small style="color: firebrick" *ngIf="!productHasImage && productName !== ''">Este Producto NO tiene foto</small>
+      </div>
+      <div class="form-group col-xl-4 col-md-12 col-sm-12">
+        <label for="file">Choose File %: {{uploadPercent}}</label>
+        <input type="file" id="file" accept=".jpg" class="form-control" [disabled]="productName === '' || productType === ''"
+          (change)="uploadFile($event.target)">
       </div>
     </div>
-    <div class="row mx-1">
-        <div class="form-group col-12">
-          <label for="file">Choose File %: {{uploadPercent}}</label>
-          <input type="file"
-                 id="file"
-                 accept=".jpg" 
-                 class="form-control"
-                 [disabled]="model === '' || productType === ''"
-                 (change)="uploadFile($event.target)">
-        </div>
-      </div>
   </section>
-  <img [src]="gaa" alt="">
+  <img [src]="imagePreview" alt="">
 </section>

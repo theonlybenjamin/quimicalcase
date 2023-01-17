@@ -134,6 +134,10 @@ export function codeForStorage(code: string){
     case StockCollections.IPhone13Pro: return StorageUrl.IPHONE;
     case StockCollections.IPhone13ProMax: return StorageUrl.IPHONE;
     case StockCollections.IPhone13Mini: return StorageUrl.IPHONE;
+    case StockCollections.IPhone14: return StorageUrl.IPHONE;
+    case StockCollections.IPhone14Pro: return StorageUrl.IPHONE;
+    case StockCollections.IPhone14ProMax: return StorageUrl.IPHONE;
+    case StockCollections.IPhone14Max: return StorageUrl.IPHONE;
     case StockCollections.IPhoneSE: return StorageUrl.IPHONE;
     case StockCollections.IPhone8plus: return StorageUrl.IPHONE;
     case StockCollections.AirpodsPro: return StorageUrl.AIRPODSPRO;
@@ -143,8 +147,6 @@ export function codeForStorage(code: string){
     case StockCollections.Camara: return StorageUrl.CAMARA;
     case StockCollections.Watch: return StorageUrl.WATCH;
     case StockCollections.Popsocket: return StorageUrl.POPSOCKET;
-    case StockCollections.Preventa: return StorageUrl.IPHONE;
-    case StockCollections.Yaya: return StorageUrl.YAYA;
     default: return code;
   }
 }

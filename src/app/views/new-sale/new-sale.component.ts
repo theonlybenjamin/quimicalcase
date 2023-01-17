@@ -6,7 +6,7 @@ import { forkJoin, from } from 'rxjs';
 import { catchError, concatMap, finalize, toArray } from 'rxjs/operators';
 import { Routes } from 'src/app/config/routes.enum';
 import { Sale } from 'src/app/interfaces/sale';
-import { IPhone, IProduct, Stock } from 'src/app/interfaces/stock';
+import { IFirebaseDocument, IProduct, Stock } from 'src/app/interfaces/stock';
 import { ProductSelled } from 'src/app/interfaces/sale';
 import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -22,7 +22,7 @@ import { ModalInterface } from 'src/app/interfaces/modal.interface';
 })
 export class NewSaleComponent {
 
-  public codes: IPhone[] = [];
+  public codes: IFirebaseDocument[] = [];
   public cases: Array<Array<IProduct>> = [];
   public saleForm: FormGroup;
   public updatedModels: ProductSelled[] = [];

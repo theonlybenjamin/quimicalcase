@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { from, Observable, Subscription } from 'rxjs';
 import { catchError, concatMap, finalize, take, toArray } from 'rxjs/operators';
-import { IPhone, Stock, IProduct } from 'src/app/interfaces/stock';
+import { IFirebaseDocument, Stock, IProduct } from 'src/app/interfaces/stock';
 import { LoaderService } from 'src/app/services/loader.service';
 import { StockService } from 'src/app/services/stock.service';
 import { iphoneNameById } from 'src/app/utils/utils';
@@ -16,7 +16,7 @@ import { iphoneNameById } from 'src/app/utils/utils';
 })
 export class AddProductComponent {
 
-  public codes: IPhone[] = [];
+  public codes: IFirebaseDocument[] = [];
   public cases: Array<Array<IProduct>> = [];
   public IProduct: FormGroup;
   public cantToSell = [0];

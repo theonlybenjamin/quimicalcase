@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, from } from 'rxjs';
-import { map, take, concatMap, finalize } from 'rxjs/operators';
+import { Observable, from, of } from 'rxjs';
+import { map, take, concatMap, finalize, catchError, tap } from 'rxjs/operators';
 import { Collections } from '../config/collections';
 import { ProductSelled } from '../interfaces/sale';
-import { Stock, IPhone } from '../interfaces/stock';
+import { Stock, IFirebaseDocument } from '../interfaces/stock';
 import { iphoneNameById } from '../utils/utils';
 import { LoaderService } from './loader.service';
 
@@ -25,7 +25,18 @@ export class StockService {
    * @returns observable con el stock pedido + el codigo de iphone
    */
   public getProductStock(collection: string): Observable<Stock> {
-    return this.afs.collection<Stock>(Collections.STOCK).doc(collection).valueChanges({ idField: 'docId' }) as Observable<Stock>;
+    this.loaderService.showLoader();
+
+    return this.afs.collection<Stock>(Collections.STOCK)
+      .doc(collection)
+      .valueChanges({ idField: 'docId' })
+      .pipe(
+        tap(() => this.loaderService.hideLoader()),
+        catchError(error => {
+          this.loaderService.hideLoader()
+          return of(error)
+        })
+      )
   }
 
   /**
@@ -94,12 +105,12 @@ export class StockService {
    * Metodo para obtener solo todos los codigos de los productos
    * @returns retorna observable con los codigos de productos
    */
-  public getStockAllDocumentsName(): Observable<IPhone[]> {
+  public getStockAllDocumentsName(): Observable<IFirebaseDocument[]> {
     this.loaderService.showLoader();
     return this.afs.collection(Collections.STOCK).get().pipe(
       take(1),
       map((x) => {
-        var a: IPhone[] = [];
+        var a: IFirebaseDocument[] = [];
         x.docs.forEach(x => {
           let objectTemp = { id: x.id, name: iphoneNameById(x.id) }
           a.push(objectTemp)

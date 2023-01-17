@@ -12,7 +12,7 @@ export interface IProduct {
     code: string;
 }
 
-export interface IPhone {
+export interface IFirebaseDocument {
     id: string;
     name: string;
 }
