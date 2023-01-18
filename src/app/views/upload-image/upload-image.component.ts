@@ -25,7 +25,8 @@ export class UploadImageComponent implements OnDestroy {
   public subscription = new Subscription();
   public imagePreview: any;
   public productHasImage: boolean = false;
-
+  public fileReader!: FileReader;
+  public newFile!: File;
   constructor(
     private storage: AngularFireStorage,
     private loaderService: LoaderService,
@@ -43,33 +44,36 @@ export class UploadImageComponent implements OnDestroy {
   public uploadFile(file: any) {
     const imageCompressionOptions = { fileType: 'image/jpeg', maxSizeMB: 1.2, useWebWorker: false }
     const fileToUpload = file.files[0] as File;
-    const fileName = this.productName.replace(/\s+/g, '-').toLowerCase();
-    const destinationToUpload = `${codeForStorage(this.productType)}${fileName}.jpg`;
-
     imageCompression(fileToUpload, imageCompressionOptions)
       .then(newFile => {
-        var reader = new FileReader();
-        reader.onload = (e) => {
+        this.newFile = newFile;
+        this.fileReader = new FileReader();
+        this.fileReader.onload = (e) => {
           this.imagePreview = e?.target?.result;
         };
-        reader.readAsDataURL(newFile);
-        const task = this.storage.upload(destinationToUpload, newFile);
-        this.loaderService.showLoader();
-        this.subscription.add(
-          task.percentageChanges()
-            .pipe(
-              map(x => this.uploadPercent = x),
-              finalize(() => {
-                this.loaderService.hideLoader();
-                this.modalService?.open(this.successModal, { centered: true });
-              }),
-              catchError(error => {
-                alert(error);
-                return error;
-              })
-            )
-            .subscribe());
+        this.fileReader.readAsDataURL(this.newFile);
       });
+  }
+
+  public confirmUploadImage() {
+    const fileName = this.productName.replace(/\s+/g, '-').toLowerCase();
+    const destinationToUpload = `${codeForStorage(this.productType)}${fileName}.jpg`;
+    const task = this.storage.upload(destinationToUpload, this.newFile);
+    this.loaderService.showLoader();
+    this.subscription.add(
+      task.percentageChanges()
+        .pipe(
+          map(x => this.uploadPercent = x),
+          finalize(() => {
+            this.loaderService.hideLoader();
+            this.modalService?.open(this.successModal, { centered: true });
+          }),
+          catchError(error => {
+            alert(error);
+            return error;
+          })
+        )
+        .subscribe());
   }
 
   public reloadCurrentRoute() {

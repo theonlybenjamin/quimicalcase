@@ -12,15 +12,12 @@
     <button type="button" class="btn btn-outline-dark" (click)="reloadCurrentRoute()">Entendido</button>
   </div>
 </ng-template>
-<section>
-</section>
-<section>
-  <section>
-    <div class="section-title text-center">
-      <h3 class="top-c-sep">Agregar Imagen</h3>
-      <p>Aqu&iacute; puedes subir las nuevas imagenes de los productos</p>
-    </div>
-  </section>
+
+<section class="mx-4">
+  <div class="section-title">
+    <h2 class="inter bold">Agregar Imagen</h2>
+    <p>Aqu&iacute; puedes subir las nuevas imagenes de los productos</p>
+  </div>
   <section>
     <div class="row mx-1">
       <div class="form-group col-xl-4 col-md-6 col-sm-12">
@@ -34,21 +31,33 @@
       </div>
       <div class="form-group col-xl-4 col-md-6 col-sm-12">
         <label for="code">Modelo</label>
-        <select class="form-select" id="code" [disabled]="productType === ''" (change)="verifyIfAlreadyHasPhoto($event)">
+        <select class="form-select" id="code" [disabled]="productType === ''"
+          (change)="verifyIfAlreadyHasPhoto($event)">
           <option selected>Selecciona el modelo</option>
           <option [value]="productName.name" *ngFor="let productName of productsName">
             {{ productName.name }}
           </option>
         </select>
-        <small style="color: green" *ngIf="productHasImage">Este Producto tiene foto, si subes una foto, estar&aacute;s remplazando la existente</small>
-        <small style="color: firebrick" *ngIf="!productHasImage && productName !== ''">Este Producto NO tiene foto</small>
+        <small style="color: green" *ngIf="productHasImage">Este Producto tiene foto, si subes una foto, estar&aacute;s
+          remplazando la existente</small>
+        <small style="color: firebrick" *ngIf="!productHasImage && productName !== ''">Este Producto NO tiene
+          foto</small>
       </div>
-      <div class="form-group col-xl-4 col-md-12 col-sm-12">
+      <div class="form-group col-xl-4 col-md-12 col-sm-12 my-3">
         <label for="file">Choose File %: {{uploadPercent}}</label>
-        <input type="file" id="file" accept=".jpg" class="form-control" [disabled]="productName === '' || productType === ''"
-          (change)="uploadFile($event.target)">
+        <input type="file" id="file" accept=".jpg" class="form-control"
+          [disabled]="productName === '' || productType === ''" (change)="uploadFile($event.target)">
+        <small *ngIf="productHasImage">Verifica que la imagen se vea correctamente</small>
+      </div>
+      <div class="form-group my-3 col-12 text-center">
+        <button type="button" style="width: 60%" [disabled]="newFile === undefined" (click)="confirmUploadImage()"
+          class="btn btn-qc-primary">
+          Subir imagen
+        </button>
       </div>
     </div>
   </section>
-  <img [src]="imagePreview" alt="">
+  <div class="text-center">
+    <img [src]="imagePreview" alt="">
+  </div>
 </section>
