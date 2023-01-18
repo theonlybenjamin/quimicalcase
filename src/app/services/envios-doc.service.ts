@@ -50,7 +50,7 @@ export class EnviosDocService {
         array = x;
         const index = array.data.findIndex(y => y.username === newOrder.cliente);
         if (index !== -1) {
-          array.data[index].products = newOrder.productos;
+          array.data[index].products = newOrder.products;
         }
         return x;
       }),
@@ -156,7 +156,6 @@ export class EnviosDocService {
           take(1),
           concatMap(y => {
             const order = y.data.find(y => y.username === username) as IPending;
-            console.log(order)
             return this.deleteOrderOfPendingList(order)
               .pipe(
                 concatMap(() => {

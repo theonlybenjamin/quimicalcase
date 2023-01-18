@@ -15,8 +15,8 @@
             <i class="mr-2"></i> {{ order.tipo_entrega }}
           </li>
           <li class="mr-md-4" style="margin-top: 20px">
-            <p *ngFor="let producto of order.productos; let i = index">
-              {{ producto.cant }} <b>{{ producto.name }} </b> de
+            <p *ngFor="let producto of order.products; let i = index">
+              {{ producto.selectedQuantity }} <b>{{ producto.name }} </b> de
               <b>{{ producto.code }}</b>
             </p>
           </li>

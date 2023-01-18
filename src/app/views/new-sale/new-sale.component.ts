@@ -138,6 +138,7 @@ export class NewSaleComponent {
         }
         var updatedModel: ProductSelled = {
           cant: x.value.cant,
+          selectedQuantity: x.value.cant,
           name: x.value.producto,
           code: x.value.iphoneCode,
           sell_price: x.value.sell_price,
@@ -150,7 +151,7 @@ export class NewSaleComponent {
           cliente: this.saleForm.get('client')?.value,
           tipo_entrega: this.saleForm.get('sell_type')?.value,
           total: this.saleForm.get('summary')?.value,
-          productos: this.updatedModels,
+          products: this.updatedModels,
           canal_venta: this.saleForm.get('sale_channel')?.value,
           payment_type: this.saleForm.get('payment_type')?.value,
           date: fecha.getDate() + '/' + fecha.getMonth()

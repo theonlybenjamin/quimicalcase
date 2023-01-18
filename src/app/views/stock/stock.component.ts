@@ -102,7 +102,6 @@ export class StockComponent {
       this.getCaseModel();
     } else {
       this.products = filter;
-      console.log(this.products);
     }
   }
 

@@ -19,7 +19,6 @@ export class SalesService {
     private loaderService: LoaderService
   ) {
     this.actualMonth = new Date().getMonth() + 1;
-    console.log(this.actualMonth)
   }
 
   /**

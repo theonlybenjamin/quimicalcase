@@ -90,7 +90,7 @@ export class ListSaleComponent {
     this.modalService.dismissAll();
     this.loaderService.showLoader();
     this.salesService.deleteSale(this.selectedOrder, this.selectedMonth ? this.selectedMonth : 0).subscribe();
-    from(this.selectedOrder.productos).pipe(
+    from(this.selectedOrder.products).pipe(
       concatMap(x => {
         var productToRestore: ProductSelled = {
           cant: x.cant,
