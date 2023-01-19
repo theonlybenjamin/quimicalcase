@@ -20,7 +20,7 @@
   </div>
   <section>
     <div class="row mx-1">
-      <div class="form-group col-xl-4 col-md-6 col-sm-12">
+      <div class="form-group col-xl-4 col-md-6 col-sm-12 my-1">
         <label for="code">C&oacute;digo</label>
         <select class="form-select" id="code" (change)="listProductsName($event)">
           <option selected>Selecciona el codigo</option>
@@ -29,7 +29,7 @@
           </option>
         </select>
       </div>
-      <div class="form-group col-xl-4 col-md-6 col-sm-12">
+      <div class="form-group col-xl-4 col-md-6 col-sm-12 my-1">
         <label for="code">Modelo</label>
         <select class="form-select" id="code" [disabled]="productType === ''"
           (change)="verifyIfAlreadyHasPhoto($event)">
@@ -43,7 +43,7 @@
         <small style="color: firebrick" *ngIf="!productHasImage && productName !== ''">Este Producto NO tiene
           foto</small>
       </div>
-      <div class="form-group col-xl-4 col-md-12 col-sm-12 my-3">
+      <div class="form-group col-xl-4 col-md-12 col-sm-12 my-1">
         <label for="file">Choose File %: {{uploadPercent}}</label>
         <input type="file" id="file" accept=".jpg" class="form-control"
           [disabled]="productName === '' || productType === ''" (change)="uploadFile($event.target)">

@@ -3,136 +3,102 @@
     <h2 class="inter bold">Nueva venta</h2>
     <p>Aqu&iacute; puedes agregar una venta</p>
   </div>
-  <form class="form" [formGroup]="saleForm">
-    <div class="form-group">
-      <fieldset>
-        <label for="sell_type">Tipo de venta</label>
-        <select class="form-select" formControlName="sell_type" id="sell_type">
-          <option selected>Selecciona el tipo de venta</option>
-          <option value="delivery">Delivery</option>
-          <option value="presencial">Presencial</option>
+  <form class="form row" [formGroup]="saleForm">
+    <div class="row my-3">
+      <div class="form-group col-xl-2 col-lg-3 col-md-6 col-sm-12">
+        <fieldset>
+          <label for="sell_type">Tipo de venta</label>
+          <select class="form-select" formControlName="sell_type" id="sell_type">
+            <option selected>Selecciona el tipo de venta</option>
+            <option value="delivery">Delivery</option>
+            <option value="presencial">Presencial</option>
+          </select>
+        </fieldset>
+      </div>
+      <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12" *ngIf="isDeliverySellType">
+        <label for="client">Nombre en instagram</label>
+        <select class="form-select" formControlName="client" id="client">
+          <option selected>Selecciona el cliente</option>
+          <option [value]="user" *ngFor="let user of notRegisteredSalesToSelect">
+            {{ user }}
+          </option>
         </select>
-      </fieldset>
+      </div>
+      <div class="form-group col-xl-2 col-lg-3 col-md-6 col-sm-12" *ngIf="isDeliverySellType">
+        <label for="sale_channel">Canal de venta</label>
+        <select class="form-select" formControlName="sale_channel" id="sale_channel">
+          <option selected>Selecciona el canal de venta</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Whatsapp">Whatsapp</option>
+        </select>
+      </div>
+      <div class="form-group col-xl-2 col-lg-3 col-md-6 col-sm-12">
+        <label for="payment_type">Medio de pago</label>
+        <select class="form-select" formControlName="payment_type" id="payment_type">
+          <option selected>Selecciona el medio de pago</option>
+          <option value="yape">Yape</option>
+          <option value="plin">Plin</option>
+          <option value="bcp">BCP</option>
+          <option value="efectivo">Efectivo</option>
+          <option value="interbank">Interbank</option>
+          <option value="scotia">Scotia</option>
+          <option value="izipay">Izipay</option>
+        </select>
+      </div>
     </div>
-    <div class="form-group" *ngIf="isDeliverySellType">
-      <label for="client">Nombre de usuario en instagram</label>
-      <select class="form-select" formControlName="client" id="client">
-        <option selected>Selecciona el cliente</option>
-        <option [value]="user" *ngFor="let user of notRegisteredSalesToSelect">
-          {{ user }}
-        </option>
-      </select>
-    </div>
-    <div class="form-group" *ngIf="isDeliverySellType">
-      <label for="sale_channel">Canal de venta</label>
-      <select
-        class="form-select"
-        formControlName="sale_channel"
-        id="sale_channel"
-      >
-        <option selected>Selecciona el canal de venta</option>
-        <option value="Instagram">Instagram</option>
-        <option value="Whatsapp">Whatsapp</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="payment_type">Medio de pago</label>
-      <select
-        class="form-select"
-        formControlName="payment_type"
-        id="payment_type"
-      >
-        <option selected>Selecciona el medio de pago</option>
-        <option value="yape">Yape</option>
-        <option value="plin">Plin</option>
-        <option value="bcp">BCP</option>
-        <option value="efectivo">Efectivo</option>
-        <option value="interbank">Interbank</option>
-        <option value="scotia">Scotia</option>
-        <option value="izipay">Izipay</option>
-      </select>
-    </div>
-    <div *ngFor="let product of array; let i = index">
-      <div class="select-group" [formGroup]="getArrayFormGroup(i)">
-        <div class="row mx-2">
-          <div class="form-group col-6">
+
+    <div class="row mx-2">
+      <h5 class="inter bold">Productos</h5>
+      <div *ngFor="let product of array; let i = index">
+        <div class="row" [formGroup]="getArrayFormGroup(i)">
+          <div class="form-group col-xl-2 col-lg-3 col-md-5 col-sm-11">
             <label for="iphoneCode">C&oacute;digo</label>
-            <select
-              class="form-select"
-              formControlName="iphoneCode"
-              id="iphoneCode"
-              (change)="searchIphoneCases(i)"
-            >
+            <select class="form-select" formControlName="iphoneCode" id="iphoneCode" (change)="searchIphoneCases(i)">
               <option selected>Selecciona el codigo</option>
               <option [value]="iphone.id" *ngFor="let iphone of codes">
                 {{ iphone.name }}
               </option>
             </select>
           </div>
-          <div class="form-group col-6">
+          <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-8">
             <label for="case">Modelo</label>
             <select class="form-select" formControlName="producto" id="case">
               <option selected>Selecciona el modelo</option>
-              <option
-                [value]="case.name"
-                *ngFor="let case of cases[i]"
-                [hidden]="case.name === undefined"
-              >
+              <option [value]="case.name" *ngFor="let case of cases[i]" [hidden]="case.name === undefined">
                 {{ case.name }}
               </option>
             </select>
           </div>
-        </div>
-        <div class="row mx-1">
-          <div class="form-group col">
+          <div class="form-group col-xl-1 col-lg-1 col-md-2 col-sm-3">
             <label for="cantidad">Cantidad</label>
-            <input
-              type="number"
-              class="form-control"
-              id="cantidad"
-              formControlName="cant"
-            />
+            <input type="number" class="form-control" id="cantidad" formControlName="cant" />
+          </div>
+          <div class="row">
+            <div class="col-xl-5 col-lg-8 col-md-12 col-sm-12">
+              <hr>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="row justify-content-between px-5">
-      <button
-        type="button"
-        class="btn btn-dark col mx-1 my-2"
-        (click)="addFormGroup()"
-      >
-        Agregar
-      </button>
-      <button
-        type="button"
-        class="btn btn-danger col mx-1 my-2"
-        (click)="deleteFormGroup()"
-        [disabled]="array.length < 2"
-      >
-        Eliminar
-      </button>
-    </div>
-    <div class="row">
-      <div class="form-group col">
-        <label for="total">Total S/.</label>
-        <input
-          type="number"
-          min="0.0"
-          step="0.1"
-          class="form-control"
-          id="total"
-          formControlName="summary"
-        />
+      <div class="row">
+        <button type="button" class="btn btn-dark col-xl-2 col-lg-4 col-md-5 col-sm-11 mx-1 my-2" (click)="addFormGroup()">
+          Agregar
+        </button>
+        <button type="button" class="btn btn-danger col-xl-2 col-lg-4 col-md-5 col-sm-11 mx-1 my-2" (click)="deleteFormGroup()"
+          [disabled]="array.length < 2">
+          Eliminar
+        </button>
       </div>
     </div>
-    <div class="row px-5">
-      <button
-        type="button"
-        class="btn btn-success col my-5"
-        (click)="doSale()"
-        [disabled]="!saleForm.valid"
-      >
+
+    <div class="row">
+      <div class="form-group col-xl-4 col-lg-7">
+        <label for="total">Total S/.</label>
+        <input type="number" min="0.0" step="0.1" class="form-control" id="total" formControlName="summary" />
+      </div>
+    </div>
+    <div class="row">
+      <button type="button" class="btn btn-success col-xl-4 col-lg-7 my-5" (click)="doSale()" [disabled]="!saleForm.valid">
         Realizar venta
       </button>
     </div>

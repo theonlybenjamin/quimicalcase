@@ -1,36 +1,11 @@
-.form {
-    padding: 0px 140px;
-    .select-group {
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: 20px;
-    }
-    & .form-group {
-        margin: 20px 0px;
-    }
-}
 @media screen and (min-width: 782px) {
-    .form {
-        padding: 0px 140px;
-    }
     .select-group {
         font-size: 10pt;
-        .select-child{
-            margin: 0px 10px;
-            min-width: 135px;
-        }
     }
 }
 @media screen and (max-width: 781px) {
-    .form {
-        padding: 0px 15px;
-    }
     .select-group {
         font-size: 10pt;
         flex-direction: column;
-        .select-child{
-            margin: 0px 10px;
-            min-width: 135px;
-        }
     }
 }

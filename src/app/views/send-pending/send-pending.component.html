@@ -84,7 +84,7 @@
       <p class="mb-30 inter demi">Total de pedidos a enviar: <b>{{ reversedOrders.length }}</b></p>
       <div class="d-flex" style="flex-flow: wrap;">
         <app-pending-send-card
-        style="margin: 10px 10px 0px 0px; flex-grow: 1;"
+        class="flex-child"
         *ngFor="let pendingOrder of reversedOrders;"
         [pendingOrder]="pendingOrder"
         (sendOperation)="completeOrder($event)" >
