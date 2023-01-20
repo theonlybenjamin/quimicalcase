@@ -1,0 +1,36 @@
+<div class="card_container">
+    <img class="image" [src]="getImageURL(product.name, product.code) | getDownloadURL" alt="">
+    <div class="canvas-container" [ngClass]="{'clicked': clickedClass }">
+        <div class="left-confirm-section">
+            <div class="name-details-section">
+                <h2>{{ product.name | titlecase }}</h2>
+                <ul class="d-flex details-container">
+                    <li>
+                        <p><b>P. Venta: S/.</b> {{ product.sell_price }}</p>
+                    </li>
+                    <li>
+                        <p><b>P. Compra: S/.</b> {{ product.buy_price }}</p>
+                    </li>
+                    <li>
+                        <p> <b>Cantidad: </b><b>{{ product.cant }}</b></p>
+                    </li>
+                    <li>
+                        <p><b>{{ iphoneNameById(product.code) }}</b></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="delete-section" (click)="clickedClass = true">
+                <i class="bx bx-trash"></i>
+            </div>
+        </div>
+        <div class="right-confirm-section">
+            <div class="right-delete-section" (click)="emitRemoveProduct(product)">
+                <i class="bx bx-trash"></i>
+            </div>
+            <div class="details">
+                <p style="margin-bottom: 0px;"><b>¿Estas seguro que deseas eliminar este producto?</b></p>
+                <p>Esta acci&oacute;n es irreversible y se eliminaran todas las existencias.</p>
+            </div>
+        </div>
+    </div>
+</div>

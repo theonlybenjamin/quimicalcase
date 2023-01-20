@@ -31,7 +31,8 @@ export class StockService {
       .doc(collection)
       .valueChanges({ idField: 'docId' })
       .pipe(
-        tap(() => this.loaderService.hideLoader()),
+        tap(x => this.loaderService.hideLoader()),
+        map(x => x),
         catchError(error => {
           this.loaderService.hideLoader()
           return of(error)
@@ -63,7 +64,7 @@ export class StockService {
   // public newBD(document: string) {
   //   return this.afs.collection(Collections.STOCK).doc(document).valueChanges().pipe(
   //     concatMap((productArray: any) => {
-  //       console.log('NOW: ',productArray)
+
   //       productArray.data.forEach((product: any) => {
   //         product.name = product.producto;
   //         product.sell_price = product.precio;
@@ -73,6 +74,7 @@ export class StockService {
   //         delete product.producto;
   //         delete product.precio;
   //       });
+  //       console.log('NOW: ',productArray)
   //       return this.addNewProduct(document, productArray);
   //     }));
   // }
@@ -136,7 +138,10 @@ export class StockService {
    * @returns
    */
   public updateSotckAfterSale(document: string, data: Stock): Observable<any> {
-    return from(this.afs.collection(Collections.STOCK).doc(document).update(data));
+    this.loaderService.showLoader();
+    return from(this.afs.collection(Collections.STOCK).doc(document).update(data)).pipe(
+      finalize(() => this.loaderService.hideLoader())
+    );
   }
 
 

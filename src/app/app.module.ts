@@ -28,6 +28,7 @@ import { LowercaseDirective } from './directives/lowercase.directive';
 import { PaymentImagePipe } from './pipes/payment-image.pipe';
 import { PendingSendCardComponent } from './components/pending-send-card/pending-send-card.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +47,8 @@ import { ModalComponent } from './components/modal/modal.component';
     LowercaseDirective,
     PaymentImagePipe,
     PendingSendCardComponent,
-    ModalComponent
+    ModalComponent,
+    ProductCardComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,121 @@
+.card_container {
+    width: 325px;
+    height: 475px;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 20px 8px #d0d0d0;
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+
+    .image {
+        object-fit: cover;
+        height: 74%;
+    }
+
+    .canvas-container {
+        width: 200%;
+        transition: transform 0.5s;
+        &.clicked {
+            transform: translateX(-50%);
+        }
+        .left-confirm-section {
+            align-items: center;
+            bottom: 0;
+
+            width: 50%;
+            height: 100%;
+            float: left;
+            position: relative;
+
+
+            .name-details-section {
+                padding-top: 20px;
+                padding-left: 20px;
+                float: left;
+                width: 76%;
+
+                .details-container {
+                    flex-flow: wrap;
+                    padding-left: 0 !important;
+
+                    li {
+                        flex-basis: 50%
+                    }
+
+                }
+            }
+
+            .delete-section {
+                width: calc(24% - 2px);
+                height: 100%;
+                float: right;
+                background: #f1f1f1;
+                transition: background 0.5s;
+                border-left: solid thin rgba(0, 0, 0, 0.1);
+                display: flex;
+                place-content: center;
+                place-items: center;
+
+                i {
+                    font-size: 40px;
+                    margin-top: -10px;
+                    color: #254053;
+                    transition: transform 0.5s;
+                }
+            }
+
+
+            h2 {
+                color: #334454;
+                font-size: 1.2rem;
+            }
+
+            p {
+                color: #a1b2bc;
+                font-size: 0.8rem;
+            }
+        }
+
+        .right-confirm-section {
+            width: 50%;
+            height: 100%;
+            width: 50%;
+            background: #FF7888;
+            color: white;
+            overflow: hidden;
+            float: right;
+            .right-delete-section {
+                width: calc(24% - 2px);
+                height: 100%;
+                float: left;
+                background: #D95060;;
+                transition: background 0.5s;
+                border-right: solid thin rgba(0, 0, 0, 0.1);
+                display: flex;
+                place-content: center;
+                place-items: center;
+
+                i {
+                    font-size: 40px;
+                    margin-top: -10px;
+                    color: white;
+                    transition: transform 0.5s;
+                }
+            }
+            .details {
+                padding-top: 17px;
+                padding-left: 20px;
+                float: right;
+                width: 76%;
+                b{
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                }
+                p{
+                    font-size:13px
+                }
+}
+        }
+    }
+}
