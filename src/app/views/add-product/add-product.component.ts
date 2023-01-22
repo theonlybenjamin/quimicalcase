@@ -26,20 +26,30 @@ export class AddProductComponent {
   public modalErrorDetail: Array<IProduct> = [];
   public dataBackUp: any;
   public uploadPercent: any = 0;
+
   public isSameModelChecked: boolean = false;
   public isSameModelSubs: boolean = false;
   public modelSubscription: Subscription = new Subscription();
+  
   public isSameCodeChecked: boolean = false;
   public isSameCodeSubs: boolean = false;
   public codeSubscription: Subscription = new Subscription();
+  
   public isSameCantChecked: boolean = false;
   public isSameCantSubs: boolean = false;
   public cantSubscription: Subscription = new Subscription();
+  
   public isSamePriceChecked: boolean = false;
   public isSamePriceSubs: boolean = false;
+  public priceSubscription: Subscription = new Subscription();
+
   public isSameBuyPriceChecked: boolean = false;
   public isSameBuyPriceSubs: boolean = false;
-  public priceSubscription: Subscription = new Subscription();
+  public buyPriceSubscription: Subscription = new Subscription();
+  
+  public isSameDescriptionChecked: boolean = false;
+  public isSameDescriptionSubs: boolean = false;
+  public descriptionSubscription: Subscription = new Subscription();
   @ViewChild('errroModal') errorModal: ElementRef | undefined;
   @ViewChild('successModal') successModal: ElementRef | undefined;
 
@@ -57,7 +67,8 @@ export class AddProductComponent {
           name: new FormControl(null, Validators.required),
           cant: new FormControl(null, Validators.required),
           sell_price: new FormControl(null, Validators.required),
-          buy_price: new FormControl(null, Validators.required)
+          buy_price: new FormControl(null, Validators.required),
+          description: new FormControl('', Validators.required)
         })
       ]),
       sameCode: new FormControl(null),
@@ -117,10 +128,10 @@ export class AddProductComponent {
 
   public sameBuyPrice(state: boolean){
     this.isSameBuyPriceChecked = state;
-      if (this.isSameBuyPriceChecked && !this.isSamePriceSubs){
-        this.priceSubscription.add(
+      if (this.isSameBuyPriceChecked && !this.isSameBuyPriceSubs){
+        this.buyPriceSubscription.add(
           this.array[0].get('buy_price')?.valueChanges.subscribe(z => {
-            this.isSamePriceSubs = true
+            this.isSameBuyPriceSubs = true
             if ((z !== null || undefined) && this.isSameBuyPriceChecked) {
               for (let i = 1; i <this.array.length; i++) {
                 this.array[i].get('buy_price')?.setValue(z);
@@ -130,9 +141,9 @@ export class AddProductComponent {
           })
         );
       } else {
-        this.priceSubscription.unsubscribe();
-        this.priceSubscription = new Subscription();
-        this.isSameModelSubs = false;
+        this.buyPriceSubscription.unsubscribe();
+        this.buyPriceSubscription = new Subscription();
+        this.isSameBuyPriceSubs = false;
         for (let i = 1; i <this.array.length; i++) {
           this.array[i].get('buy_price')?.enable();
         }
@@ -156,7 +167,7 @@ export class AddProductComponent {
       } else {
         this.priceSubscription.unsubscribe();
         this.priceSubscription = new Subscription();
-        this.isSameModelSubs = false;
+        this.isSamePriceSubs = false;
         for (let i = 1; i <this.array.length; i++) {
           this.array[i].get('sell_price')?.enable();
         }
@@ -187,6 +198,30 @@ export class AddProductComponent {
       }
   }
 
+  public sameDescription(state: boolean){
+    this.isSameDescriptionChecked = state;
+      if (this.isSameDescriptionChecked && !this.isSameDescriptionSubs){
+        this.descriptionSubscription.add(
+          this.array[0].get('name')?.valueChanges.subscribe(z => {
+            this.isSameDescriptionSubs = true
+            if ((z !== null || undefined) && this.isSameDescriptionChecked) {
+              for (let i = 1; i <this.array.length; i++) {
+                this.array[i].get('description')?.setValue(z.toLowerCase());
+                this.array[i].get('description')?.disable();
+              }
+            }
+          })
+        );
+      } else {
+        this.descriptionSubscription.unsubscribe();
+        this.descriptionSubscription = new Subscription();
+        this.isSameDescriptionSubs = false;
+        for (let i = 1; i <this.array.length; i++) {
+          this.array[i].get('description')?.enable();
+        }
+      }
+  }
+
   get products() {
     return this.IProduct.get('products') as FormArray;
   }
@@ -209,7 +244,8 @@ export class AddProductComponent {
       name: new FormControl(null, Validators.required),
       cant: new FormControl(null, Validators.required),
       buy_price: new FormControl(null, Validators.required),
-      sell_price: new FormControl(null, Validators.required)
+      sell_price: new FormControl(null, Validators.required),
+      description: new FormControl('', Validators.required)
     }))
     if (this.isSameCodeChecked) {
       this.array[0].get('code')?.setValue(this.array[0].get('code')?.value)
@@ -225,6 +261,9 @@ export class AddProductComponent {
     }
     if (this.isSameBuyPriceChecked) {
       this.array[0].get('buy_price')?.setValue(this.array[0].get('buy_price')?.value)
+    }
+    if (this.isSameDescriptionChecked) {
+      this.array[0].get('description')?.setValue(this.array[0].get('description')?.value)
     }
   }
 
