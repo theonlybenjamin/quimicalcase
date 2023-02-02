@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { concatMap, finalize, map, take } from 'rxjs/operators';
+import { concatMap, finalize, map, take, tap } from 'rxjs/operators';
 import { Collections } from '../config/collections';
 import { Documents } from '../config/documents';
 import { IPending, IPendingArray } from '../interfaces/envios.interface';
@@ -22,8 +22,10 @@ export class EnviosDocService {
    * Metodo para obtener los pendientes de envío
    * @returns mock
    */
-  public getPending(): Observable<IPendingArray> {
-    return this.afs.collection<IPendingArray>(Collections.ENVIOS).doc(Documents.PENDIENTES).valueChanges() as Observable<IPendingArray>;
+  public getPendingOfSend(): Observable<IPendingArray> {
+    return this.afs.collection<IPendingArray>(Collections.ENVIOS)
+      .doc(Documents.PENDIENTES)
+      .valueChanges() as Observable<IPendingArray>
   }
 
   /**
@@ -31,7 +33,9 @@ export class EnviosDocService {
    * @returns mock
    */
   public getHisotric(): Observable<IPendingArray> {
-    return this.afs.collection<IPendingArray>(Collections.ENVIOS).doc(Documents.HISTORIC).valueChanges() as Observable<IPendingArray>;
+    return this.afs.collection<IPendingArray>(Collections.ENVIOS)
+      .doc(Documents.HISTORIC)
+      .valueChanges() as Observable<IPendingArray>;
   }
 
   /**
@@ -39,20 +43,19 @@ export class EnviosDocService {
    * @param newOrder - venta a agregar
    * @returns 
    */
-  public addProductToOrder(newOrder: Sale): Observable<IPendingArray> {
+  public addProductToPendingOrder(newOrder: Sale): Observable<IPendingArray> {
     this.loaderService.showLoader();
     var array: IPendingArray = {
       data: []
     };
-    return this.getPending().pipe(
+    return this.getPendingOfSend().pipe(
       take(1),
-      map(x => {
-        array = x;
-        const index = array.data.findIndex(y => y.username === newOrder.cliente);
+      tap(pendingOrders => {
+        array = pendingOrders;
+        const index = array.data.findIndex(pendingOrder => pendingOrder.username === newOrder.cliente);
         if (index !== -1) {
           array.data[index].products = newOrder.products;
         }
-        return x;
       }),
       finalize(() => {
         this.afs.collection(Collections.ENVIOS).doc(Documents.PENDIENTES).set(array);
@@ -71,12 +74,11 @@ export class EnviosDocService {
     var array: IPendingArray = {
       data: []
     };
-    return this.getPending().pipe(
+    return this.getPendingOfSend().pipe(
       take(1),
-      map(x => {
-        array = x
+      tap(x => {
+        array = x;
         array.data.push(newOrder);
-        return x;
       }),
       finalize(() => {
         this.afs.collection(Collections.ENVIOS).doc(Documents.PENDIENTES).set(array);
@@ -90,21 +92,21 @@ export class EnviosDocService {
    * @param newOrder - venta a agregar
    * @returns 
    */
-  public addOrderToHistoricList(newOrder: IPending): Observable<IPendingArray> {
+  public addOrderToHistoricList(newOrder: IPending) {
     this.loaderService.showLoader();
     var array: IPendingArray = {
       data: []
     };
     return this.getHisotric().pipe(
       take(1),
-      map(x => {
+      concatMap(async x => {
         array = x
         array.data.push(newOrder);
-        return x;
-      }),
-      finalize(() => {
-        this.afs.collection(Collections.ENVIOS).doc(Documents.HISTORIC).set(array);
-        this.loaderService.hideLoader();
+
+        return await this.afs.collection(Collections.ENVIOS)
+          .doc(Documents.HISTORIC)
+          .set(array)
+          .finally(() => this.loaderService.hideLoader());
       })
     )
   }
@@ -118,7 +120,7 @@ export class EnviosDocService {
     var pendingList: IPendingArray = {
       data: []
     };
-    return this.getPending().pipe(
+    return this.getPendingOfSend().pipe(
       take(1),
       concatMap((x) => {
         pendingList = x;
@@ -126,46 +128,6 @@ export class EnviosDocService {
         pendingList.data.splice(index, 1);
 
         return this.afs.collection(Collections.ENVIOS).doc(Documents.PENDIENTES).set(pendingList);
-      })
-    )
-  }
-
-  /**
-   * Metodo para eliminar una venta de la lista de pendientes de envio
-   * @param order - venta a eliminar
-   * @returns 
-   */
-  public historicToPending(username: string) {
-
-    return this.getPending().pipe(
-      take(1),
-      concatMap((x) => {
-        const order = x.data.find(y => y.username === username) as IPending;
-        if (order) {
-
-          return this.deleteOrderOfPendingList(order)
-            .pipe(
-              concatMap(() => {
-                order.products = [];
-                return this.addOrderToPendingList(order)
-              })
-            )
-        }
-
-        return this.getHisotric().pipe(
-          take(1),
-          concatMap(y => {
-            const order = y.data.find(y => y.username === username) as IPending;
-            return this.deleteOrderOfPendingList(order)
-              .pipe(
-                concatMap(() => {
-                  order.products = [];
-
-                  return this.addOrderToPendingList(order)
-                })
-              )
-          })
-        )
       })
     )
   }

@@ -3,8 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, from, of } from 'rxjs';
 import { map, take, concatMap, finalize, catchError, tap } from 'rxjs/operators';
 import { Collections } from '../config/collections';
-import { ProductSelled } from '../interfaces/sale';
-import { Stock, IFirebaseDocument } from '../interfaces/stock';
+import { Stock, IFirebaseDocument, IProduct } from '../interfaces/stock';
 import { iphoneNameById } from '../utils/utils';
 import { LoaderService } from './loader.service';
 
@@ -79,12 +78,7 @@ export class StockService {
   //     }));
   // }
 
-  /**
-   * Metodo para resturar un producto de una venta cancelada
-   * @param product  producto a restaurar
-   * @returns Observable añadiendo producto
-   */
-  public restoreProduct(product: ProductSelled) {
+  public restoreProduct(product: IProduct) {
     var productStock: Stock = {
       data: []
     };
@@ -94,7 +88,8 @@ export class StockService {
         productStock = x;
         var productIndex = productStock.data.findIndex(z => z.name.toLowerCase() === product.name.toLowerCase() && z.sell_price == product.sell_price);
         if (productIndex !== -1) {
-          productStock.data[productIndex].cant += product.cant;
+          productStock.data[productIndex].cant += product.selectedQuantity ? product.selectedQuantity : 0;
+          delete productStock.data[productIndex].selectedQuantity;
         } else {
           productStock.data.push(product);
         }
@@ -103,10 +98,6 @@ export class StockService {
     );
   }
 
-  /**
-   * Metodo para obtener solo todos los codigos de los productos
-   * @returns retorna observable con los codigos de productos
-   */
   public getStockAllDocumentsName(): Observable<IFirebaseDocument[]> {
     this.loaderService.showLoader();
     return this.afs.collection(Collections.STOCK).get().pipe(
@@ -114,21 +105,13 @@ export class StockService {
       map((x) => {
         var a: IFirebaseDocument[] = [];
         x.docs.forEach(x => {
-          let objectTemp = { id: x.id, name: iphoneNameById(x.id) }
+          let objectTemp = { id: x.id, name: iphoneNameById(x.id) };
           a.push(objectTemp)
         });
         return a;
       }),
       finalize(() => this.loaderService.hideLoader())
     );
-  }
-
-  /**
-   * Metodo para obtener todos el stock de productos
-   * @returns
-   */
-  public getAllProductNames(): Observable<any> {
-    return this.afs.collection(Collections.STOCK).valueChanges({ idField: 'docId' });
   }
 
   /**

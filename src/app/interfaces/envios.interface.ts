@@ -1,4 +1,4 @@
-import { ProductSelled } from "./sale";
+import { IProduct } from "./stock";
 
 export interface IPendingArray {
     data: Array<IPending>;
@@ -16,7 +16,7 @@ export interface IPending {
     phone: string;
     reference: string;
     username: string;
-    products: Array<ProductSelled>;
+    products: Array<IProduct>;
     date?: string;
     email?: string;
 }

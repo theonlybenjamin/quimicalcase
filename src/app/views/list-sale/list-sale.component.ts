@@ -1,14 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs';
 import { concatMap, finalize } from 'rxjs/operators';
-import { Routes } from 'src/app/config/routes.enum';
 import { Sale, SaleArray } from 'src/app/interfaces/sale';
-import { ProductSelled } from 'src/app/interfaces/sale';
-import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { LoaderService } from 'src/app/services/loader.service';
-import { MessageService } from 'src/app/services/message.service';
 import { SalesService } from 'src/app/services/sales.service';
 import { StockService } from 'src/app/services/stock.service';
 import { getMonthOnSalesDOC } from 'src/app/utils/utils';
@@ -26,7 +21,6 @@ export class ListSaleComponent {
   public selectedOrder: Sale = {} as Sale;
   public actualMonth: number;
   @ViewChild('successModal') successModal: ElementRef | undefined;
-  @ViewChild('editModal') editModal: ElementRef | undefined;
   public justDevVar: SaleArray = {
     data: []
   };
@@ -37,25 +31,21 @@ export class ListSaleComponent {
     public fireService: StockService,
     private modalService: NgbModal,
     private loaderService: LoaderService,
-    private salesService: SalesService,
-    private messageService: MessageService,
-    private router: Router,
-    private enviosService: EnviosDocService
-  ) {
+    private salesService: SalesService) {
     this.loaderService.showLoader();
     this.actualMonth = (new Date().getMonth() + 1);
-    this.getSends(getMonthOnSalesDOC(this.actualMonth));
+    this.getAllSaleForMonth(getMonthOnSalesDOC(this.actualMonth));
   }
 
 
-  public getSends(doc: string) {
+  public getAllSaleForMonth(doc: string) {
     this.showSends = false;
     this.salesService.getAllSales(doc).subscribe(x => {
       this.orders = []
       for (let i = 0; i < x.data.length; i++) {
-          this.justDevVar = x;
-          this.orders[i] = x.data[i];
-        }
+        this.justDevVar = x;
+        this.orders[i] = x.data[i];
+      }
       this.reversedOrders = this.orders.slice().reverse();
       this.showSends = true;
       this.loaderService.hideLoader();
@@ -64,46 +54,23 @@ export class ListSaleComponent {
 
   public changeMonth($event: string) {
     this.selectedMonth = Number($event);
-    this.getSends(getMonthOnSalesDOC(Number($event)));
+    this.getAllSaleForMonth(getMonthOnSalesDOC(Number($event)));
   }
 
-  public deleteOrder(order: Sale) {
+  public deleteSale(order: Sale) {
     this.selectedOrder = order;
-    this.modalService.open(this.successModal, {centered: true});
-  }
-
-  public editOrderModal(order: Sale) {
-    this.selectedOrder = order;
-    this.modalService.open(this.editModal, { centered: true });
-  }
-
-  public editOrder() {
-    this.messageService.setEditSale(this.selectedOrder);
-    this.confirmDelete();
-    this.enviosService.historicToPending(this.selectedOrder.cliente || '').
-    pipe(
-      finalize(() => this.router.navigate([Routes.NEW_SALE]))
-    ).subscribe();
+    this.modalService.open(this.successModal, { centered: true });
   }
 
   public confirmDelete() {
     this.modalService.dismissAll();
     this.loaderService.showLoader();
     this.salesService.deleteSale(this.selectedOrder, this.selectedMonth ? this.selectedMonth : 0).subscribe();
-    from(this.selectedOrder.products).pipe(
-      concatMap(x => {
-        var productToRestore: ProductSelled = {
-          cant: x.cant,
-          sell_price: x.sell_price,
-          name: x.name,
-          code: x.code,
-          selectedQuantity: x.selectedQuantity ? x.selectedQuantity : 0,
-          buy_price: x.buy_price
-        }
-        return this.fireService.restoreProduct(productToRestore);
-      }),
-      finalize(()=> this.loaderService.hideLoader())
-    ).subscribe();
+    from(this.selectedOrder.products)
+      .pipe(
+        concatMap(productToRestore => this.fireService.restoreProduct(productToRestore)),
+        finalize(() => this.loaderService.hideLoader())
+      ).subscribe();
 
   }
 }

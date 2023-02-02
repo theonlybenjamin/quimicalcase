@@ -30,7 +30,7 @@ export class SendPendingComponent {
   public getSends() {
     this.loaderService.showLoader();
     this.showSends = false;
-    this.enviosService.getPending().subscribe(x => {
+    this.enviosService.getPendingOfSend().subscribe(x => {
       this.orders = []
       for (let i = 0; i < x.data.length; i++) {
           this.orders[i] = x.data[i];

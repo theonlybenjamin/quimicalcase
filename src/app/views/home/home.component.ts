@@ -15,11 +15,11 @@ export class HomeComponent implements OnInit {
   constructor(
     private firebaseService: AuthService,
     private router: Router
-    ) {
-      if (this.firebaseService.userEmail.startsWith('benja.') || this.firebaseService.userEmail.startsWith('andreal')) {
-        this.showAdminOptions = true;
-      }
+  ) {
+    if (this.firebaseService.userEmail.startsWith('benja.') || this.firebaseService.userEmail.startsWith('andreal')) {
+      this.showAdminOptions = true;
     }
+  }
 
   ngOnInit(): void {
   }
@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
     document.getElementById('header')?.classList.toggle('body-expanded');
   }
 
-  public changeMenuIcon(): string{
+  public changeMenuIcon(): string {
     if (this.isMenuOpen) {
       return 'bx bx-x';
     } else {
@@ -40,12 +40,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  closeSession() {
-    this.firebaseService.closeSession().pipe(
-      catchError(error =>{
-        this.router.navigate([Routes.LOGIN])
-        return error;
-      })
-    ).subscribe(() => this.router.navigate([Routes.LOGIN]));
+  async closeSession() {
+    await this.firebaseService.closeSession().catch(() => {
+      this.router.navigate([Routes.LOGIN])
+    }
+    ).then(() => this.router.navigate([Routes.LOGIN]));
   }
 }

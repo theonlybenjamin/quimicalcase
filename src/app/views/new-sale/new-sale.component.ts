@@ -7,7 +7,6 @@ import { catchError, concatMap, finalize, toArray } from 'rxjs/operators';
 import { Routes } from 'src/app/config/routes.enum';
 import { Sale } from 'src/app/interfaces/sale';
 import { IFirebaseDocument, IProduct, Stock } from 'src/app/interfaces/stock';
-import { ProductSelled } from 'src/app/interfaces/sale';
 import { EnviosDocService } from 'src/app/services/envios-doc.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { SalesService } from 'src/app/services/sales.service';
@@ -22,10 +21,10 @@ import { ModalInterface } from 'src/app/interfaces/modal.interface';
 })
 export class NewSaleComponent {
 
-  public codes: IFirebaseDocument[] = [];
-  public cases: Array<Array<IProduct>> = [];
+  public codesToList: IFirebaseDocument[] = [];
+  public modelsgroupedForCode: Array<Array<IProduct>> = [];
   public saleForm: FormGroup;
-  public updatedModels: ProductSelled[] = [];
+  public productsSelled: IProduct[] = [];
   public newSale: Sale = {} as Sale;
   public notRegisteredSalesToSelect: Array<string> = [];
 
@@ -39,28 +38,26 @@ export class NewSaleComponent {
     private messageService: MessageService
   ) {
     this.firebaseService.getStockAllDocumentsName().subscribe(x => {
-      this.codes = x;
+      this.codesToList = x;
     });
-    this.envios.getPending().subscribe(x => {
+    this.envios.getPendingOfSend().subscribe(x => {
       x.data.forEach(x => {
         if (x.products === null || x.products?.length === 0) {
           this.notRegisteredSalesToSelect.push(x.username);
         }
       })
-    })
+    });
 
-    const messageSale = this.messageService.getEditSale();
     this.saleForm = new FormGroup({
-      client: new FormControl(messageSale?.cliente || null),
-      sell_type: new FormControl(messageSale?.tipo_entrega || 'presencial'),
-      sale_channel: new FormControl(messageSale?.canal_venta || null),
-      summary: new FormControl(messageSale?.total || null, Validators.required),
-      payment_type: new FormControl(messageSale?.payment_type || 'yape', Validators.required),
+      client: new FormControl(null),
+      sale_channel: new FormControl('Instagram', Validators.required),
+      summary: new FormControl(null, Validators.required),
+      payment_type: new FormControl('yape', Validators.required),
       products: new FormArray([
         new FormGroup({
-          iphoneCode: new FormControl(null, Validators.required),
-          producto: new FormControl(null, Validators.required),
-          cant: new FormControl(1, Validators.required)
+          code: new FormControl(null, Validators.required),
+          name: new FormControl({value: '', disabled: true}, Validators.required),
+          selectedQuantity: new FormControl({value: 0, disabled: true}, Validators.required)
         })
       ]),
       date: new FormControl(null)
@@ -76,26 +73,56 @@ export class NewSaleComponent {
   }
 
   get isDeliverySellType() {
-    return this.saleForm.controls['sell_type'].value === 'delivery'
+    return this.saleForm.controls['sale_channel'].value === 'Instagram' ||
+      this.saleForm.controls['sale_channel'].value === 'Whatsapp';
   }
 
   getArrayFormGroup(i: number) {
     return this.array[i] as FormGroup;
   }
 
-  public searchIphoneCases(index: number) {
-    const formGroupValue = this.getArrayFormGroup(index).value;
-    this.firebaseService.getProductStock(formGroupValue.iphoneCode).subscribe(x => {
-      this.cases[index] = x.data
-      this.cases[index].push(x.docId as unknown as IProduct);
+  public searchIphoneCases(indexOfProductFormArrayGroup: number) {
+    const productformGroupValue = this.getArrayFormGroup(indexOfProductFormArrayGroup).value;
+    this.firebaseService.getProductStock(productformGroupValue.code).subscribe(x => {
+      this.modelsgroupedForCode[indexOfProductFormArrayGroup] = x.data;
     });
+  }
+
+  productQuantity(index: number) {
+    if (this.modelsgroupedForCode.length > 0) {
+      const indexOfCode = this.modelsgroupedForCode
+        .findIndex(product => product[0].code === this.array[index].value.code);
+        if (this.modelsgroupedForCode[indexOfCode] && this.modelsgroupedForCode[indexOfCode].length > 0 && this.array[index].value.name) {
+        const indexOfProduct = this.modelsgroupedForCode[indexOfCode].findIndex(z => z.name === this.array[index].value.name);
+        if (indexOfProduct !== -1) {
+          return this.modelsgroupedForCode[indexOfCode][indexOfProduct].cant;
+        }
+      }
+    }
+    return 0;
+  }
+
+  shouldDisabledModelInput(index: number) {
+    if (this.array[index].value.code && this.array[index].value.code.length > 0) {
+      this.array[index].get('name')?.enable();
+    } else {
+      this.array[index].get('name')?.disable();
+    }
+  }
+
+  shouldDisabledModelSelectedQuantity(index: number) {
+    if (this.array[index].value.name && this.array[index].value.name.length > 0) {
+      this.array[index].get('selectedQuantity')?.enable();
+    } else {
+      this.array[index].get('selectedQuantity')?.disable();
+    }
   }
 
   addFormGroup() {
     this.products.push(new FormGroup({
-      iphoneCode: new FormControl(null, Validators.required),
-      producto: new FormControl(null, Validators.required),
-      cant: new FormControl(1, Validators.required)
+      code: new FormControl(null, Validators.required),
+      name: new FormControl({value: '', disabled: true}, Validators.required),
+      selectedQuantity: new FormControl({value: 0, disabled: true}, Validators.required)
     }))
   }
 
@@ -119,44 +146,45 @@ export class NewSaleComponent {
   public doSale(): void {
     this.loaderService.showLoader();
     from(this.array).pipe(
-      concatMap(x => {
-        const codeIndex = this.cases.findIndex(y => y[y.length - 1] === x.value.iphoneCode);
-        const modelIndex = this.cases[codeIndex].findIndex(z => z.name === x.value.producto);
-        const price = this.cases[codeIndex][modelIndex].buy_price;
-        var finalResult: Stock = {} as Stock;
-        this.cases[codeIndex][modelIndex].cant = this.cases[codeIndex][modelIndex].cant - x.value.cant;
+      concatMap(formArray => {
+        const indexOfProductCode = this.modelsgroupedForCode.findIndex(code => code === formArray.value.code);
+        const indexOfProduct = this.modelsgroupedForCode[indexOfProductCode].findIndex(z => z.name === formArray.value.name);
+        var finalCasesArray: Stock = {} as Stock;
+        this.modelsgroupedForCode[indexOfProductCode][indexOfProduct].cant -= formArray.value.selectedQuantity;
 
-        if (this.cases[codeIndex][modelIndex].cant === 0) {
-          this.cases[codeIndex].splice(modelIndex, 1);
+        const sell_price = this.modelsgroupedForCode[indexOfProductCode][indexOfProduct].sell_price;
+        const buy_price = this.modelsgroupedForCode[indexOfProductCode][indexOfProduct].buy_price;
+        const cant = this.modelsgroupedForCode[indexOfProductCode][indexOfProduct].cant;
+        const description = this.modelsgroupedForCode[indexOfProductCode][indexOfProduct].description;
+
+
+        if (this.modelsgroupedForCode[indexOfProductCode][indexOfProduct].cant === 0) {
+          this.modelsgroupedForCode[indexOfProductCode].splice(indexOfProduct, 1);
         }
-        finalResult.data = this.cases[codeIndex];
-        /**
-         * Eliminar el ultimo objecto del array que es el codigo del modelo
-         */
-        if (finalResult.data[finalResult.data.length - 1] === x.value.iphoneCode) {
-          finalResult.data.pop();
+        finalCasesArray.data = this.modelsgroupedForCode[indexOfProductCode];
+
+        var productSelled: IProduct = {
+          selectedQuantity: formArray.value.selectedQuantity,
+          name: formArray.value.name,
+          code: formArray.value.code,
+          cant: cant,
+          description: description,
+          sell_price: sell_price,
+          buy_price: buy_price,
         }
-        var updatedModel: ProductSelled = {
-          cant: x.value.cant,
-          selectedQuantity: x.value.cant,
-          name: x.value.producto,
-          code: x.value.iphoneCode,
-          sell_price: x.value.sell_price,
-          buy_price: x.value.buyPrice,
-        }
-        this.updatedModels.push(updatedModel);
+        this.productsSelled.push(productSelled);
         const fecha = new Date();
 
         this.newSale = {
           cliente: this.saleForm.get('client')?.value,
           tipo_entrega: this.saleForm.get('sell_type')?.value,
           total: this.saleForm.get('summary')?.value,
-          products: this.updatedModels,
+          products: this.productsSelled,
           canal_venta: this.saleForm.get('sale_channel')?.value,
           payment_type: this.saleForm.get('payment_type')?.value,
           date: fecha.getDate() + '/' + fecha.getMonth()
         };
-        return this.firebaseService.updateSotckAfterSale(x.value.iphoneCode, finalResult).pipe(
+        return this.firebaseService.updateSotckAfterSale(formArray.value.code, finalCasesArray).pipe(
           catchError(error => {
             this.prepareSendPendingData(this.newSale);
             this.openErrorModal();
@@ -196,7 +224,7 @@ export class NewSaleComponent {
   }
 
   public prepareSendPendingData(newSale: Sale) {
-    return this.envios.addProductToOrder(newSale);
+    return this.envios.addProductToPendingOrder(newSale);
   }
 
   public sendAllSalesData(newSale: Sale) {

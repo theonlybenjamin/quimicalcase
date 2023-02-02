@@ -9,7 +9,9 @@ export interface IProduct {
     sell_price: number;
     buy_price: number;
     cant: number;
+    description: string;
     code: string;
+    selectedQuantity?: number;
 }
 
 export interface IFirebaseDocument {

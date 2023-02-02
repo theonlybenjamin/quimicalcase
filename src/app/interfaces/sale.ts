@@ -1,6 +1,8 @@
+import { IProduct } from "./stock";
+
 export interface Sale {
     cliente?: string;
-    products: Array<ProductSelled>;
+    products: Array<IProduct>;
     tipo_entrega: string;
     total: number;
     canal_venta?: string;
@@ -10,13 +12,4 @@ export interface Sale {
 
 export interface SaleArray {
     data: Array<Sale>;
-}
-
-export interface ProductSelled {
-    name: string;
-    sell_price: number;
-    cant: number;
-    code: string;
-    selectedQuantity?: number;
-    buy_price: number;
 }

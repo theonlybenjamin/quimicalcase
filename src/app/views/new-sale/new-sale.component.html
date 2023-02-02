@@ -6,14 +6,13 @@
   <form class="form row" [formGroup]="saleForm">
     <div class="row my-3">
       <div class="form-group col-xl-2 col-lg-3 col-md-6 col-sm-12">
-        <fieldset>
-          <label for="sell_type">Tipo de venta</label>
-          <select class="form-select" formControlName="sell_type" id="sell_type">
-            <option selected>Selecciona el tipo de venta</option>
-            <option value="delivery">Delivery</option>
-            <option value="presencial">Presencial</option>
-          </select>
-        </fieldset>
+        <label for="sale_channel">Canal de venta</label>
+        <select class="form-select" formControlName="sale_channel" id="sale_channel">
+          <option selected>Selecciona el canal de venta</option>
+          <option value="presencial">Presencial</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Whatsapp">Whatsapp</option>
+        </select>
       </div>
       <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12" *ngIf="isDeliverySellType">
         <label for="client">Nombre en instagram</label>
@@ -22,14 +21,6 @@
           <option [value]="user" *ngFor="let user of notRegisteredSalesToSelect">
             {{ user }}
           </option>
-        </select>
-      </div>
-      <div class="form-group col-xl-2 col-lg-3 col-md-6 col-sm-12" *ngIf="isDeliverySellType">
-        <label for="sale_channel">Canal de venta</label>
-        <select class="form-select" formControlName="sale_channel" id="sale_channel">
-          <option selected>Selecciona el canal de venta</option>
-          <option value="Instagram">Instagram</option>
-          <option value="Whatsapp">Whatsapp</option>
         </select>
       </div>
       <div class="form-group col-xl-2 col-lg-3 col-md-6 col-sm-12">
@@ -49,29 +40,33 @@
 
     <div class="row mx-2">
       <h5 class="inter bold">Productos</h5>
-      <div *ngFor="let product of array; let i = index">
-        <div class="row" [formGroup]="getArrayFormGroup(i)">
+      <div *ngFor="let product of array; let indexOfProductFormArrayGroup = index">
+        <div class="row" [formGroup]="getArrayFormGroup(indexOfProductFormArrayGroup)">
           <div class="form-group col-xl-2 col-lg-3 col-md-5 col-sm-11">
-            <label for="iphoneCode">C&oacute;digo</label>
-            <select class="form-select" formControlName="iphoneCode" id="iphoneCode" (change)="searchIphoneCases(i)">
+            <label for="code">C&oacute;digo</label>
+            <select class="form-select" formControlName="code" id="code" (change)="searchIphoneCases(indexOfProductFormArrayGroup)"
+              (click)="shouldDisabledModelInput(indexOfProductFormArrayGroup)">
               <option selected>Selecciona el codigo</option>
-              <option [value]="iphone.id" *ngFor="let iphone of codes">
+              <option [value]="iphone.id" *ngFor="let iphone of codesToList">
                 {{ iphone.name }}
               </option>
             </select>
           </div>
           <div class="form-group col-xl-2 col-lg-3 col-md-4 col-sm-8">
             <label for="case">Modelo</label>
-            <select class="form-select" formControlName="producto" id="case">
+            <select class="form-select" formControlName="name" id="case" (click)="shouldDisabledModelSelectedQuantity(indexOfProductFormArrayGroup)">
               <option selected>Selecciona el modelo</option>
-              <option [value]="case.name" *ngFor="let case of cases[i]" [hidden]="case.name === undefined">
-                {{ case.name }}
-              </option>
+              <option [value]="product.name" *ngFor="let product of modelsgroupedForCode[indexOfProductFormArrayGroup]" [hidden]="product.name === undefined">
+                {{ product.name }}     
+              </option>                      
             </select>
           </div>
-          <div class="form-group col-xl-1 col-lg-1 col-md-2 col-sm-3">
+          <div class="form-group col-xl-1 col-lg-1 col-md-2 col-sm-3">                   
             <label for="cantidad">Cantidad</label>
-            <input type="number" class="form-control" id="cantidad" formControlName="cant" />
+            <select class="form-control" formControlName="selectedQuantity">
+              <option *ngFor="let num of [].constructor(productQuantity(indexOfProductFormArrayGroup)); let z = index">{{z+1}}</option>
+            </select>
+            <!-- <input type="number" class="form-control" id="cantidad" formControlName="selectedQuantity" /> -->
           </div>
           <div class="row">
             <div class="col-xl-5 col-lg-8 col-md-12 col-sm-12">
@@ -81,11 +76,12 @@
         </div>
       </div>
       <div class="row">
-        <button type="button" class="btn btn-dark col-xl-2 col-lg-4 col-md-5 col-sm-11 mx-1 my-2" (click)="addFormGroup()">
+        <button type="button" class="btn btn-dark col-xl-2 col-lg-4 col-md-5 col-sm-11 mx-1 my-2"
+          (click)="addFormGroup()">
           Agregar
         </button>
-        <button type="button" class="btn btn-danger col-xl-2 col-lg-4 col-md-5 col-sm-11 mx-1 my-2" (click)="deleteFormGroup()"
-          [disabled]="array.length < 2">
+        <button type="button" class="btn btn-danger col-xl-2 col-lg-4 col-md-5 col-sm-11 mx-1 my-2"
+          (click)="deleteFormGroup()" [disabled]="array.length < 2">
           Eliminar
         </button>
       </div>
@@ -98,7 +94,8 @@
       </div>
     </div>
     <div class="row">
-      <button type="button" class="btn btn-success col-xl-4 col-lg-7 my-5" (click)="doSale()" [disabled]="!saleForm.valid">
+      <button type="button" class="btn btn-success col-xl-4 col-lg-7 my-5" (click)="doSale()"
+        [disabled]="!saleForm.valid">
         Realizar venta
       </button>
     </div>
