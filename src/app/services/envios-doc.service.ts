@@ -52,7 +52,7 @@ export class EnviosDocService {
       take(1),
       tap(pendingOrders => {
         array = pendingOrders;
-        const index = array.data.findIndex(pendingOrder => pendingOrder.username === newOrder.cliente);
+        const index = array.data.findIndex(pendingOrder => pendingOrder.username === newOrder.client);
         if (index !== -1) {
           array.data[index].products = newOrder.products;
         }

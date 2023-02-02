@@ -40,11 +40,13 @@ export class SalesService {
     var allSales: SaleArray = {
       data: []
     };
+    console.log(newSale, getMonthOnSalesDOC(this.actualMonth));
     return this.getAllSales(getMonthOnSalesDOC(this.actualMonth)).pipe(
       take(1),
       map(x => {
         allSales = x
         allSales.data.push(newSale);
+        console.log(allSales);
         return x;
       }),
       finalize(() => {

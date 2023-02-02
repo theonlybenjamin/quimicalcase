@@ -147,7 +147,7 @@ export class NewSaleComponent {
     this.loaderService.showLoader();
     from(this.array).pipe(
       concatMap(formArray => {
-        const indexOfProductCode = this.modelsgroupedForCode.findIndex(code => code === formArray.value.code);
+        const indexOfProductCode = this.modelsgroupedForCode.findIndex(code => code[0].code === formArray.value.code);
         const indexOfProduct = this.modelsgroupedForCode[indexOfProductCode].findIndex(z => z.name === formArray.value.name);
         var finalCasesArray: Stock = {} as Stock;
         this.modelsgroupedForCode[indexOfProductCode][indexOfProduct].cant -= formArray.value.selectedQuantity;
@@ -176,17 +176,16 @@ export class NewSaleComponent {
         const fecha = new Date();
 
         this.newSale = {
-          cliente: this.saleForm.get('client')?.value,
-          tipo_entrega: this.saleForm.get('sell_type')?.value,
+          client: this.saleForm.get('client')?.value,
           total: this.saleForm.get('summary')?.value,
           products: this.productsSelled,
-          canal_venta: this.saleForm.get('sale_channel')?.value,
+          sale_channel: this.saleForm.get('sale_channel')?.value,
           payment_type: this.saleForm.get('payment_type')?.value,
           date: fecha.getDate() + '/' + fecha.getMonth()
         };
         return this.firebaseService.updateSotckAfterSale(formArray.value.code, finalCasesArray).pipe(
           catchError(error => {
-            this.prepareSendPendingData(this.newSale);
+            this.envios.addProductToPendingOrder(this.newSale)
             this.openErrorModal();
             this.loaderService.hideLoader();
             return error;
@@ -195,13 +194,9 @@ export class NewSaleComponent {
       }),
       toArray(),
       finalize(() => {
-        /**
-         * Una vez terminado el loop, procedemos a preparar la data a enviar y a
-         * rutear al home o mostrar el modal de cases a elminar
-         */
         forkJoin([
-          this.sendAllSalesData(this.newSale),
-          this.prepareSendPendingData(this.newSale),
+          this.salesService.addSaleToAllSales(this.newSale),
+          this.envios.addProductToPendingOrder(this.newSale)
         ]).pipe(
           catchError(error => {
             this.openErrorModal();
@@ -222,13 +217,4 @@ export class NewSaleComponent {
       }))
       .subscribe()
   }
-
-  public prepareSendPendingData(newSale: Sale) {
-    return this.envios.addProductToPendingOrder(newSale);
-  }
-
-  public sendAllSalesData(newSale: Sale) {
-    return this.salesService.addSaleToAllSales(newSale);
-  }
-
 }

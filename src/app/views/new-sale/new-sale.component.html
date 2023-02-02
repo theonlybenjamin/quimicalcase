@@ -64,9 +64,8 @@
           <div class="form-group col-xl-1 col-lg-1 col-md-2 col-sm-3">                   
             <label for="cantidad">Cantidad</label>
             <select class="form-control" formControlName="selectedQuantity">
-              <option *ngFor="let num of [].constructor(productQuantity(indexOfProductFormArrayGroup)); let z = index">{{z+1}}</option>
+              <option *ngFor="let num of [].constructor(productQuantity(indexOfProductFormArrayGroup)); let z = index" [value]="z+1">{{z+1}}</option>
             </select>
-            <!-- <input type="number" class="form-control" id="cantidad" formControlName="selectedQuantity" /> -->
           </div>
           <div class="row">
             <div class="col-xl-5 col-lg-8 col-md-12 col-sm-12">
