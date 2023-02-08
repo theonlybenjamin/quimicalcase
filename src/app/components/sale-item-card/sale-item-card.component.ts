@@ -43,4 +43,8 @@ export class SaleItemCard implements OnChanges {
       default: return 'assets/logo2.png';
     }
   }
+
+  public getTithe() {
+    return ((this.order.total - this.productsCost - (this.order.logisticCost || 0)) * 0.10).toFixed(2)
+  }
 }

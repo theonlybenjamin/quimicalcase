@@ -29,9 +29,20 @@
           </li>
           <li class="mr-md-4">
             <span style="color: red">
-              Gasto log&iacute;stica: <b>S/.</b> {{ order.logisticCost || 'Debes agregar el gasto para poder visualizarlo' }}</span
+              Gasto log&iacute;stica: <b>S/.</b> {{ order.logisticCost || 'Agrega el gasto para poder visualizarlo' }}</span
             >
           </li>
+          <li class="mr-md-4">
+            <span style="color: green">
+              Utilidad: <b>S/.</b> {{ (order.total - productsCost) - (order.logisticCost || 0) }}</span
+            >
+          </li>
+          <li class="mr-md-4">
+            <span style="color: blue">
+              10%: <b>S/.</b> {{ getTithe() }}</span
+            >
+          </li>
+
         </ul>
       </div>
     </div>
