@@ -5,8 +5,7 @@ import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss']
+  templateUrl: './modal.component.html'
 })
 export class ModalComponent {
   @ViewChild('content') htmlModal: any;

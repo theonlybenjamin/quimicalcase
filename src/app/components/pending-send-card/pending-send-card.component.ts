@@ -4,13 +4,11 @@ import { iphoneNameById, setDashesToName } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-pending-send-card',
-  templateUrl: './pending-send-card.component.html',
-  styleUrls: ['./pending-send-card.component.scss']
+  templateUrl: './pending-send-card.component.html'
 })
 export class PendingSendCardComponent {
   @Output() sendOperation = new EventEmitter<IPending>();
   @Input() pendingOrder!: IPending;
-  constructor() { }
 
   isPendingHasProducts(pendingOrder: IPending): boolean {
     return pendingOrder && pendingOrder.products && pendingOrder.products.length > 0
@@ -24,7 +22,7 @@ export class PendingSendCardComponent {
     return iphoneNameById(id);
   }
 
-  public sendOperationToAction(order: IPending) {
+  public deleteOperation(order: IPending) {
     this.sendOperation.emit(order);
   }
 }

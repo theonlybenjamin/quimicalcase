@@ -13,7 +13,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { NewSaleComponent } from './views/new-sale/new-sale.component';
 import { SendPendingComponent } from './views/send-pending/send-pending.component';
-import { SendPendingItemComponent } from './components/send-pending-item/send-pending-item.component';
+import { SaleItemCard } from './components/sale-item-card/sale-item-card.component';
 import { LoginComponent } from './views/login/login.component';
 import { AddProductComponent } from './views/add-product/add-product.component';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -36,7 +36,7 @@ import { ProductCardComponent } from './components/product-card/product-card.com
     StockComponent,
     NewSaleComponent,
     SendPendingComponent,
-    SendPendingItemComponent,
+    SaleItemCard,
     LoginComponent,
     AddProductComponent,
     ListSaleComponent,

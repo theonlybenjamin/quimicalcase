@@ -26,7 +26,7 @@ export class SalesService {
    * @param doc  - el documento a consultar
    * @returns
    */
-   public getAllSales(doc: string): Observable<SaleArray> {
+  public getAllSales(doc: string): Observable<SaleArray> {
     return this.afs.collection<SaleArray>(Collections.VENTAS).doc(doc).valueChanges() as Observable<SaleArray>;
   }
 
@@ -35,12 +35,11 @@ export class SalesService {
    * @param newSale - venta a agregar
    * @returns
    */
-   public addSaleToAllSales(newSale: Sale): Observable<SaleArray> {
+  public addSaleToAllSales(newSale: Sale): Observable<SaleArray> {
     this.loaderService.showLoader();
     var allSales: SaleArray = {
       data: []
     };
-    console.log(newSale, getMonthOnSalesDOC(this.actualMonth));
     return this.getAllSales(getMonthOnSalesDOC(this.actualMonth)).pipe(
       take(1),
       map(x => {
@@ -56,22 +55,33 @@ export class SalesService {
     );
   }
 
-  /**
-   * Metodo para eliminar una venta
-   * @param sale - venta a eliminar
-   * @returns
-   */
-   public deleteSale(sale: Sale, month?: number) {
-    var allSales: SaleArray = {
-      data: []
-    };
-    return this.getAllSales(getMonthOnSalesDOC(month && month!== 0? month : this.actualMonth)).pipe(
+  public deleteSale(saleToDelete: Sale, month?: number) {
+
+    return this.getAllSales(getMonthOnSalesDOC(month && month !== 0 ? month : this.actualMonth)).pipe(
       take(1),
-      concatMap(x => {
-        allSales = x;
-        const index = allSales.data.findIndex(y => isEqual(y, sale));
+      concatMap(allSales => {
+        const index = allSales.data.findIndex(sale => isEqual(sale, saleToDelete));
         allSales.data.splice(index, 1);
-        return this.afs.collection(Collections.VENTAS).doc(getMonthOnSalesDOC(month && month!== 0? month : this.actualMonth)).set(allSales);
+
+        return this.afs.collection(Collections.VENTAS)
+          .doc(getMonthOnSalesDOC(month && month !== 0 ? month : this.actualMonth))
+          .set(allSales);
+      })
+    )
+  }
+
+  public addLogisticExpense(oldSale: Sale, logisticCost: number, month?: number) {
+    const monthToEdit = month && month !== 0 ? month : this.actualMonth;
+
+    return this.getAllSales(getMonthOnSalesDOC(monthToEdit)).pipe(
+      take(1),
+      concatMap(allSales => {
+        const index = allSales.data.findIndex(sale => isEqual(sale, oldSale));
+        allSales.data[index].logisticCost = logisticCost;
+
+        return this.afs.collection(Collections.VENTAS)
+          .doc(getMonthOnSalesDOC(monthToEdit))
+          .set(allSales);
       })
     )
   }

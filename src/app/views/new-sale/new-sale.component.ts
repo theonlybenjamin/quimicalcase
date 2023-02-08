@@ -49,7 +49,7 @@ export class NewSaleComponent {
     });
 
     this.saleForm = new FormGroup({
-      client: new FormControl(null),
+      client: new FormControl('Cliente no identificado'),
       sale_channel: new FormControl('Instagram', Validators.required),
       summary: new FormControl(null, Validators.required),
       payment_type: new FormControl('yape', Validators.required),

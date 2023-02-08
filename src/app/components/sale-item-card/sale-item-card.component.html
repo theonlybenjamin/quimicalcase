@@ -22,6 +22,16 @@
               Total: <b>S/.</b> {{ order.total }}</span
             >
           </li>
+          <li class="mr-md-4">
+            <span style="color: red">
+              Gasto producto: <b>S/.</b> {{ productsCost }}</span
+            >
+          </li>
+          <li class="mr-md-4">
+            <span style="color: red">
+              Gasto log&iacute;stica: <b>S/.</b> {{ order.logisticCost || 'Debes agregar el gasto para poder visualizarlo' }}</span
+            >
+          </li>
         </ul>
       </div>
     </div>
@@ -43,16 +53,17 @@
       <button
         type="button"
         class="btn d-block w-100 d-sm-inline-block btn-danger my-1"
-        (click)="emitButton1(order)"
+        (click)="deleteSale(order)"
       >
-      Cancelar pedido
+      Cancelar Venta
       </button>
       <button
         type="button"
         class="btn d-block w-100 d-sm-inline-block btn-secondary my-1"
-        (click)="emitButton2(order)"
+        (click)="addLogisticCost(order)"
+        *ngIf="!order.logisticCost"
       >
-      Editar pedido
+      Agrega gastos log&iacute;sticos
       </button>
     </div>
   </div>

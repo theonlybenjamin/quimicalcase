@@ -9,7 +9,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 export class LoaderComponent {
 
   constructor(
-    public fireService: LoaderService
+    public loaderService: LoaderService
   ) { }
 
 }

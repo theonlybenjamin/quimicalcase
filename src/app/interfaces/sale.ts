@@ -7,6 +7,7 @@ export interface Sale {
     sale_channel: string;
     payment_type: string;
     date: string;
+    logisticCost?: number;
 }
 
 export interface SaleArray {

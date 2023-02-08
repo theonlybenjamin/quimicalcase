@@ -79,16 +79,13 @@ export class StockService {
   // }
 
   public restoreProduct(product: IProduct) {
-    var productStock: Stock = {
-      data: []
-    };
+
     return this.getStockSpecificDocumentAlone(product.code).pipe(
       take(1),
-      concatMap(x => {
-        productStock = x;
-        var productIndex = productStock.data.findIndex(z => z.name.toLowerCase() === product.name.toLowerCase() && z.sell_price == product.sell_price);
+      concatMap(productStock => {
+        var productIndex = productStock.data.findIndex(z => z.name.toLowerCase() === product.name.toLowerCase() && z.description == product.description);
         if (productIndex !== -1) {
-          productStock.data[productIndex].cant += product.selectedQuantity ? product.selectedQuantity : 0;
+          productStock.data[productIndex].cant = Number(Number(productStock.data[productIndex].cant) + Number(product.selectedQuantity || 0));
           delete productStock.data[productIndex].selectedQuantity;
         } else {
           productStock.data.push(product);
